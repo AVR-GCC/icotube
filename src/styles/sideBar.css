@@ -1,0 +1,45 @@
+.sideBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(15, 26, 44);
+  overflow: auto;
+  height: 100%;
+  width: 240px;
+  color: antiquewhite;
+  padding: 50px;
+}
+
+.logo {
+  margin: 25px;
+  font-size: 25px;
+  font-family: sans-serif;
+  font-style: italic;
+  font-weight: 600;
+  color: #bdecff;
+}
+
+.section {
+  margin: 10px;
+  border: solid 1px;
+  width: -webkit-fill-available;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.section:hover {
+  color: black;
+  background-color: antiquewhite;
+}
+
+.publishLink {
+  position: fixed;
+  bottom: 20px;
+  color: rgb(39, 57, 85);
+  cursor: pointer;
+}
+
+.publishLink:hover {
+  color: rgb(53, 100, 161);
+}
+

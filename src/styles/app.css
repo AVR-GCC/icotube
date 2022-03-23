@@ -1,0 +1,19 @@
+.sButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 30px;
+    background: #11AAFF;
+    color: #FFF;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .sButton:hover{
+    background: #0b699c;
+  }
+  
+  .sButton:active {
+    background: rgb(255, 255, 255);
+  }
