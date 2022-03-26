@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com/' : 'http://localhost:5000';
+const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
 
 const APIcall = async ({ url, method, events, body }) => {
     console.log('----- API Call -----');
