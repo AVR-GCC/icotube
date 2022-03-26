@@ -9,7 +9,6 @@ import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
 
 function Home({ history, location }) {
-    console.log('Home component ready!!!');
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
