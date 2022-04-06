@@ -20,7 +20,7 @@ function SideBar(props) {
                     navigateToMain();
                 }}
             >
-                ICO Gallery
+                ICO Tube
             </div>
             <div
                 className={'section'}
@@ -28,7 +28,7 @@ function SideBar(props) {
                     navigateToMain();
                 }}
             >
-                Upcoming ICOs
+                UPCOMING ICO
             </div>
             <div
                 className={'section'}
@@ -36,7 +36,7 @@ function SideBar(props) {
                     navigateToMain();
                 }}
             >
-                Ended ICOs
+                RUNNING ICO
             </div>
             <div
                 className={'section'}
@@ -44,23 +44,7 @@ function SideBar(props) {
                     navigateToMain();
                 }}
             >
-                Upcoming Airdrops
-            </div>
-            <div
-                className={'section'}
-                onClick={() => {
-                    navigateToMain();
-                }}
-            >
-                Ended Airdrops
-            </div>
-            <div
-                className={'section'}
-                onClick={() => {
-                    navigateToMain();
-                }}
-            >
-                Subscribe
+                ENDED ICO
             </div>
             <div
                 className={'publishLink'}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import  '../styles/publish.css';
+import CoinbaseCommerceButton from 'react-coinbase-commerce';
+import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import { TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
@@ -10,6 +12,7 @@ import { defined } from '../utils';
 function Publish() {
 
     // const [loading, setLoading] = useState(false);
+    const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});
     const [errors, setErrors] = useState({});
@@ -118,7 +121,8 @@ function Publish() {
                     setNotificationText('Submitting post...');
                 }, (res) => {
                     setLoading(false);
-                    setNotificationText(`Post: ${post.title} - submitted for review`);
+                    setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
+                    setPostSubmitted(true);
                 }
             );
         } else {
@@ -220,6 +224,7 @@ function Publish() {
                         {_field(field)}
                     </div>
                 ))}
+
                 <div
                     className="sButton"
                     style={{ marginTop: 20 }}
@@ -227,6 +232,27 @@ function Publish() {
                 >
                     <span style={{ fontSize: 14 }}>Submit</span>
                 </div>
+                {postSubmitted ? (
+                    <div className="paymentButton">
+                        <CoinbaseCommerceButton
+                            styled={true}
+                            checkoutId={'2fd410af-6ba1-42a1-91d3-bb1dc7c42bc1'}
+                            // onLoad={(arg) => {
+                            //     console.log('onLoad:', arg);
+                            // }}
+                            // onChargeSuccess={(arg) => {
+                            //     console.log('onChargeSuccess:', arg);
+                            // }}
+                            // onChargeFailure={(arg) => {
+                            //     console.log('onChargeFailure:', arg);
+                            // }}
+                            // customMetadata={'custom-metadata-1248'}
+                            onPaymentDetected={(arg) => {
+                                setNotificationText(`Payment made! The post will appear when the payment is confirmed`);
+                            }}
+                        />
+                    </div>
+                ) : null}
             </div>
         );
     };

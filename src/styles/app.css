@@ -1,17 +1,28 @@
 .sButton {
+    border-radius: 6px;
+    background-color: #0667D0;
+    background: linear-gradient(#0667D0, #0655AB);
+    color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 60px;
-    height: 30px;
-    background: #11AAFF;
-    color: #FFF;
-    border-radius: 5px;
+    height: 40px;
+    font-size: 14px;
+    font-family: Avenir Next, sans-serif;
+    font-weight: 500;
+    user-select: none;
+    -webkit-user-drag: none;
+    text-decoration: none;
     cursor: pointer;
+    padding: 1px 6px;
+    border-width: 1px;
+    border-style: outset;
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133))
   }
   
   .sButton:hover{
-    background: #0b699c;
+    background: #0655AB;
   }
   
   .sButton:active {
