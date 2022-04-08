@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import  '../styles/publish.css';
-import CoinbaseCommerceButton from 'react-coinbase-commerce';
-import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
+import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
+// import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import { TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';

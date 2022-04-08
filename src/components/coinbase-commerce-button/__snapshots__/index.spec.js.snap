@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`it opens up an iframe when its button is clicked 1`] = `
+<div>
+  <a
+    href="https://commerce.coinbase.com"
+    onClick={[Function]}
+    rel="external"
+    title="Pay with Bitcoin, Bitcoin Cash, DAI, Litecoin, Dogecoin, Ethereum, or USD Coin"
+  >
+    <Button
+      onClick={[Function]}
+    />
+  </a>
+  <IFrame
+    checkoutId="aaaa"
+    onError={[Function]}
+    onModalClose={[Function]}
+  />
+</div>
+`;
+
+exports[`it renders and matches its snapshot 1`] = `
+<div>
+  <a
+    href="https://commerce.coinbase.com"
+    onClick={[Function]}
+    rel="external"
+    title="Pay with Bitcoin, Bitcoin Cash, DAI, Litecoin, Dogecoin, Ethereum, or USD Coin"
+  >
+    <Button
+      onClick={[Function]}
+    />
+  </a>
+</div>
+`;
