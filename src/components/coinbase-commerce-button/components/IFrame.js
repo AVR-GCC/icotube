@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type {MessageData} from '../types';
+import {MessageData} from '../types';
 import {generateUUID} from '../utils';
 import './LoadingSpinner.css';
 import './iframe.css';

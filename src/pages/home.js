@@ -7,6 +7,7 @@ import Search from '../components/search';
 import SideBar from '../components/sideBar';
 import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
+import Login from '../components/login.js';
 
 function Home({ history, location }) {
     const [loading, setLoading] = useState(false);
@@ -76,6 +77,9 @@ function Home({ history, location }) {
     const _main = () => {
         return (
             <div className={'mainContainer'}>
+                <div className={'loginContainer'}>
+                    <Login />
+                </div>
                 <Search />
                 <div className={'postsContainer'}>
                     {posts.map((post, index) => _post(post, index))}
