@@ -1,9 +1,20 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
+import Login from './components/login';
 
 function App() {
+  /*
+    email: "ogoun.d@gmail.com"
+    familyName: "Yehudai"
+    givenName: "Bar"
+    googleId: "106178580899644455244"
+    imageUrl: "https://lh3.googleusercontent.com/a-/AOh14Gh8xeIktOiOMIcEvNBD67DXzBJCkn427UMPw4llMg=s96-c"
+    name: "Bar Yehudai"
+  */
+  const [user, setUser] = useState(null);
   return (
     <div className="App">
       <link
@@ -14,11 +25,18 @@ function App() {
         rel="stylesheet"
         href="https://fonts.googleapis.com/icon?family=Material+Icons"
       />
+      <div className={'loginContainer'}>
+        <Login
+          currentUser={user}
+          onSignIn={newUser => setUser(newUser)}
+          onSignOut={() => setUser(null)}
+        />
+      </div>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/:postId" element={<Home />} />
-          <Route path="/publish" element={<Publish />} />
+          <Route path="/" element={<Home currentUser={user} />} />
+          <Route path="/:postId" element={<Home currentUser={user} />} />
+          <Route path="/publish" element={<Publish currentUser={user} />} />
         </Routes>
       </BrowserRouter>
     </div>
