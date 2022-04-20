@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { getConfigAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
@@ -15,6 +16,14 @@ function App() {
     name: "Bar Yehudai"
   */
   const [user, setUser] = useState(null);
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    getConfigAPI(() => {}, (res) => {
+      setConfig(res.data);
+    })
+  }, []);
+
   return (
     <div className="App">
       <link
@@ -28,6 +37,7 @@ function App() {
       <div className={'loginContainer'}>
         <Login
           currentUser={user}
+          clientId={config?.clientId}
           onSignIn={newUser => setUser(newUser)}
           onSignOut={() => setUser(null)}
         />

@@ -2,12 +2,42 @@ import React from 'react';
 
 import { GoogleLogin, useGoogleLogout } from 'react-google-login';
 import { LogoutRounded } from '@mui/icons-material';
+import { CircularProgress } from '@mui/material';
 // refresh token
 import { refreshTokenSetup } from '../utils';
 
-const clientId = '491980368334-a8a41j6pgefthdu1mc5h9o2ct7dopplp.apps.googleusercontent.com';
+function Logout({
+  clientId,
+  currentUser,
+  onLogoutSuccess,
+  onFailure
+}) {
+  const { signOut } = useGoogleLogout({
+    clientId,
+    onLogoutSuccess,
+    onFailure
+  });
+  return (
+    <div>
+      <img
+        className='avatar'
+        src={currentUser?.imageUrl}
+        alt='user'
+        // style={{
+        //   backgroundImage: `url("${currentUser?.imageUrl}")`
+        // }}
+      />
+      <LogoutRounded onClick={signOut} className='logoutButton' />
+    </div>
+  );
+}
 
-function Login({ currentUser, onSignIn, onSignOut }) {
+function Login({
+  clientId,
+  currentUser,
+  onSignIn,
+  onSignOut
+}) {
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res.profileObj);
     onSignIn(res.profileObj);
@@ -23,26 +53,19 @@ function Login({ currentUser, onSignIn, onSignOut }) {
     console.log(`${currentUser ? 'Login' : 'Logout'} failed: res:`, res);
   };
 
-  const { signOut } = useGoogleLogout({
-    clientId,
-    onLogoutSuccess,
-    onFailure
-  });
+  if (!clientId) {
+    return <CircularProgress size={20} />;
+  }
 
   return (
     <div>
       {currentUser ? (
-        <div>
-          <img
-            className='avatar'
-            src={currentUser?.imageUrl}
-            alt='user'
-            // style={{
-            //   backgroundImage: `url("${currentUser?.imageUrl}")`
-            // }}
-          />
-          <LogoutRounded onClick={signOut} className='logoutButton' />
-        </div>
+        <Logout
+          clientId={clientId}
+          currentUser={currentUser}
+          onLogoutSuccess={onLogoutSuccess}
+          onFailure={onFailure}
+        />
       ) : (
         <GoogleLogin
           clientId={clientId}
