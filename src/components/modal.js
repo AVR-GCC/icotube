@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import '../styles/modal.css';
 
 const Modal = ({
@@ -8,16 +7,17 @@ const Modal = ({
     width = 500
 }) => {
     // 15 is half of the padding
-    const top = window.innerHeight / 2 - height / 2 - 15;
-    const left = window.innerWidth / 2 - width / 2 - 15;
+    const padding = 30;
+    const top = window.innerHeight / 2 - height / 2 - padding / 2;
+    const left = window.innerWidth / 2 - width / 2 - padding / 2;
     return (
         <div
             className="modalBackdrop"
-            onClick={(e) => {
+            onMouseDown={(e) => {
                 const x = e.clientX;
                 const y = e.clientY;
-                const horizontal = x > left && x < left + width;
-                const vertical = y > top && y < top + height;
+                const horizontal = x > left && x < left + width + padding * 2;
+                const vertical = y > top && y < top + height + padding * 2;
                 if (!horizontal || !vertical) {
                     clickOutside();
                 }

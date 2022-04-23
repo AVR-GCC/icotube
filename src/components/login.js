@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/login.css';
 import { GoogleLogin, useGoogleLogout } from 'react-google-login';
 import { LogoutRounded } from '@mui/icons-material';
 import { CircularProgress, TextField, Divider } from '@mui/material';
+import { loginAPI, signupAPI } from '../actions/searchAPI';
+import Modal from './modal';
 // refresh token
 import { refreshTokenSetup } from '../utils';
-import Modal from './modal';
 
 const AuthModal = ({
   clientId,
@@ -18,6 +19,14 @@ const AuthModal = ({
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState('');
+
+  const removeErrors = () => {
+    if (emailError) setEmailError('');
+    if (passwordError) setPasswordError('');
+    if (confirmPasswordError) setConfirmPasswordError('');
+  };
 
   const onSuccess = (res) => {
     console.log('Login Success: currentUser:', res);
@@ -26,18 +35,60 @@ const AuthModal = ({
     closeModal();
   };
 
-  const loginWithEmail = () => {
-    console.log('log in with email');
+  const signUpWithEmail = () => {
+    if (email && password && confirmPassword && confirmPassword === password) {
+      signupAPI(email, password, () => {},
+        (res) => {
+          console.log('res', res);
+          // onSignIn(res);
+        }
+      );
+      return;
+    }
+    if (!email) {
+      setEmailError('Please enter your email');
+    }
+    if (!password) {
+      setPasswordError('Please enter your password');
+    }
+    if (!confirmPassword) {
+      setConfirmPasswordError('Please confirm your password');
+    }
+    if (confirmPassword !== password) {
+      setConfirmPasswordError("Passwords don't match");
+    }
   }
+
+  const loginWithEmail = () => {
+    if (email && password) {
+      loginAPI(email, password, null, () => {},
+        (res) => {
+          console.log('res', res);
+          // onSignIn(res);
+        }
+      );
+      return;
+    }
+    if (!email) {
+      setEmailError('Please enter your email');
+    }
+    if (!password) {
+      setPasswordError('Please enter your password');
+    }
+  }
+
+  const height = 360 + (emailError ? 20 : 0) + (passwordError ? 20 : 0) + (confirmPasswordError ? 20 : 0) + (signUp ? 80 : 0);
 
   return (
     <Modal
-      clickOutside={closeModal}
-      height={360}
-      width={260}
+      clickOutside={() => closeModal()}
+      height={height}
+      width={280}
     >
       <div className='loginModal'>
-        <div className='title' style={{ marginTop: 35 }}>Log in to ICO tube</div>
+        <div className='title' style={{ marginTop: 35 }}>
+          {signUp ? "Signup to ICO tube" : "Login to ICO tube"}
+        </div>
         <TextField
             error={!!emailError}
             key="email-input"
@@ -69,17 +120,35 @@ const AuthModal = ({
             }}
             helperText={passwordError}
         />
+        {signUp ? (
+          <TextField
+            type="password"
+            error={!!confirmPasswordError}
+            key="confirm-password-input"
+            id="confirm-password-input"
+            label="Confirm Password"
+            required
+            variant='filled'
+            margin='normal'
+            fullWidth
+            value={confirmPassword}
+            onChange={(event) => {
+                setConfirmPassword(event.target.value);
+            }}
+            helperText={confirmPasswordError}
+          />
+        ) : null}
         <div
             className="sButton"
             style={{ marginTop: 20, width: '100%' }}
-            onClick={loginWithEmail}
+            onClick={signUp ? signUpWithEmail : loginWithEmail}
         >
-            <span style={{ fontSize: 14 }}>Log in with email</span>
+            <span style={{ fontSize: 14 }}>{signUp ? "Signup with Email" : "Login with Email"}</span>
         </div>
         <div style={{ width: '100%', margin: 10 }}><Divider>or</Divider></div>
         <GoogleLogin
           clientId={clientId}
-          buttonText="Login with Google"
+          buttonText={signUp ? "Signup with Google" : "Login with Google"}
           onSuccess={onSuccess}
           onFailure={onFailure}
           cookiePolicy={'single_host_origin'}
@@ -87,10 +156,17 @@ const AuthModal = ({
           isSignedIn={true}
         />
         <div className='moveToSignup'>
-          Don't have an account? <div
+          {signUp ? "Already have an account?" : "Don't have an account?"}
+          <div
             className='linkText'
             style={{ marginLeft: 15 }}
-          >Join</div>
+            onClick={() => {
+              setSignUp(!signUp);
+              removeErrors();
+            }}
+          >
+            {signUp ? "Login" : "Join"}
+          </div>
         </div>
       </div>
     </Modal>
