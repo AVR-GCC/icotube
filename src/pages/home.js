@@ -7,8 +7,9 @@ import Search from '../components/search';
 import SideBar from '../components/sideBar';
 import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
-function Home({ history, location }) {
+function Home() {
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
@@ -43,7 +44,8 @@ function Home({ history, location }) {
         }
     }, [selectedPost, posts, navigate]);
 
-    const _post = (post, index) => (
+    const _post = (post, index) => {
+        return (
         <div
             key={post._id}
             className={'postContainer'}
@@ -72,6 +74,7 @@ function Home({ history, location }) {
             </div>
         </div>
     );
+            }
 
     const _main = () => {
         return (
@@ -83,6 +86,12 @@ function Home({ history, location }) {
             </div>
         );
     };
+
+    if (loading) {
+        return (
+            <CircularProgress size={20} />
+        );
+    }
 
     return (
         <div className={'topContainer'}>

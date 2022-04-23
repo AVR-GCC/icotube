@@ -1,0 +1,15 @@
+.loginModal {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.moveToSignup {
+    display: flex;
+    margin: 20px;
+}
+
+.MuiFilledInput-input {
+    color: #1a1a1a !important;
+}

@@ -1,3 +1,11 @@
+.title {
+  font-size: 22px;
+  letter-spacing: -0.8px;
+  text-align: center;
+  cursor: default;
+  font-weight: 600;
+}
+
 .sButton {
   border-radius: 6px;
   background-color: #0667D0;
@@ -49,4 +57,22 @@
   margin-bottom: 4px;
   margin-left: 15px;
   cursor: pointer;
+}
+
+.linkText {
+  color: rgb(0, 173, 239) !important;
+  font-size: 15px;
+  cursor: pointer;
+  max-height: 130px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  overflow: hidden;
+  padding: 2px;
+  margin-bottom: 22px;
+}
+
+.linkText:hover {
+  color: rgb(0, 136, 204) !important;
+  text-decoration: underline;
 }
