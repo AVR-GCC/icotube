@@ -20,3 +20,11 @@ export const refreshTokenSetup = (res) => {
     // Setup first refresh timer
     setTimeout(refreshToken, refreshTiming);
 };
+
+export const setToken = (token) => {
+    localStorage.setItem('tubeAuthToken', token);
+};
+
+export const getToken = () => {
+    localStorage.getItem('tubeAuthToken');
+};

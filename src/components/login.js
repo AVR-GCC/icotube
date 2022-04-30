@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/login.css';
 import { GoogleLogin, useGoogleLogout } from 'react-google-login';
-import { LogoutRounded } from '@mui/icons-material';
+import { LogoutRounded, Person } from '@mui/icons-material';
 import { CircularProgress, TextField, Divider } from '@mui/material';
-import { loginAPI, signupAPI } from '../actions/searchAPI';
+import { loginAPI, signupAPI, testAuthAPI, logoutAPI } from '../actions/searchAPI';
 import Modal from './modal';
 // refresh token
 import { refreshTokenSetup } from '../utils';
@@ -21,28 +21,46 @@ const AuthModal = ({
   const [passwordError, setPasswordError] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   const removeErrors = () => {
     if (emailError) setEmailError('');
     if (passwordError) setPasswordError('');
     if (confirmPasswordError) setConfirmPasswordError('');
+    if (loginError) setLoginError('');
   };
 
-  const onSuccess = (res) => {
-    console.log('Login Success: currentUser:', res);
+  const onGoogleSuccess = (res) => {
+    console.log('Login Success Google -', res);
+
+    loginAPI({
+      googleToken: res.tokenObj.id_token,
+      imageUrl: res.profileObj.imageUrl,
+      after: loginUser
+    });
     onSignIn(res.profileObj);
     refreshTokenSetup(res);
     closeModal();
   };
 
+  const loginUser = (res) => {
+    if (res.data) {
+      if (res.data.error) {
+        setLoginError(res.data.error.message);
+      } else {
+        console.log('res', res);
+        onSignIn(res.data.user);
+        closeModal();
+      }
+    } else {
+      setLoginError('Incorrect email or password');
+    }
+  }
+
   const signUpWithEmail = () => {
+    removeErrors();
     if (email && password && confirmPassword && confirmPassword === password) {
-      signupAPI(email, password, () => {},
-        (res) => {
-          console.log('res', res);
-          // onSignIn(res);
-        }
-      );
+      signupAPI(email, password, () => {}, loginUser);
       return;
     }
     if (!email) {
@@ -60,13 +78,13 @@ const AuthModal = ({
   }
 
   const loginWithEmail = () => {
+    removeErrors();
     if (email && password) {
-      loginAPI(email, password, null, () => {},
-        (res) => {
-          console.log('res', res);
-          // onSignIn(res);
-        }
-      );
+      loginAPI({
+        email,
+        password,
+        after: loginUser
+      });
       return;
     }
     if (!email) {
@@ -77,7 +95,12 @@ const AuthModal = ({
     }
   }
 
-  const height = 360 + (emailError ? 20 : 0) + (passwordError ? 20 : 0) + (confirmPasswordError ? 20 : 0) + (signUp ? 80 : 0);
+  const height = 360
+    + (emailError ? 20 : 0)
+    + (passwordError ? 20 : 0)
+    + (confirmPasswordError ? 20 : 0)
+    + (signUp ? 80 : 0)
+    + (loginError ? 20 : 0);
 
   return (
     <Modal
@@ -145,11 +168,14 @@ const AuthModal = ({
         >
             <span style={{ fontSize: 14 }}>{signUp ? "Signup with Email" : "Login with Email"}</span>
         </div>
+        {loginError ? (
+            <div className='error'>{loginError}</div>
+        ) : null}
         <div style={{ width: '100%', margin: 10 }}><Divider>or</Divider></div>
         <GoogleLogin
           clientId={clientId}
           buttonText={signUp ? "Signup with Google" : "Login with Google"}
-          onSuccess={onSuccess}
+          onSuccess={onGoogleSuccess}
           onFailure={onFailure}
           cookiePolicy={'single_host_origin'}
           style={{ marginTop: '100px' }}
@@ -173,6 +199,12 @@ const AuthModal = ({
   );
 }
 
+const testAuth = () => {
+  testAuthAPI(() => {},  (res) => {
+    console.log('testAuth res', res);
+  })
+}
+
 const Logout = ({
   clientId,
   currentUser,
@@ -186,15 +218,22 @@ const Logout = ({
   });
   return (
     <div>
-      <img
-        className='avatar'
-        src={currentUser?.imageUrl}
-        alt='user'
-        // style={{
-        //   backgroundImage: `url("${currentUser?.imageUrl}")`
-        // }}
+      {currentUser?.imageUrl ? (
+        <img
+          className='avatar'
+          src={currentUser?.imageUrl}
+          alt='user'
+          // style={{
+          //   backgroundImage: `url("${currentUser?.imageUrl}")`
+          // }}
+        />
+      ) : (
+        <Person className='logoutButton' />
+      )}
+      <LogoutRounded
+        onClick={signOut}
+        className='logoutButton'
       />
-      <LogoutRounded onClick={signOut} className='logoutButton' />
     </div>
   );
 }
@@ -209,6 +248,7 @@ const Login = ({
 
   const onLogoutSuccess = (res) => {
     console.log('Logout Success: currentUser:', res);
+    logoutAPI();
     onSignOut();
   };
 
