@@ -247,7 +247,7 @@ const Login = ({
   const [modalOpen, setModalOpen] = useState(false);
 
   const onLogoutSuccess = (res) => {
-    console.log('Logout Success! user -', res);
+    console.log('Logout Success: user -', res);
     logoutAPI();
     onSignOut();
   };
