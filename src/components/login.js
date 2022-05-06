@@ -36,20 +36,20 @@ const AuthModal = ({
     loginAPI({
       googleToken: res.tokenObj.id_token,
       imageUrl: res.profileObj.imageUrl,
-      after: loginUser
+      after: (res) => loginUser(res, true)
     });
     onSignIn(res.profileObj);
     refreshTokenSetup(res);
     closeModal();
   };
 
-  const loginUser = (res) => {
+  const loginUser = (res, isGoogle) => {
     if (res.data) {
       if (res.data.error) {
         setLoginError(res.data.error.message);
       } else {
         console.log('res', res);
-        onSignIn(res.data.user);
+        onSignIn({ ...res.data.user, isGoogle });
         closeModal();
       }
     } else {
@@ -223,15 +223,12 @@ const Logout = ({
           className='avatar'
           src={currentUser?.imageUrl}
           alt='user'
-          // style={{
-          //   backgroundImage: `url("${currentUser?.imageUrl}")`
-          // }}
         />
       ) : (
         <Person className='logoutButton' />
       )}
       <LogoutRounded
-        onClick={signOut}
+        onClick={currentUser.isGoogle ? signOut : onLogoutSuccess}
         className='logoutButton'
       />
     </div>
