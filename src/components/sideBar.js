@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/sideBar.css';
 
 function SideBar(props) {
+    const { currentUser } = props;
     const navigate = useNavigate();
     const navigateToMain = () => {
         navigate('/');
@@ -47,9 +48,11 @@ function SideBar(props) {
                 ENDED ICO
             </div>
             <div
-                className={'publishLink'}
+                className={currentUser ? 'publishLink' : 'publishLinkDisabled'}
                 onClick={() => {
-                    navigateToPublish();
+                    if (currentUser || true) {
+                        navigateToPublish();
+                    }
                 }}
             >
                 Publish

@@ -14,6 +14,9 @@ const AuthModal = ({
   onFailure,
   closeModal
 }) => {
+  window.addEventListener("message", ({ data }) => {
+    console.log('message data', data);
+  });
   const [signUp, setSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
