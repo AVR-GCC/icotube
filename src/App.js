@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { getConfigAPI } from './actions/searchAPI';
+import { getConfigAPI, loginSuccessAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
@@ -22,6 +22,13 @@ function App() {
     getConfigAPI(() => {}, (res) => {
       setConfig(res.data);
     })
+  }, []);
+
+  useEffect(() => {
+    loginSuccessAPI().then(result => {
+      console.log('login success reply', result);
+      setUser(result?.data?.user);
+    });
   }, []);
 
   return (
