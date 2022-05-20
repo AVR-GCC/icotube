@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { findIndex } from 'lodash';
 import  '../styles/home.css';
@@ -15,6 +15,17 @@ function Home() {
 
     const [hoveredPost, setHoveredPost] = useState(null);
     const [selectedPost, setSelectedPost] = useState(-1);
+
+    // const videoRefresher = useRef(null);
+
+    // useEffect(() => {
+    //     videoRefresher.current = setInterval(() => {
+    //         const curHoveredPost = hoveredPost;
+    //         setHoveredPost(null);
+    //         setHoveredPost(curHoveredPost);
+    //     }, 5000);
+    //     return () => clearInterval(videoRefresher.current);
+    // }, [hoveredPost])
 
     const { postId } = useParams();
     const navigate = useNavigate();
@@ -45,6 +56,8 @@ function Home() {
     }, [selectedPost, posts, navigate]);
 
     const _post = (post, index) => {
+        console.log('index', index);
+        console.log('hoveredPost', hoveredPost);
         return (
         <div
             key={post._id}
