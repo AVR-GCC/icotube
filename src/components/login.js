@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
-import { CircularProgress, TextField, Divider } from '@mui/material';
-import { loginAPI, signupAPI, testAuthAPI, logoutAPI, baseURL } from '../actions/searchAPI';
+import { TextField, Divider } from '@mui/material';
+import { loginAPI, signupAPI, testAuthAPI, baseURL } from '../actions/searchAPI';
+import APIcall from '../actions/server';
 import Modal from './modal';
 // refresh token
 import { refreshTokenSetup } from '../utils';
@@ -274,6 +275,22 @@ const Login = ({
           closeModal={() => setModalOpen(false)}
         />
       ) : null}
+      <div
+        onClick={() => {
+          APIcall({
+            method: "GET",
+            url: 'check-auth',
+            events: [
+              () => {},
+              (res) => {
+                console.log('got res', res);
+              }
+            ]
+        });
+        }}
+      >
+        Test Auth
+      </div>
       {currentUser ? _logoutButtons() : _loginButton()}
     </div>
   );

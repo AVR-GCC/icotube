@@ -100,7 +100,7 @@ function Home({ currentUser }) {
         );
     };
 
-    if (loading || true) {
+    if (loading) {
         return (
             <div className={'loaderContainer'}>
                 <CircularProgress size={50} />
