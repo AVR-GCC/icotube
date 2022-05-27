@@ -9,7 +9,7 @@ import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 
-function Home() {
+function Home({ currentUser }) {
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
@@ -56,8 +56,8 @@ function Home() {
     }, [selectedPost, posts, navigate]);
 
     const _post = (post, index) => {
-        console.log('index', index);
-        console.log('hoveredPost', hoveredPost);
+        // console.log('index', index);
+        // console.log('hoveredPost', hoveredPost);
         return (
         <div
             key={post._id}
@@ -119,7 +119,7 @@ function Home() {
                     }}
                 />
             )}
-            <SideBar />
+            <SideBar currentUser={currentUser} />
             {_main()}
         </div>
     );

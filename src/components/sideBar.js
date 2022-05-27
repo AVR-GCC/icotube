@@ -4,6 +4,7 @@ import '../styles/sideBar.css';
 
 function SideBar(props) {
     const { currentUser } = props;
+    console.log('SideBar currentUser', currentUser);
     const navigate = useNavigate();
     const navigateToMain = () => {
         navigate('/');
@@ -48,9 +49,10 @@ function SideBar(props) {
                 ENDED ICO
             </div>
             <div
+                title={currentUser ? 'Publish a new post' : 'Please log in to publish'}
                 className={currentUser ? 'publishLink' : 'publishLinkDisabled'}
                 onClick={() => {
-                    if (currentUser || true) {
+                    if (currentUser) {
                         navigateToPublish();
                     }
                 }}

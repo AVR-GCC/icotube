@@ -11,9 +11,9 @@ const AuthModal = ({
   onSignIn,
   closeModal
 }) => {
-  window.addEventListener("message", ({ data }) => {
-    console.log('message data', data);
-  });
+  // window.addEventListener("message", ({ data }) => {
+  //   console.log('message data', data);
+  // });
   const [signUp, setSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -87,7 +87,7 @@ const AuthModal = ({
     }
   };
 
-  const height = 400
+  const height = 360
     + (emailError ? 20 : 0)
     + (passwordError ? 20 : 0)
     + (confirmPasswordError ? 20 : 0)
@@ -212,8 +212,8 @@ const AuthModal = ({
         {_title()}
         {_inputs()}
         {_loginButton()}
-        {_divider()}
-        {_googleLogin()}
+        {/* {_divider()} */}
+        {/* {_googleLogin()} */}
         {_signInLogin()}
       </div>
     </Modal>
