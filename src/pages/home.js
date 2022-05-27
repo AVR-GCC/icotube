@@ -59,35 +59,35 @@ function Home({ currentUser }) {
         // console.log('index', index);
         // console.log('hoveredPost', hoveredPost);
         return (
-        <div
-            key={post._id}
-            className={'postContainer'}
-            onMouseEnter={() => setHoveredPost(post._id)}
-            onMouseLeave={() => setHoveredPost(null)}
-            onClick={() => {
-                setSelectedPost(index);
-            }}
-        >
-            <ReactPlayer
-                playing={hoveredPost === post._id}
-                height={313}
-                width={313}
-                url={post.videoUrl}
-                muted={true}
-                controls={false}
-            />
-            <div className={'boxICOTextSection'}>
-                <div className={'boxICOTitle'}>{post.title}</div>
-                <div>{post.type}</div>
-                <div>Fundraising Goal: {
-                    post.fundraisingGoal === undefined ?
-                    'NOT SET' : post.fundraisingGoal
-                }</div>
-                <div className={'boxICODescriptionHolder'}>{post.description}</div>
+            <div
+                key={post._id}
+                className={'postContainer'}
+                onMouseEnter={() => setHoveredPost(post._id)}
+                onMouseLeave={() => setHoveredPost(null)}
+                onClick={() => {
+                    setSelectedPost(index);
+                }}
+            >
+                <ReactPlayer
+                    playing={hoveredPost === post._id}
+                    height={313}
+                    width={313}
+                    url={post.videoUrl}
+                    muted={true}
+                    controls={false}
+                />
+                <div className={'boxICOTextSection'}>
+                    <div className={'boxICOTitle'}>{post.title}</div>
+                    <div>{post.type}</div>
+                    <div>Fundraising Goal: {
+                        post.fundraisingGoal === undefined ?
+                        'NOT SET' : post.fundraisingGoal
+                    }</div>
+                    <div className={'boxICODescriptionHolder'}>{post.description}</div>
+                </div>
             </div>
-        </div>
-    );
-            }
+        );
+    }
 
     const _main = () => {
         return (
@@ -100,9 +100,11 @@ function Home({ currentUser }) {
         );
     };
 
-    if (loading) {
+    if (loading || true) {
         return (
-            <CircularProgress size={20} />
+            <div className={'loaderContainer'}>
+                <CircularProgress size={50} />
+            </div>
         );
     }
 
