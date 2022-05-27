@@ -24,12 +24,12 @@ function App() {
     })
   }, []);
 
-  useEffect(() => {
-    loginSuccessAPI().then(result => {
-      console.log('login success reply', result);
-      setUser(result?.data?.user);
-    });
-  }, []);
+  // useEffect(() => { for google passport
+  //   loginSuccessAPI().then(result => {
+  //     console.log('login success reply', result);
+  //     setUser(result?.data?.user);
+  //   });
+  // }, []);
 
   return (
     <div className="App">
