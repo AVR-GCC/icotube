@@ -278,6 +278,7 @@ const Login = ({
       <div
         onClick={() => {
           APIcall({
+            withCredentials: true,
             method: "GET",
             url: 'check-auth',
             events: [
