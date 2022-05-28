@@ -3,7 +3,6 @@ import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { TextField, Divider } from '@mui/material';
 import { loginAPI, signupAPI, testAuthAPI, baseURL } from '../actions/searchAPI';
-import APIcall from '../actions/server';
 import Modal from './modal';
 // refresh token
 import { refreshTokenSetup, setToken } from '../utils';
@@ -277,14 +276,7 @@ const Login = ({
         />
       ) : null}
       <div
-        onClick={() => {
-          testAuthAPI(
-            () => {},
-            (res) => {
-              console.log('got res', res);
-            }
-          );
-        }}
+        onClick={testAuth}
       >
         Test Auth
       </div>
