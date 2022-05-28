@@ -7,6 +7,7 @@ const APIcall = async ({ url, method, events, body, withCredentials }) => {
     console.log('url:', url);
     console.log('method:', method);
     console.log('body:', body);
+    console.log('withCredentials:', withCredentials);
     if (events && events.length) {
         events[0]()
     }
