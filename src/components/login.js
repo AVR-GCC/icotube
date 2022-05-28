@@ -35,7 +35,8 @@ const AuthModal = ({
       if (res.data.error) {
         setLoginError(res.data.error.message);
       } else {
-        setToken(res.data.token)
+        console.log('loginUser token', res.data.token);
+        setToken(res.data.token);
         onSignIn({ ...res.data.user, isGoogle });
         closeModal();
       }

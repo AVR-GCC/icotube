@@ -45,7 +45,7 @@ export const signupAPI = async (email, password, before, after) => {
 
 export const testAuthAPI = async (before, after) => {
     before();
-    const token = `Bearer ${getToken()}`;
+    const token = getToken();
     console.log('token', token);
     const result = await axios.get(`${baseURL}/check-auth`, { withCredentials: true, headers: { Authorization: token } });
     after(result);
