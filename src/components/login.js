@@ -6,7 +6,7 @@ import { loginAPI, signupAPI, testAuthAPI, baseURL } from '../actions/searchAPI'
 import APIcall from '../actions/server';
 import Modal from './modal';
 // refresh token
-import { refreshTokenSetup } from '../utils';
+import { refreshTokenSetup, setToken } from '../utils';
 
 const AuthModal = ({
   onSignIn,
@@ -36,7 +36,7 @@ const AuthModal = ({
       if (res.data.error) {
         setLoginError(res.data.error.message);
       } else {
-        console.log('res', res);
+        setToken(res.data.token)
         onSignIn({ ...res.data.user, isGoogle });
         closeModal();
       }
@@ -65,10 +65,10 @@ const AuthModal = ({
     }
   };
 
-  const loginWithGoogle = () => {
-    removeErrors();
-    window.open(`${baseURL}/auth/google`, '_self');
-  };
+  // const loginWithGoogle = () => {
+  //   removeErrors();
+  //   window.open(`${baseURL}/auth/google`, '_self');
+  // };
 
   const loginWithEmail = () => {
     removeErrors();
@@ -170,22 +170,22 @@ const AuthModal = ({
     </React.Fragment>
   );
 
-  const _divider = () => <div style={{ width: '100%', margin: 10 }}><Divider>or</Divider></div>;
+  // const _divider = () => <div style={{ width: '100%', margin: 10 }}><Divider>or</Divider></div>;
 
-  const _googleLogin = () => (
-    <div
-      className='googleLogin'
-      style={{ marginTop: '100px' }}
-      onClick={loginWithGoogle}
-      // buttonText={signUp ? "Signup with Google" : "Login with Google"}
-      // onSuccess={onGoogleSuccess}
-      // onFailure={onFailure}
-      // cookiePolicy={'single_host_origin'}
-      // isSignedIn={true}
-    >
-      {signUp ? "Signup with Google" : "Login with Google"}
-    </div>
-  );
+  // const _googleLogin = () => (
+  //   <div
+  //     className='googleLogin'
+  //     style={{ marginTop: '100px' }}
+  //     onClick={loginWithGoogle}
+  //     // buttonText={signUp ? "Signup with Google" : "Login with Google"}
+  //     // onSuccess={onGoogleSuccess}
+  //     // onFailure={onFailure}
+  //     // cookiePolicy={'single_host_origin'}
+  //     // isSignedIn={true}
+  //   >
+  //     {signUp ? "Signup with Google" : "Login with Google"}
+  //   </div>
+  // );
 
   const _signInLogin = () => (
     <div className='moveToSignup'>
@@ -235,6 +235,7 @@ const Login = ({
   const [modalOpen, setModalOpen] = useState(false);
 
   const logout = () => {
+    setToken(null);
     window.open(`${baseURL}/auth/logout`, '_self');
   };
 
@@ -277,17 +278,12 @@ const Login = ({
       ) : null}
       <div
         onClick={() => {
-          APIcall({
-            withCredentials: true,
-            method: "GET",
-            url: 'check-auth',
-            events: [
-              () => {},
-              (res) => {
-                console.log('got res', res);
-              }
-            ]
-        });
+          testAuthAPI(
+            () => {},
+            (res) => {
+              console.log('got res', res);
+            }
+          );
         }}
       >
         Test Auth
