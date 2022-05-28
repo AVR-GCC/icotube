@@ -121,8 +121,13 @@ function Publish() {
                     setNotificationText('Submitting post...');
                 }, (res) => {
                     setLoading(false);
-                    setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
-                    setPostSubmitted(true);
+                    const autoPublish = res?.data?.autoPublish;
+                    if (autoPublish) {
+                        setNotificationText(`Post: ${post.title} - published!`);
+                    } else {
+                        setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
+                        setPostSubmitted(true);
+                    }
                 }
             );
         } else {

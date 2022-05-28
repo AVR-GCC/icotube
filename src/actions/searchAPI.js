@@ -14,7 +14,7 @@ export const getPostsAPI = (before, after) => {
 
 export const submitPostAPI = async (body, before, after) => {
     before();
-    const result = await axios.put(`${baseURL}/posts`, body);
+    const result = await axios.put(`${baseURL}/posts`, body, { withCredentials: true, headers: { Authorization: getToken() } });
     after(result);
 };
 

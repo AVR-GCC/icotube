@@ -276,11 +276,11 @@ const Login = ({
           closeModal={() => setModalOpen(false)}
         />
       ) : null}
-      <div
+      {/* <div
         onClick={testAuth}
       >
         Test Auth
-      </div>
+      </div> */}
       {currentUser ? _logoutButtons() : _loginButton()}
     </div>
   );

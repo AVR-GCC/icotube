@@ -4,7 +4,6 @@ import '../styles/sideBar.css';
 
 function SideBar(props) {
     const { currentUser } = props;
-    console.log('SideBar currentUser', currentUser);
     const navigate = useNavigate();
     const navigateToMain = () => {
         navigate('/');
