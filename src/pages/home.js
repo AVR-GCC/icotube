@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactPlayer from 'react-player';
 import { findIndex } from 'lodash';
 import  '../styles/home.css';
@@ -6,15 +6,19 @@ import { getPostsAPI } from '../actions/searchAPI';
 import Search from '../components/search';
 import SideBar from '../components/sideBar';
 import SelectedPost from '../components/selectedPost';
+import Login from '../components/login';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 
-function Home({ currentUser }) {
+function Home({ currentUser, setUser }) {
+    console.log('navigator', navigator);
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
-    const [hoveredPost, setHoveredPost] = useState(null);
+    const [hoveredPost, setHoveredPost] = useState  (null);
     const [selectedPost, setSelectedPost] = useState(-1);
+
+    const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
 
     // const videoRefresher = useRef(null);
 
@@ -121,7 +125,7 @@ function Home({ currentUser }) {
                     }}
                 />
             )}
-            <SideBar currentUser={currentUser} />
+            {!isMobile.current && <SideBar currentUser={currentUser} />}
             {_main()}
         </div>
     );
