@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import { loginAPI, signupAPI, testAuthAPI, baseURL } from '../actions/searchAPI';
 import Modal from './modal';
 // refresh token
@@ -234,12 +233,10 @@ const Login = ({
   onSignOut
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const navigate = useNavigate();
 
   const logout = () => {
     setToken(null);
     window.open(`${baseURL}/auth/logout`, '_self');
-    navigate('/');
   };
 
   const onFailure = (res) => {
