@@ -243,7 +243,7 @@ const Login = ({
   };
 
   const onFailure = (res) => {
-    console.log(`${currentUser ? 'Login' : 'Logout'} failed: res:`, res);
+    console.log(`${currentUser ? 'Login' : 'Logout'} failed: res::`, res);
   };
 
   const _logoutButtons = () => (
