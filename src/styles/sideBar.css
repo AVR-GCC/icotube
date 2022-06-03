@@ -6,6 +6,7 @@
   overflow: auto;
   height: 100%;
   width: 240px;
+  border-right: 1px solid rgb(255, 255, 255, 0.1);
 }
 
 .section {

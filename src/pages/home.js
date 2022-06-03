@@ -4,6 +4,7 @@ import { findIndex } from 'lodash';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
+import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
@@ -16,6 +17,7 @@ function Home({ currentUser, setUser }) {
     const [autoplayTimer, setAutoplayTimer] = useState(null);
     const [selectedPost, setSelectedPost] = useState(-1);
 
+    const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
     const mainRef = useRef(null);
 
     // const videoRefresher = useRef(null);
@@ -130,20 +132,23 @@ function Home({ currentUser, setUser }) {
     }
 
     return (
-        <div className={'topContainer'}>
-            {selectedPost !== -1 && (
-                <SelectedPost
-                    post={posts[selectedPost]}
-                    rightClick={selectedPost >= posts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
-                    leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
-                    XClick={() => {
-                        setSelectedPost(-1);
-                        navigate('/');
-                    }}
-                />
-            )}
-            {!isMobile.current && <SideBar currentUser={currentUser} />}
-            {_main()}
+        <div>
+            <TopBar currentUser={currentUser} />
+            <div className={'topContainer'}>
+                {selectedPost !== -1 && (
+                    <SelectedPost
+                        post={posts[selectedPost]}
+                        rightClick={selectedPost >= posts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
+                        leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
+                        XClick={() => {
+                            setSelectedPost(-1);
+                            navigate('/');
+                        }}
+                    />
+                )}
+                {!isMobile.current && <SideBar currentUser={currentUser} />}
+                {_main()}
+            </div>
         </div>
     );
 }

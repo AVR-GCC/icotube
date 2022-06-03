@@ -1,0 +1,14 @@
+.topBar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: rgb(33, 33, 33);
+  height: 56px;
+  width: 100%;
+  border-bottom: solid 1px rgb(255, 255, 255, 0.1);
+}
+
+.logo {
+  margin-left: 73px;
+  cursor: default;
+}

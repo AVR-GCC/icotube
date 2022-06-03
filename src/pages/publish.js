@@ -4,12 +4,13 @@ import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
+import TopBar from '../components/topBar';
 import { TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
 
-function Publish() {
+function Publish({ currentUser }) {
 
     // const [loading, setLoading] = useState(false);
     const [postSubmitted, setPostSubmitted] = useState(false);
@@ -263,20 +264,23 @@ function Publish() {
     };
 
     return (
-        <div className='topContainer'>
-            <SideBar />
-            <div className='publishMainContainer'>
-                <div className='publishTitle'>
-                    Publish Funding Campaign
+        <div>
+            <TopBar currentUser={currentUser} />
+            <div className='topContainer'>
+                <SideBar />
+                <div className='publishMainContainer'>
+                    <div className='publishTitle'>
+                        Publish Funding Campaign
+                    </div>
+                    <div
+                        className='notificationText'
+                        style={{ color: loading ? '#afaf33' : 'green' }}
+                    >
+                        <div className='loadingIndicator'>{loading && <CircularProgress size={20} />}</div>
+                        {notificationText}
+                    </div>
+                    {_main()}
                 </div>
-                <div
-                    className='notificationText'
-                    style={{ color: loading ? '#afaf33' : 'green' }}
-                >
-                    <div className='loadingIndicator'>{loading && <CircularProgress size={20} />}</div>
-                    {notificationText}
-                </div>
-                {_main()}
             </div>
         </div>
     );
