@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Upcoming, History, NewReleases } from '@mui/icons-material';
 import '../styles/sideBar.css';
 
 function SideBar(props) {
@@ -16,12 +17,13 @@ function SideBar(props) {
     return (
         <div className={'sideBar'}>
             <div
-                className={'logo'}
+                className={'section'}
                 onClick={() => {
                     navigateToMain();
                 }}
             >
-                ICO Tube
+                <div className="icon"><Upcoming /></div>
+                Upcoming ICOs
             </div>
             <div
                 className={'section'}
@@ -29,7 +31,8 @@ function SideBar(props) {
                     navigateToMain();
                 }}
             >
-                UPCOMING ICO
+                <div className="icon"><NewReleases /></div>
+                Running ICOs
             </div>
             <div
                 className={'section'}
@@ -37,15 +40,8 @@ function SideBar(props) {
                     navigateToMain();
                 }}
             >
-                RUNNING ICO
-            </div>
-            <div
-                className={'section'}
-                onClick={() => {
-                    navigateToMain();
-                }}
-            >
-                ENDED ICO
+                <div className="icon"><History /></div>
+                Ended ICOs
             </div>
             <div
                 title={currentUser ? 'Publish a new post' : 'Please log in to publish'}

@@ -9,6 +9,12 @@
   overflow-x: hidden;
 }
 
+.subMainContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .postsContainer {
   display: flex;
   flex-wrap: wrap;

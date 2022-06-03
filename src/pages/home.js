@@ -3,22 +3,20 @@ import ReactPlayer from 'react-player';
 import { findIndex } from 'lodash';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
-import Search from '../components/search';
 import SideBar from '../components/sideBar';
 import SelectedPost from '../components/selectedPost';
-import Login from '../components/login';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 
 function Home({ currentUser, setUser }) {
-    console.log('navigator', navigator);
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
-    const [hoveredPost, setHoveredPost] = useState  (null);
+    const [hoveredPost, setHoveredPost] = useState(null);
+    const [autoplayTimer, setAutoplayTimer] = useState(null);
     const [selectedPost, setSelectedPost] = useState(-1);
 
-    const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
+    const mainRef = useRef(null);
 
     // const videoRefresher = useRef(null);
 
@@ -66,8 +64,17 @@ function Home({ currentUser, setUser }) {
             <div
                 key={post._id}
                 className={'postContainer'}
-                onMouseEnter={() => setHoveredPost(post._id)}
-                onMouseLeave={() => setHoveredPost(null)}
+                onMouseEnter={() => {
+                    setHoveredPost(null);
+                    setAutoplayTimer(setTimeout(() => {
+                        setHoveredPost(post._id);
+                    }, 3000));
+                }}
+                onMouseLeave={() => {
+                    clearTimeout(autoplayTimer);
+                    setHoveredPost(null);
+                    setAutoplayTimer(null);
+                }}
                 onClick={() => {
                     setSelectedPost(index);
                 }}
@@ -94,11 +101,21 @@ function Home({ currentUser, setUser }) {
     }
 
     const _main = () => {
+        const postWidth = 353;
+        let numPosts = 4;
+        if (mainRef.current) {
+            numPosts = Math.floor(mainRef.current.clientWidth / postWidth);
+        }
         return (
-            <div className={'mainContainer'}>
-                <Search />
-                <div className={'postsContainer'}>
-                    {posts.map((post, index) => _post(post, index))}
+            <div
+                className="mainContainer"
+                ref={mainRef}
+            >
+                {/* <Search /> */}
+                <div className="subMainContainer" style={{ width: numPosts * postWidth }}>
+                    <div className="postsContainer">
+                        {posts.map((post, index) => _post(post, index))}
+                    </div>
                 </div>
             </div>
         );
