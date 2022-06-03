@@ -36,7 +36,7 @@ function SelectedPost({
 
     return (
         <div className='selectedPost'>
-            <div className='topBar'>
+            <div className='postTopBar'>
                 <div className='social'>
                     <div className='socialButton'><FullscreenRounded /></div>
                     <div className='socialButton'><ReplyRounded /></div>

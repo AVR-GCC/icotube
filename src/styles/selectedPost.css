@@ -11,7 +11,7 @@
   transition: opacity 0.8s ease 0s;
 }
 
-.topBar {
+.postTopBar {
   margin-top: 10px;
   display: flex;
   align-items: center;
