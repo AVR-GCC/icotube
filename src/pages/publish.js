@@ -1,11 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import  '../styles/publish.css';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
-import { TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress, Button } from '@mui/material';
+import {
+    TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    CircularProgress,
+    Button,
+    ToggleButton,
+    ToggleButtonGroup
+} from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
@@ -102,6 +112,7 @@ function Publish({ currentUser }) {
     const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});
+    const [postType, setPostType] = React.useState('ICO');
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
@@ -155,6 +166,10 @@ function Publish({ currentUser }) {
         } else {
             setErrors(errorsObj);
         }
+    }
+
+    const handleChangeType = (_, arg2) => {
+        if (arg2) setPostType(arg2);
     }
 
     const handleChange = (val, fieldName) => {
@@ -239,6 +254,21 @@ function Publish({ currentUser }) {
                 return null;
         }
     }
+
+    const _typeToggle = () => (
+        <div className='toggleTypeContainer'>
+            <ToggleButtonGroup
+                color="primary"
+                value={postType}
+                exclusive
+                onChange={handleChangeType}
+            >
+                <ToggleButton value="ICO">ICO</ToggleButton>
+                <ToggleButton value="Airdrop">Airdrop</ToggleButton>
+                <ToggleButton value="NFT">NFT</ToggleButton>
+            </ToggleButtonGroup>
+        </div>
+    )
 
     const _main = () => {
         return (
@@ -327,6 +357,7 @@ function Publish({ currentUser }) {
                 >
                     <div className='publishTitle'>
                         Publish Funding Campaign
+                        {_typeToggle()}
                     </div>
                     <div
                         className='notificationText'
