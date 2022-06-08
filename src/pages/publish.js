@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import  '../styles/publish.css';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
@@ -11,13 +11,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
 
 function Publish({ currentUser }) {
-
-    // const [loading, setLoading] = useState(false);
-    const [postSubmitted, setPostSubmitted] = useState(false);
-    const [notificationText, setNotificationText] = useState('');
-    const [post, setPost] = useState({});
-    const [errors, setErrors] = useState({});
-    const [loading, setLoading] = useState(false);
 
     const fields = [
         {
@@ -104,6 +97,30 @@ function Publish({ currentUser }) {
             default: Date.now()
         },
     ];
+
+    // const [loading, setLoading] = useState(false);
+    const [postSubmitted, setPostSubmitted] = useState(false);
+    const [notificationText, setNotificationText] = useState('');
+    const [post, setPost] = useState({});
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    const [notificationTextTopPx, setNotificationTextTopPx] = useState(55);
+    const [notificationTextleftPercent, setNotificationTextleftPercent] = useState(0);
+    const [notificationTextRef, setNotificationTextRef] = useState(null);
+    const [publishMainContainerRef, setPublishMainContainerRef] = useState(null);
+
+    useEffect(() => {
+        const pmcWidth = publishMainContainerRef?.clientWidth;
+        const ntWidth = notificationTextRef?.clientWidth;
+        const sizeRatio = ntWidth / (pmcWidth ? pmcWidth : 1);
+        const srCompliment = 1 - sizeRatio;
+        const leftPercentRaw = 100 * srCompliment / 2;
+        const leftPercent = leftPercentRaw * (pmcWidth / (pmcWidth + 240));
+        if (leftPercent !== notificationTextleftPercent) {
+            setNotificationTextleftPercent(leftPercent);
+        }
+    }, [publishMainContainerRef, notificationTextRef, notificationText]);
 
     const toggleSubmitted = () => {
         setPostSubmitted(!postSubmitted);
@@ -226,6 +243,16 @@ function Publish({ currentUser }) {
     const _main = () => {
         return (
             <div className='publishInputContainer'>
+                {/* <TextField
+                    label={'showText'}
+                    variant='outlined'
+                    margin='normal'
+                    fullWidth
+                    value={notificationText}
+                    onChange={(event) => {
+                        setNotificationText(event.target.value)
+                    }}
+                /> */}
                 {fields.map(field => (
                     <div
                         key={`${field.name}_input_container`}
@@ -282,15 +309,38 @@ function Publish({ currentUser }) {
             <TopBar currentUser={currentUser} />
             <div className='topContainer'>
                 <SideBar />
-                <div className='publishMainContainer'>
+                <div
+                    className='publishMainContainer'
+                    ref={ref => {
+                        if (ref) setPublishMainContainerRef(ref);
+                    }}
+                    onScroll={(event) => {
+                        const st = event.target.scrollTop;
+                        if (st > 50) {
+                            if (notificationTextTopPx > 5) {
+                                setNotificationTextTopPx(5);
+                            }
+                        } else {
+                            setNotificationTextTopPx(55 - st);
+                        }
+                    }}
+                >
                     <div className='publishTitle'>
                         Publish Funding Campaign
                     </div>
                     <div
                         className='notificationText'
-                        style={{ color: loading ? '#afaf33' : 'green' }}
+                        style={{
+                            maxWidth: publishMainContainerRef?.clientWidth / 2,
+                            top: notificationTextTopPx,
+                            left: `calc(240px + ${notificationTextleftPercent}%)`,
+                            color: loading ? '#afaf33' : 'green'
+                        }}
+                        ref={ref => {
+                            if (ref) setNotificationTextRef(ref);
+                        }}
                     >
-                        <div className='loadingIndicator'>{loading && <CircularProgress size={20} />}</div>
+                        {loading && <div className='loadingIndicator'><CircularProgress size={20} /></div>}
                         {notificationText}
                     </div>
                     {_main()}

@@ -41,7 +41,7 @@
 }
 
 .publishTitle {
-  width: 100%;
+  width: -webkit-fill-available;
   text-align: center;
   margin: 20px;
   font-size: 25px;
@@ -50,13 +50,14 @@
 
 .notificationText {
   position: absolute;
-  left: 53%;
-  top: 8%;
   color: darkcyan;
   font-size: 14px;
+  top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;   
+  overflow: hidden; 
 }
 
 .loadingIndicator {
