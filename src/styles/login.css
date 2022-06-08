@@ -8,6 +8,7 @@
 .moveToSignup {
     display: flex;
     margin: 20px;
+    color: white;
 }
 
 .MuiFilledInput-input {

@@ -88,7 +88,7 @@ const AuthModal = ({
     }
   };
 
-  const height = 360
+  const height = 300
     + (emailError ? 20 : 0)
     + (passwordError ? 20 : 0)
     + (confirmPasswordError ? 20 : 0)
@@ -157,13 +157,13 @@ const AuthModal = ({
 
   const _loginButton = () => (
     <React.Fragment>
-      <div
-        className="sButton"
+      <Button
+        variant="outlined"
         style={{ marginTop: 20, width: '100%' }}
         onClick={signUp ? signUpWithEmail : loginWithEmail}
       >
         <span style={{ fontSize: 14 }}>{signUp ? "Signup with Email" : "Login with Email"}</span>
-      </div>
+      </Button>
       {loginError ? (
         <div className='error'>{loginError}</div>
       ) : null}
