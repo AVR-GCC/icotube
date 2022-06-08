@@ -5,7 +5,7 @@ import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 import { submitPostAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
-import { TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@mui/material';
+import { TextField, FormControl, InputLabel, Select, MenuItem, CircularProgress, Button } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
@@ -95,13 +95,13 @@ function Publish({ currentUser }) {
             name: 'startDate',
             label: 'Start Date',
             type: 'date',
-            default: Date.now
+            default: Date.now()
         },
         {
             name: 'endDate',
             label: 'End Date',
             type: 'date',
-            default: Date.now
+            default: Date.now()
         },
     ];
 
@@ -160,7 +160,7 @@ function Publish({ currentUser }) {
                         label={showText}
                         required={field.required}
                         multiline={field.multiline}
-                        variant='filled'
+                        variant='outlined'
                         margin='normal'
                         fullWidth
                         value={value}
@@ -174,7 +174,7 @@ function Publish({ currentUser }) {
                 return (
                     <FormControl
                         // sx={{ m: 1, minWidth: 120 }}
-                        variant='filled'
+                        variant='outlined'
                         margin='normal'
                         fullWidth
                     >
@@ -231,13 +231,13 @@ function Publish({ currentUser }) {
                     </div>
                 ))}
 
-                <div
-                    className="sButton"
+                <Button
+                    variant='outlined'
                     style={{ marginTop: 20 }}
                     onClick={handleSubmit}
                 >
                     <span style={{ fontSize: 14 }}>Submit</span>
-                </div>
+                </Button>
                 {postSubmitted ? (
                     <div className="paymentButton">
                         <CoinbaseCommerceButton
