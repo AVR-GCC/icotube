@@ -1,4 +1,5 @@
 // @flow
+import { Button as MuiButton } from '@mui/material';
 import * as React from 'react';
 import './button.css';
 
@@ -12,7 +13,7 @@ export default class Button extends React.PureComponent<Props> {
   render(){
     const {styled, children, ...props} = this.props;
     return (
-      <button {...props} className={styled ? 'coinbase-commerce-button' : props.className}>{children || 'Buy With Crypto'}</button>
+      <MuiButton variant='outlined' {...props}>{children || 'Buy With Crypto'}</MuiButton>
     );
   }
 }

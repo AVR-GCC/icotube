@@ -33,6 +33,13 @@
   padding: 50px;
 }
 
+.publishButtonsContainer {
+  display: flex;
+  width: 270px;
+  justify-content: space-between;
+  margin-left: 10px;
+}
+
 .publishTitle {
   width: 100%;
   text-align: center;

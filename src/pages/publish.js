@@ -105,6 +105,10 @@ function Publish({ currentUser }) {
         },
     ];
 
+    const toggleSubmitted = () => {
+        setPostSubmitted(!postSubmitted);
+    }
+
     const handleSubmit = () => {
         const errorsObj = {};
         let shouldSubmit = true;
@@ -231,14 +235,23 @@ function Publish({ currentUser }) {
                     </div>
                 ))}
 
-                <Button
-                    variant='outlined'
-                    style={{ marginTop: 20 }}
-                    onClick={handleSubmit}
-                >
-                    <span style={{ fontSize: 14 }}>Submit</span>
-                </Button>
-                {postSubmitted ? (
+
+                    {/* <Button
+                        variant='outlined'
+                        onClick={toggleSubmitted}
+                    >
+                        <span style={{ fontSize: 14 }}>Toggle Submit</span>
+                    </Button> */}
+
+                <div className='publishButtonsContainer'>
+                    <Button
+                        variant='outlined'
+                        style={{ marginTop: 20 }}
+                        onClick={handleSubmit}
+                        disabled={postSubmitted}
+                    >
+                        <span style={{ fontSize: 14 }}>Submit</span>
+                    </Button>
                     <div className="paymentButton">
                         <CoinbaseCommerceButton
                             styled={true}
@@ -256,9 +269,10 @@ function Publish({ currentUser }) {
                             onPaymentDetected={(arg) => {
                                 setNotificationText(`Payment made! The post will appear when the payment is confirmed`);
                             }}
+                            disabled={!postSubmitted}
                         />
                     </div>
-                ) : null}
+                </div>
             </div>
         );
     };
