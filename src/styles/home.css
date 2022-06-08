@@ -9,6 +9,30 @@
   overflow-x: hidden;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #212121;
+  border-left: solid 1px rgb(255, 255, 255, 0.1);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ffffff50;
+  border-radius: 5px;
+  border-left: solid 3px #212121;
+  border-right: solid 3px #212121;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ffffff80;
+}
+
 .subMainContainer {
   display: flex;
   flex-direction: column;
