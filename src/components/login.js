@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
-import { TextField } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import { loginAPI, signupAPI, testAuthAPI, baseURL } from '../actions/searchAPI';
 import Modal from './modal';
 // refresh token
@@ -262,9 +262,7 @@ const Login = ({
   );
 
   const _loginButton = () => (
-    <div className="sButton" onClick={() => setModalOpen(true)}>
-      Login
-    </div>
+    <Button variant="outlined" onClick={() => setModalOpen(true)}>Login</Button>
   )
 
   return (

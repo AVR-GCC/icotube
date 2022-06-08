@@ -39,7 +39,7 @@
 
 .loginContainer {
   position: absolute;
-  top: 20px;
+  top: 10px;
   right: 35px;
   z-index: 2;
 }
