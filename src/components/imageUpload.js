@@ -195,16 +195,14 @@ class ImageUploadCard extends React.Component {
 
     renderUploadedState() {
         return (
-            <React.Fragment>
-                <CardActionArea onClick={this.imageResetHandler}>
+            <CardActionArea onClick={this.imageResetHandler}>
                 <img
                     width="100%"
                     className="media"
                     src={this.state.selectedFile}
                     alt="Choose"
                 />
-                </CardActionArea>
-            </React.Fragment>
+            </CardActionArea>
         );
     }
 

@@ -1,9 +1,9 @@
 .root {
-    background-color: #212121;
-    width: 500px;
     display: flex;
     justify-content: center;
     align-items: flex-end;
+    border: 1px solid #00000030;
+    border-radius: 4px;
 }
 
 .icon {

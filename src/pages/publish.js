@@ -424,7 +424,7 @@ function Publish({ currentUser }) {
                 );
             case 'image':
                 return (
-                    <div style={{ margin: 8 }}>
+                    <div>
                         <ImageUpload />
                     </div>
                 );
