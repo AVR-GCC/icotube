@@ -4,15 +4,15 @@ import '../styles/topBar.css';
 import logoPNG from '../assets/icogalleryicon-topbarbg.jpg'
 
 function TopBar(props) {
-    const { currentUser } = props;
+    // const { currentUser } = props;
     const navigate = useNavigate();
     const navigateToMain = () => {
         navigate('/');
     }
 
-    const navigateToPublish = () => {
-        navigate('/publish');
-    }
+    // const navigateToPublish = () => {
+    //     navigate('/publish');
+    // }
 
     return (
         <div className={'topBar'}>

@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { TextField, Button } from '@mui/material';
-import { loginAPI, signupAPI, testAuthAPI, baseURL } from '../actions/searchAPI';
+import {
+  loginAPI,
+  signupAPI,
+  // testAuthAPI,
+  baseURL
+} from '../actions/searchAPI';
 import Modal from './modal';
 // refresh token
 import { setToken } from '../utils';
@@ -221,11 +226,11 @@ const AuthModal = ({
   );
 }
 
-const testAuth = () => {
-  testAuthAPI(() => {},  (res) => {
-    console.log('testAuth res', res);
-  })
-}
+// const testAuth = () => {
+//   testAuthAPI(() => {},  (res) => {
+//     console.log('testAuth res', res);
+//   })
+// }
 
 const Login = ({
   currentUser,

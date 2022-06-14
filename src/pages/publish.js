@@ -19,72 +19,48 @@ import {
 import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
+import ImageUpload from '../components/imageUpload';
 
 const fields = {
     ICO: [
         {
+            name: 'name',
+            label: 'Submitter Name',
+            type: 'string'
+        },
+        {
             name: 'email',
-            label: 'Contact Email',
+            label: 'Submitter Email',
             type: 'string',
             required: true
         },
         {
             name: 'title',
-            label: 'Title',
-            type: 'string',
-            required: true
+            label: 'Project Name',
+            type: 'string'
         },
         {
             name: 'type',
-            label: 'Type',
+            label: 'Project Category',
             type: 'enum',
             enum: [
                 'Platform',
                 'Blockchain Service'
             ],
-            required: true,
             default: 'Platform'
         },
         {
+            name: 'short-description',
+            label: 'Short Description',
+            type: 'string',
+            default: ''
+        },
+        {
             name: 'description',
-            label: 'Description',
+            label: 'Long Description',
             type: 'string',
             multiline: true,
             default: ''
-        },
-        {
-            name: 'isWhitelist',
-            label: 'Whitelist',
-            type: 'boolean',
-            default: ''
-        },
-        {
-            name: 'fundraisingGoal',
-            label: 'Fundraising Goal',
-            type: 'number'
-        },
-        {
-            name: 'ticker',
-            label: 'Ticker',
-            type: 'string',
-            required: true
-        },
-        {
-            name: 'tokenType',
-            label: 'Token Type',
-            type: 'string',
-            default: 'ERC20'
-        },
-        {
-            name: 'homepage',
-            label: 'Homepage',
-            type: 'string',
-        },
-        {
-            name: 'videoUrl',
-            label: 'Video URL',
-            type: 'string',
-            required: true
         },
         {
             name: 'startDate',
@@ -97,6 +73,109 @@ const fields = {
             label: 'End Date',
             type: 'date',
             default: Date.now()
+        },
+        {
+            name: 'ticker',
+            label: 'Ticker',
+            type: 'string'
+        },
+        {
+            name: 'tokenType',
+            label: 'Token Type',
+            type: 'string',
+            default: 'ERC20'
+        },
+        {
+            name: 'amountPerUser',
+            label: 'Price/Amount Per User',
+            type: 'number',
+            default: 'ERC20'
+        },
+        {
+            name: 'soft-cap',
+            label: 'Soft Cap',
+            type: 'number'
+        },
+        {
+            name: 'cap',
+            label: 'Hard Cap',
+            type: 'number'
+        },
+        {
+            name: 'totalTokens',
+            label: 'Total Tokens',
+            type: 'number'
+        },
+        {
+            name: 'availableTokens',
+            label: 'Available Tokens',
+            type: 'number'
+        },
+        {
+            name: 'minParticipation',
+            label: 'Minimum Participation',
+            type: 'number'
+        },
+        {
+            name: 'maxParticipation',
+            label: 'Maximum Participation',
+            type: 'number'
+        },
+        {
+            name: 'accepts',
+            label: 'Accepts',
+            type: 'enum',
+            enum: [
+                'BTC',
+                'Ethereum',
+                'USDT'
+            ],
+        },
+        {
+            name: 'isWhitelist',
+            label: 'Whitelist',
+            type: 'boolean',
+            default: false
+        },
+        {
+            name: 'restrictedCountries',
+            label: 'Restricted Countries',
+            type: 'boolean',
+        },
+        {
+            name: 'homepage',
+            label: 'Homepage',
+            type: 'string',
+        },
+        {
+            name: 'officialChat',
+            label: 'Official Chat',
+            type: 'string',
+        },
+        {
+            name: 'github',
+            label: 'Github',
+            type: 'string',
+        },
+        {
+            name: 'bitcoinTalk',
+            label: 'Bitcoin Talk',
+            type: 'string',
+        },
+        {
+            name: 'logo',
+            label: 'Logo',
+            type: 'image',
+        },
+        {
+            name: 'homepage',
+            label: 'Homepage',
+            type: 'string',
+        },
+        {
+            name: 'videoUrl',
+            label: 'Video URL',
+            type: 'string'
         },
     ],
     Airdrop: [
@@ -219,11 +298,16 @@ function Publish({ currentUser }) {
         if (leftPercent !== notificationTextleftPercent) {
             setNotificationTextleftPercent(leftPercent);
         }
-    }, [publishMainContainerRef, notificationTextRef, notificationText]);
+    }, [
+        publishMainContainerRef,
+        notificationTextRef,
+        notificationText,
+        notificationTextleftPercent
+    ]);
 
-    const toggleSubmitted = () => {
-        setPostSubmitted(!postSubmitted);
-    }
+    // const toggleSubmitted = () => {
+    //     setPostSubmitted(!postSubmitted);
+    // }
 
     const handleSubmit = () => {
         const errorsObj = {};
@@ -338,6 +422,12 @@ function Publish({ currentUser }) {
                         </LocalizationProvider>
                     </div>
                 );
+            case 'image':
+                return (
+                    <div style={{ margin: 8 }}>
+                        <ImageUpload />
+                    </div>
+                );
             default:
                 return null;
         }
@@ -352,8 +442,8 @@ function Publish({ currentUser }) {
                 onChange={handleChangeType}
             >
                 <ToggleButton value="ICO">ICO</ToggleButton>
-                <ToggleButton value="Airdrop">Airdrop</ToggleButton>
-                <ToggleButton value="NFT">NFT</ToggleButton>
+                <ToggleButton disabled value="Airdrop">Airdrop</ToggleButton>
+                <ToggleButton disabled value="NFT">NFT</ToggleButton>
             </ToggleButtonGroup>
         </div>
     )
