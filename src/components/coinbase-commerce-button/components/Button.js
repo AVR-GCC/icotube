@@ -13,7 +13,7 @@ export default class Button extends React.PureComponent<Props> {
   render(){
     const {styled, children, ...props} = this.props;
     return (
-      <MuiButton variant='outlined' {...props}>{children || 'Buy With Crypto'}</MuiButton>
+      <MuiButton variant='outlined' {...props}>{children || 'Pay With Crypto'}</MuiButton>
     );
   }
 }

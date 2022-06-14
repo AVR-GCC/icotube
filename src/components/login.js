@@ -109,7 +109,7 @@ const AuthModal = ({
         id="email-input"
         label="Email"
         required
-        variant='filled'
+        variant='outlined'
         margin='normal'
         fullWidth
         value={email}
@@ -125,7 +125,7 @@ const AuthModal = ({
         id="password-input"
         label="Password"
         required
-        variant='filled'
+        variant='outlined'
         margin='normal'
         fullWidth
         value={password}
@@ -142,7 +142,7 @@ const AuthModal = ({
           id="confirm-password-input"
           label="Confirm Password"
           required
-          variant='filled'
+          variant='outlined'
           margin='normal'
           fullWidth
           value={confirmPassword}

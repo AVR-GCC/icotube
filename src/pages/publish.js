@@ -20,9 +20,8 @@ import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
 
-function Publish({ currentUser }) {
-
-    const fields = [
+const fields = {
+    ICO: [
         {
             name: 'email',
             label: 'Contact Email',
@@ -88,11 +87,60 @@ function Publish({ currentUser }) {
             required: true
         },
         {
-            name: 'icoOrAirdrop',
-            label: 'Event Type',
-            type: 'enum',
-            enum: ['ICO', 'Airdrop'],
-            default: 'ICO'
+            name: 'startDate',
+            label: 'Start Date',
+            type: 'date',
+            default: Date.now()
+        },
+        {
+            name: 'endDate',
+            label: 'End Date',
+            type: 'date',
+            default: Date.now()
+        },
+    ],
+    Airdrop: [
+        {
+            name: 'email',
+            label: 'Contact Email',
+            type: 'string',
+            required: true
+        },
+        {
+            name: 'title',
+            label: 'Title',
+            type: 'string',
+            required: true
+        },
+        {
+            name: 'description',
+            label: 'Description',
+            type: 'string',
+            multiline: true,
+            default: ''
+        },
+        {
+            name: 'ticker',
+            label: 'Ticker',
+            type: 'string',
+            required: true
+        },
+        {
+            name: 'tokenType',
+            label: 'Token Type',
+            type: 'string',
+            default: 'ERC20'
+        },
+        {
+            name: 'homepage',
+            label: 'Homepage',
+            type: 'string',
+        },
+        {
+            name: 'videoUrl',
+            label: 'Video URL',
+            type: 'string',
+            required: true
         },
         {
             name: 'startDate',
@@ -106,8 +154,48 @@ function Publish({ currentUser }) {
             type: 'date',
             default: Date.now()
         },
-    ];
+    ],
+    NFT: [
+        {
+            name: 'email',
+            label: 'Contact Email',
+            type: 'string',
+            required: true
+        },
+        {
+            name: 'title',
+            label: 'Title',
+            type: 'string',
+            required: true
+        },
+        {
+            name: 'description',
+            label: 'Description',
+            type: 'string',
+            multiline: true,
+            default: ''
+        },
+        {
+            name: 'ticker',
+            label: 'Ticker',
+            type: 'string',
+            required: true
+        },
+        {
+            name: 'homepage',
+            label: 'Homepage',
+            type: 'string',
+        },
+        {
+            name: 'videoUrl',
+            label: 'Video URL',
+            type: 'string',
+            required: true
+        },
+    ]
+}
 
+function Publish({ currentUser }) {
     // const [loading, setLoading] = useState(false);
     const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
@@ -283,7 +371,7 @@ function Publish({ currentUser }) {
                         setNotificationText(event.target.value)
                     }}
                 /> */}
-                {fields.map(field => (
+                {fields[postType].map(field => (
                     <div
                         key={`${field.name}_input_container`}
                         style={{ width: '100%' }}
