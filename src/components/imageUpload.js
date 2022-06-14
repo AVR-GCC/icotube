@@ -22,70 +22,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import ReplayIcon from "@mui/icons-material/Replay";
-
-const classes = {
-    root: {
-        backgroundColor: '#212121',
-        width: 500,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-end"
-    },
-    icon: {
-        margin: 10
-    },
-    iconHover: {
-        margin: 10,
-        "&:hover": {
-            color: red[800]
-        }
-    },
-    cardHeader: {
-        textalign: "center",
-        align: "center",
-        backgroundColor: "white"
-    },
-    input: {
-        display: "none"
-    },
-    title: {
-        color: blue[800],
-        fontWeight: "bold",
-        fontFamily: "Montserrat",
-        align: "center"
-    },
-    button: {
-        color: blue[900],
-        margin: 10
-    },
-    secondaryButton: {
-        color: "gray",
-        margin: 10
-    },
-    typography: {
-        margin: 10,
-        backgroundColor: "default"
-    },
-
-    searchRoot: {
-        padding: "2px 4px",
-        display: "flex",
-        alignItems: "center",
-        width: 400
-    },
-    searchInput: {
-        marginLeft: 8,
-        flex: 1
-    },
-    searchIconButton: {
-        padding: 10
-    },
-    searchDivider: {
-        width: 1,
-        height: 28,
-        margin: 4
-    }
-};
+import  '../styles/imageUpload.css';
 
 class ImageUploadCard extends React.Component {
     state = {
@@ -116,13 +53,13 @@ class ImageUploadCard extends React.Component {
 
     handleSearchClick = event => {
         this.setState({
-        mainState: "search"
+            mainState: "search"
         });
     };
 
     handleGalleryClick = event => {
         this.setState({
-        mainState: "gallery"
+            mainState: "gallery"
         });
     };
 
@@ -132,21 +69,21 @@ class ImageUploadCard extends React.Component {
                 <Grid container justify="center" alignItems="center">
                     <input
                         accept="image/*"
-                        className={classes.input}
+                        className="input"
                         id="contained-button-file"
                         multiple
                         type="file"
                         onChange={this.handleUploadClick}
                     />
                     <label htmlFor="contained-button-file">
-                    <Fab component="span" className={classes.button}>
+                    <Fab component="span" className="button">
                         <AddPhotoAlternateIcon />
                     </Fab>
                     </label>
-                    <Fab className={classes.button} onClick={this.handleSearchClick}>
+                    <Fab className="button" onClick={this.handleSearchClick}>
                         <SearchIcon />
                     </Fab>
-                    <Fab className={classes.button} onClick={this.handleGalleryClick}>
+                    <Fab className="button" onClick={this.handleGalleryClick}>
                         <CollectionsIcon />
                     </Fab>
                 </Grid>
@@ -192,19 +129,19 @@ class ImageUploadCard extends React.Component {
 
     renderSearchState() {
         return (
-            <Paper className={classes.searchRoot} elevation={1}>
-                <InputBase className={classes.searchInput} placeholder="Image URL" />
+            <Paper className="search-root" elevation={1}>
+                <InputBase className="search-input" placeholder="Image URL" />
                 <IconButton
-                    className={classes.button}
+                    className="button"
                     aria-label="Search"
                     onClick={this.handleImageSearch}
                 >
                     <SearchIcon />
                 </IconButton>
-                <Divider className={classes.searchDivider} />
+                <Divider className="search-divider" />
                 <IconButton
                     color="primary"
-                    className={classes.secondaryButton}
+                    className="secondary-button"
                     aria-label="Close"
                     onClick={this.handleSeachClose}
                 >
@@ -245,7 +182,7 @@ class ImageUploadCard extends React.Component {
                     {listItems}
                     <IconButton
                         color="primary"
-                        className={classes.secondaryButton}
+                        className="secondary-button"
                         aria-label="Close"
                         onClick={this.handleSeachClose}
                     >
@@ -262,7 +199,7 @@ class ImageUploadCard extends React.Component {
                 <CardActionArea onClick={this.imageResetHandler}>
                 <img
                     width="100%"
-                    className={classes.media}
+                    className="media"
                     src={this.state.selectedFile}
                     alt="Choose"
                 />
@@ -282,7 +219,7 @@ class ImageUploadCard extends React.Component {
 
     render() {
         return (
-            <div className={classes.root}>
+            <div className="root">
                 <Card className={this.props.cardName}>
                     {this.state.mainState === "initial" && this.renderInitialState()}
                     {this.state.mainState === "search" && this.renderSearchState()}

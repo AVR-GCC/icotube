@@ -1,0 +1,64 @@
+.root {
+    background-color: #212121;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.icon {
+    margin: 10px;
+}
+
+.icon:hover {
+    color: #c62828;
+}
+
+.card-header {
+    text-align: center;
+    align-items: center;
+    background-color: white;
+}
+
+.input {
+    display: none;
+}
+
+.title {
+    color: #1565c0;
+    font-weight: bold;
+    font-family: Montserrat;
+    align-items: center;
+}
+
+.button {
+    color: #0d47a1;
+    margin: 10px;
+}
+
+.secondary-button {
+    color: gray;
+    margin: 10px;
+}
+
+.typography {
+    margin: 10px;
+    background-color: default;
+}
+
+.search-root {
+    padding: 2px 4px;
+    display: flex;
+    align-items: center;
+    width: 400px;
+}
+
+.search-input {
+    margin-left: 8px;
+}
+
+.search-divider {
+    width: 1px;
+    height: 28px;
+    margin: 4px;
+}
