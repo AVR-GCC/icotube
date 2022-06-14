@@ -1,27 +1,26 @@
-// imports the React Javascript Library
-import React from "react";
-//Card
-import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
-import CardContent from "@mui/material/CardContent";
+import React, { useState } from "react";
 
-import Fab from "@mui/material/Fab";
-import Grid from "@mui/material/Grid";
-import Avatar from "@mui/material/Avatar";
+import {
+    Card,
+    CardActionArea,
+    CardContent,
+    Fab,
+    Grid,
+    Avatar,
+    Paper,
+    InputBase,
+    Divider,
+    IconButton,
+    CloseIcon,
+    ReplayIcon,
+} from '@mui/material';
 
-import red from "@mui/material/colors/red";
-import blue from "@mui/material/colors/blue";
-import SearchIcon from "@mui/icons-material/Search";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import CollectionsIcon from "@mui/icons-material/Collections";
+import {
+    SearchIcon,
+    AddPhotoAlternateIcon,
+    CollectionsIcon
+} from '@mui/icons-material';
 
-// Search
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import ReplayIcon from "@mui/icons-material/Replay";
 import  '../styles/imageUpload.css';
 
 class ImageUploadCard extends React.Component {
