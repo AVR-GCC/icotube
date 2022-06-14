@@ -425,7 +425,7 @@ function Publish({ currentUser }) {
             case 'image':
                 return (
                     <div>
-                        <ImageUpload />
+                        <ImageUpload height={56} width={56} />
                     </div>
                 );
             default:

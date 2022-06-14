@@ -1,9 +1,14 @@
 .root {
     display: flex;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
     border: 1px solid #00000030;
     border-radius: 4px;
+}
+
+.card {
+    display: flex;
+    justify-content: center;
 }
 
 .icon {
@@ -32,8 +37,10 @@
 }
 
 .button {
+    background-color: #212121;
     color: #0d47a1;
     margin: 10px;
+    box-shadow: unset;
 }
 
 .secondary-button {
@@ -61,4 +68,10 @@
     width: 1px;
     height: 28px;
     margin: 4px;
+}
+
+.media {
+    border-radius: 4px;
+    margin: 5px;
+    border: 1px solid #00000030;
 }

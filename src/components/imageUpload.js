@@ -6,225 +6,113 @@ import {
     CardContent,
     Fab,
     Grid,
-    Avatar,
     Paper,
     InputBase,
     Divider,
     IconButton,
-    CloseIcon,
-    ReplayIcon,
 } from '@mui/material';
 
 import {
-    SearchIcon,
-    AddPhotoAlternateIcon,
-    CollectionsIcon
+    Close,
+    Search,
+    AddPhotoAlternate,
+    Collections
 } from '@mui/icons-material';
 
 import  '../styles/imageUpload.css';
 
-class ImageUploadCard extends React.Component {
-    state = {
-        mainState: "initial", // initial, search, gallery, uploaded
-        imageUploaded: 0,
-        selectedFile: null
-    };
+const ImageUpload = (props) => {
+    const [selectedFile, setSelectedFile] = useState(null);
 
-    handleUploadClick = event => {
-        console.log();
+    const handleUploadClick = event => {
         var file = event.target.files[0];
         const reader = new FileReader();
         var url = reader.readAsDataURL(file);
 
-        reader.onloadend = function(e) {
-            this.setState({
-                selectedFile: [reader.result]
-            });
-        }.bind(this);
-        console.log(url); // Would see a path?
+        reader.onloadend = () => setSelectedFile(reader.result);
+        console.log('image url', url);
 
-        this.setState({
-            mainState: "uploaded",
-            selectedFile: event.target.files[0],
-            imageUploaded: 1
-        });
+        setSelectedFile(event.target.files[0]);
     };
 
-    handleSearchClick = event => {
-        this.setState({
-            mainState: "search"
-        });
-    };
+    const renderInitialState = () => (
+        <div className="card">
+            <input
+                accept="image/*"
+                className="input"
+                id="contained-button-file"
+                multiple
+                type="file"
+                onChange={handleUploadClick}
+            />
+            <label htmlFor="contained-button-file">
+            <Fab component="span" className="button">
+                <AddPhotoAlternate />
+            </Fab>
+            </label>
+            <Fab className="button" onClick={() => {}}>
+                <Search />
+            </Fab>
+            <Fab className="button" onClick={() => {}}>
+                <Collections />
+            </Fab>
+        </div>
+    );
 
-    handleGalleryClick = event => {
-        this.setState({
-            mainState: "gallery"
-        });
-    };
+    const renderSearchState = () => (
+        <Paper className="search-root" elevation={1}>
+            <InputBase className="search-input" placeholder="Image URL" />
+            <IconButton
+                className="button"
+                aria-label="Search"
+                onClick={() => {}}
+            >
+                <Search />
+            </IconButton>
+            <Divider className="search-divider" />
+            <IconButton
+                color="primary"
+                className="secondary-button"
+                aria-label="Close"
+                onClick={() => {}}
+            >
+                <Close />
+            </IconButton>
+        </Paper>
+    );
 
-    renderInitialState() {
-        return (
-            <CardContent>
-                <Grid container justify="center" alignItems="center">
-                    <input
-                        accept="image/*"
-                        className="input"
-                        id="contained-button-file"
-                        multiple
-                        type="file"
-                        onChange={this.handleUploadClick}
-                    />
-                    <label htmlFor="contained-button-file">
-                    <Fab component="span" className="button">
-                        <AddPhotoAlternateIcon />
-                    </Fab>
-                    </label>
-                    <Fab className="button" onClick={this.handleSearchClick}>
-                        <SearchIcon />
-                    </Fab>
-                    <Fab className="button" onClick={this.handleGalleryClick}>
-                        <CollectionsIcon />
-                    </Fab>
-                </Grid>
-            </CardContent>
-        );
-    }
-
-    handleSearchURL = event => {
-        var file = event.target.files[0];
-        var reader = new FileReader();
-        var url = reader.readAsDataURL(file);
-
-        reader.onloadend = function(e) {
-            this.setState({
-                selectedFile: [reader.result]
-            });
-        }.bind(this);
-        console.log(url); // Would see a path?
-
-        this.setState({
-            selectedFile: event.target.files[0],
-            imageUploaded: 1
-        });
-    };
-
-    handleImageSearch(url) {
-        var filename = url.substring(url.lastIndexOf("/") + 1);
-        console.log(filename);
-        this.setState({
-            mainState: "uploaded",
-            imageUploaded: true,
-            selectedFile: url,
-            fileReader: undefined,
-            filename: filename
-        });
-    }
-
-    handleSeachClose = event => {
-        this.setState({
-            mainState: "initial"
-        });
-    };
-
-    renderSearchState() {
-        return (
-            <Paper className="search-root" elevation={1}>
-                <InputBase className="search-input" placeholder="Image URL" />
-                <IconButton
-                    className="button"
-                    aria-label="Search"
-                    onClick={this.handleImageSearch}
-                >
-                    <SearchIcon />
-                </IconButton>
-                <Divider className="search-divider" />
-                <IconButton
-                    color="primary"
-                    className="secondary-button"
-                    aria-label="Close"
-                    onClick={this.handleSeachClose}
-                >
-                    <CloseIcon />
-                </IconButton>
-            </Paper>
-        );
-    }
-
-    handleAvatarClick(value) {
+    const handleAvatarClick = (value) => {
         var filename = value.url.substring(value.url.lastIndexOf("/") + 1);
         console.log(filename);
-        this.setState({
-            mainState: "uploaded",
-            imageUploaded: true,
-            selectedFile: value.url,
-            fileReader: undefined,
-            filename: filename
-        });
+        setSelectedFile(value.url);
     }
 
-    renderGalleryState() {
-        const listItems = this.props.imageGallery.map(url => (
-            <div
-                onClick={value => this.handleAvatarClick({ url })}
-                style={{
-                    padding: "5px 5px 5px 5px",
-                    cursor: "pointer"
-                }}
-            >
-                <Avatar src={url} />
-            </div>
-        ));
-
+    const renderUploadedState = () => {
+        const { width = 30, height = 30 } = props;
         return (
-            <React.Fragment>
-                <Grid>
-                    {listItems}
-                    <IconButton
-                        color="primary"
-                        className="secondary-button"
-                        aria-label="Close"
-                        onClick={this.handleSeachClose}
-                    >
-                        <ReplayIcon />
-                    </IconButton>
-                </Grid>
-            </React.Fragment>
-        );
-    }
-
-    renderUploadedState() {
-        return (
-            <CardActionArea onClick={this.imageResetHandler}>
+            <CardActionArea onClick={() => {}}>
                 <img
-                    width="100%"
+                    width={width}
+                    height={height}
                     className="media"
-                    src={this.state.selectedFile}
+                    src={selectedFile}
                     alt="Choose"
                 />
             </CardActionArea>
         );
     }
 
-    imageResetHandler = event => {
+    const imageResetHandler = event => {
         console.log("Click!");
-        this.setState({
-            mainState: "initial",
-            selectedFile: null,
-            imageUploaded: 0
-        });
+        setSelectedFile(null);
     };
 
-    render() {
-        return (
-            <div className="root">
-                <Card className={this.props.cardName}>
-                    {this.state.mainState === "initial" && this.renderInitialState()}
-                    {this.state.mainState === "search" && this.renderSearchState()}
-                    {this.state.mainState === "uploaded" && this.renderUploadedState()}
-                </Card>
-            </div>
-        );
-    }
+    return (
+        <div className="root">
+            {!!selectedFile && renderUploadedState()}
+            {renderInitialState()}
+        </div>
+    );
 }
 
-export default ImageUploadCard;
+export default ImageUpload;
