@@ -143,11 +143,6 @@ const fields = {
             type: 'boolean',
         },
         {
-            name: 'homepage',
-            label: 'Homepage',
-            type: 'string',
-        },
-        {
             name: 'officialChat',
             label: 'Official Chat',
             type: 'string',
@@ -541,7 +536,7 @@ function Publish({ currentUser }) {
                     <div
                         className='notificationText'
                         style={{
-                            maxWidth: publishMainContainerRef?.clientWidth / 2,
+                            maxWidth: (publishMainContainerRef?.clientWidth || 0) / 2,
                             top: notificationTextTopPx,
                             left: `calc(240px + ${notificationTextleftPercent}%)`,
                             color: loading ? '#afaf33' : 'green'
