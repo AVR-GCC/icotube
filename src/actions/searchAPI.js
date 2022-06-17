@@ -4,12 +4,8 @@ import { getToken } from '../utils'
 
 export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
 
-export const getPostsAPI = (before, after) => {
-    APIcall({
-        method: "GET",
-        url: 'posts',
-        events: [before, after]
-    });
+export const getPostsAPI = async () => {
+    return await axios.get(`${baseURL}/posts`);
 };
 
 export const submitPostAPI = async (body, before, after) => {

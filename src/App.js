@@ -19,9 +19,12 @@ function App() {
   const [config, setConfig] = useState(null);
 
   useEffect(() => {
-    getConfigAPI(() => {}, (res) => {
-      setConfig(res.data);
-    })
+    const interval = setInterval(() => {
+      getConfigAPI(() => {}, (res) => {
+        setConfig(res.data);
+        clearInterval(interval);
+      });
+    }, 10000);
   }, []);
 
   // useEffect(() => { for google passport

@@ -35,15 +35,13 @@ function Home({ currentUser, setUser }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        getPostsAPI(
-            () => {
-                setLoading(true);
-            },
-            (res) => {
-                setPosts(res.data.data);
-                setLoading(false);
-            }
-        );
+        const interval = setInterval(async () => {
+            setLoading(true);
+            const res = await getPostsAPI();
+            setPosts(res.data.data);
+            clearInterval(interval);
+            setLoading(false);
+        }, 10000);
     }, [setLoading, setPosts]);
 
     useEffect(() => {
