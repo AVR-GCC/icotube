@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { TextField, Button } from '@mui/material';
@@ -27,6 +27,17 @@ const AuthModal = ({
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loginError, setLoginError] = useState('');
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.keyCode === 13) {
+        e.preventDefault();
+        document.getElementById("submit-button").click();
+      }
+    }
+    window.addEventListener('keyup', onKeyDown);
+    return () => window.removeEventListener('keyup', onKeyDown)
+  }, []);
 
   const removeErrors = () => {
     if (emailError) setEmailError('');
@@ -92,6 +103,8 @@ const AuthModal = ({
       setPasswordError('Please enter your password');
     }
   };
+
+  const submit = signUp ? signUpWithEmail : loginWithEmail;
 
   const height = 300
     + (emailError ? 20 : 0)
@@ -163,9 +176,10 @@ const AuthModal = ({
   const _loginButton = () => (
     <React.Fragment>
       <Button
+        id="submit-button"
         variant="outlined"
         style={{ marginTop: 20, width: '100%' }}
-        onClick={signUp ? signUpWithEmail : loginWithEmail}
+        onClick={submit}
       >
         <span style={{ fontSize: 14 }}>{signUp ? "Signup with Email" : "Login with Email"}</span>
       </Button>
