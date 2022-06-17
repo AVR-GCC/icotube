@@ -20,6 +20,7 @@ import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { defined } from '../utils';
 import ImageUpload from '../components/imageUpload';
+import { identity } from 'lodash';
 
 const fields = {
     ICO: [
@@ -339,12 +340,15 @@ function Publish({ currentUser }) {
         if (arg2) setPostType(arg2);
     }
 
-    const handleChange = (val, fieldName) => {
-        setPost({ ...post, [fieldName]: val });
-        if (errors[fieldName] && val) {
-            const newErrors = { ...errors };
-            delete newErrors[fieldName];
-            setErrors(newErrors);
+    const getHandleChange = (fieldName, transformer = identity) => rawVal => {
+        const val = transformer(rawVal);
+        if (val !== post[fieldName]) {
+            setPost({ ...post, [fieldName]: val });
+            if (errors[fieldName] && val) {
+                const newErrors = { ...errors };
+                delete newErrors[fieldName];
+                setErrors(newErrors);
+            }
         }
     }
 
@@ -367,9 +371,7 @@ function Publish({ currentUser }) {
                         margin='normal'
                         fullWidth
                         value={value}
-                        onChange={(event) => {
-                            handleChange(event.target.value, field.name);
-                        }}
+                        onChange={getHandleChange(field.name, event => event.target.value)}
                         helperText={errors[field.name]}
                     />
                 );
@@ -385,11 +387,9 @@ function Publish({ currentUser }) {
                         <Select
                             labelId={inputLabelId}
                             id={inputId}
-                            value={value}
+                            value={value || ''}
                             label={showText}
-                            onChange={(event) => {
-                                handleChange(event.target.value, field.name);
-                            }}
+                            onChange={getHandleChange(field.name, event => event.target.value)}
                         >
                             <MenuItem key={`${inputId}_none_option`} value=''>
                                 <em>None</em>
@@ -409,9 +409,7 @@ function Publish({ currentUser }) {
                                 margin='normal'
                                 label={showText}
                                 value={value}
-                                onChange={(newValue) => {
-                                    handleChange(newValue, field.name);
-                                }}
+                                onChange={getHandleChange(field.name)}
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
