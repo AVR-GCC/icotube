@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 
-import {
-    TextField,
-    Fab,
-} from '@mui/material';
+import { TextField } from '@mui/material';
+
+import { AddPhotoAlternate } from '@mui/icons-material';
 
 import {
-    AddPhotoAlternate,
-} from '@mui/icons-material';
 
 import  '../styles/imageUpload.css';
 
