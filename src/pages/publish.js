@@ -274,7 +274,7 @@ function Publish({ currentUser }) {
     const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});
-    const [postType, setPostType] = React.useState('ICO');
+    const [postType, setPostType] = useState('ICO');
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
