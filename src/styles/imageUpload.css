@@ -1,22 +1,12 @@
 .root {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    border: 1px solid #00000030;
-    border-radius: 4px;
 }
 
 .card {
     display: flex;
     justify-content: center;
-}
-
-.icon {
-    margin: 10px;
-}
-
-.icon:hover {
-    color: #c62828;
 }
 
 .card-header {
@@ -38,9 +28,17 @@
 
 .button {
     background-color: #212121;
+    padding: 15px;
+    border-radius: 50%;
     color: #0d47a1;
     margin: 10px;
-    box-shadow: unset;
+    border: 1px solid #000000;
+    transition: all ease 500ms;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #ffffff;
 }
 
 .secondary-button {
@@ -53,15 +51,8 @@
     background-color: default;
 }
 
-.search-root {
-    padding: 2px 4px;
-    display: flex;
-    align-items: center;
-    width: 400px;
-}
-
-.search-input {
-    margin-left: 8px;
+.url-container {
+    margin: 10px;
 }
 
 .search-divider {
@@ -72,6 +63,6 @@
 
 .media {
     border-radius: 4px;
-    margin: 5px;
+    margin: 10px;
     border: 1px solid #00000030;
 }

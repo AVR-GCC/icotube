@@ -424,8 +424,9 @@ function Publish({ currentUser }) {
                 );
             case 'image':
                 return (
-                    <div>
-                        <ImageUpload height={56} width={56} />
+                    <div className='imageUploadContainer'>
+                        <div className='sectionTitleText'>{showText}</div>
+                        <ImageUpload height={200} width={200} />
                     </div>
                 );
             default:

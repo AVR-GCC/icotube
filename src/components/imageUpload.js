@@ -1,28 +1,42 @@
 import React, { useState } from "react";
 
 import {
-    Card,
-    CardActionArea,
-    CardContent,
+    TextField,
     Fab,
-    Grid,
-    Paper,
-    InputBase,
-    Divider,
-    IconButton,
 } from '@mui/material';
 
 import {
-    Close,
-    Search,
     AddPhotoAlternate,
-    Collections
 } from '@mui/icons-material';
 
 import  '../styles/imageUpload.css';
 
 const ImageUpload = (props) => {
     const [selectedFile, setSelectedFile] = useState(null);
+    const [inputRef, setInputRef] = useState(null);
+    const [textInputRef, setTextInputRef] = useState(null);
+
+    function testImage(url) {
+        return new Promise(function (resolve, reject) {
+            var timeout = 2000;
+            var timer, img = new Image();
+            img.onerror = img.onabort = function () {
+                clearTimeout(timer);
+                resolve("error");
+            };
+            img.onload = function () {
+                clearTimeout(timer);
+                resolve("success");
+            };
+            timer = setTimeout(function () {
+                // reset .src to invalid URL so it stops previous
+                // loading, but doesn't trigger new load
+                img.src = "//!!!!/test.jpg";
+                resolve("timeout");
+            }, timeout);
+            img.src = url;
+        });
+    }
 
     const handleUploadClick = event => {
         var file = event.target.files[0];
@@ -33,84 +47,76 @@ const ImageUpload = (props) => {
         console.log('image url', url);
 
         setSelectedFile(event.target.files[0]);
+        console.log('textInputRef', textInputRef.value);
+        textInputRef.value = '';
     };
 
     const renderInitialState = () => (
         <div className="card">
             <input
+                ref={ref => setInputRef(ref)}
                 accept="image/*"
                 className="input"
                 id="contained-button-file"
-                multiple
                 type="file"
                 onChange={handleUploadClick}
             />
             <label htmlFor="contained-button-file">
-            <Fab component="span" className="button">
-                <AddPhotoAlternate />
-            </Fab>
+                <div className="button" onClick={() => inputRef.value = null}>
+                    <AddPhotoAlternate />
+                </div>
             </label>
-            <Fab className="button" onClick={() => {}}>
-                <Search />
-            </Fab>
-            <Fab className="button" onClick={() => {}}>
-                <Collections />
-            </Fab>
         </div>
     );
 
     const renderSearchState = () => (
-        <Paper className="search-root" elevation={1}>
-            <InputBase className="search-input" placeholder="Image URL" />
-            <IconButton
-                className="button"
-                aria-label="Search"
-                onClick={() => {}}
-            >
-                <Search />
-            </IconButton>
-            <Divider className="search-divider" />
-            <IconButton
-                color="primary"
-                className="secondary-button"
-                aria-label="Close"
-                onClick={() => {}}
-            >
-                <Close />
-            </IconButton>
-        </Paper>
+        <div className="url-container">
+            <TextField
+                inputRef={ref => setTextInputRef(ref)}
+                key="search-input"
+                id="search-input"
+                label="Image URL"
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                onChange={async (event) => {
+                    const url = event.target.value;
+                    const result = await testImage(url);
+                    if (result === 'success') {
+                        inputRef.value = null;
+                        setSelectedFile(url);
+                    }
+                }}
+            />
+        </div>
     );
-
-    const handleAvatarClick = (value) => {
-        var filename = value.url.substring(value.url.lastIndexOf("/") + 1);
-        console.log(filename);
-        setSelectedFile(value.url);
-    }
 
     const renderUploadedState = () => {
         const { width = 30, height = 30 } = props;
-        return (
-            <CardActionArea onClick={() => {}}>
-                <img
-                    width={width}
-                    height={height}
-                    className="media"
-                    src={selectedFile}
-                    alt="Choose"
-                />
-            </CardActionArea>
-        );
+        return selectedFile ? (
+            <img
+                width={width}
+                height={height}
+                className="media"
+                src={selectedFile}
+                alt="Choose"
+                onClick={imageResetHandler}
+            />
+        ) : (
+            <div style={{ margin: 10, width, height }} />
+        )
     }
 
-    const imageResetHandler = event => {
-        console.log("Click!");
+    const imageResetHandler = () => {
+        inputRef.value = null;
         setSelectedFile(null);
     };
 
     return (
         <div className="root">
-            {!!selectedFile && renderUploadedState()}
+            {renderUploadedState()}
             {renderInitialState()}
+            {renderSearchState()}
         </div>
     );
 }
