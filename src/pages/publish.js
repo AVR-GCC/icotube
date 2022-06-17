@@ -419,7 +419,11 @@ function Publish({ currentUser }) {
                 return (
                     <div className='imageUploadContainer'>
                         <div className='sectionTitleText'>{showText}</div>
-                        <ImageUpload height={200} width={200} />
+                        <ImageUpload
+                            height={200}
+                            width={200}
+                            onChange={getHandleChange(field.name)}
+                        />
                     </div>
                 );
             default:

@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { TextField } from '@mui/material';
 
 import { AddPhotoAlternate } from '@mui/icons-material';
 
-import {
+import { noop } from 'lodash';
 
 import  '../styles/imageUpload.css';
 
-const ImageUpload = (props) => {
+const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [inputRef, setInputRef] = useState(null);
     const [textInputRef, setTextInputRef] = useState(null);
 
+    useEffect(() => {
+        onChange(selectedFile);
+    }, [selectedFile, onChange]);
+
     function testImage(url) {
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var timeout = 2000;
             var timer, img = new Image();
             img.onerror = img.onabort = function () {
@@ -41,10 +45,8 @@ const ImageUpload = (props) => {
         var url = reader.readAsDataURL(file);
 
         reader.onloadend = () => setSelectedFile(reader.result);
-        console.log('image url', url);
 
-        setSelectedFile(event.target.files[0]);
-        console.log('textInputRef', textInputRef.value);
+        setSelectedFile(file);
         textInputRef.value = '';
     };
 
@@ -89,7 +91,6 @@ const ImageUpload = (props) => {
     );
 
     const renderUploadedState = () => {
-        const { width = 30, height = 30 } = props;
         return selectedFile ? (
             <img
                 width={width}
