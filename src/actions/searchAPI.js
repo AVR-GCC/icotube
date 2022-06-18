@@ -53,10 +53,6 @@ export const logoutAPI = async () => {
     }
 };
 
-export const getConfigAPI = (before, after) => {
-    APIcall({
-        method: "GET",
-        url: 'config',
-        events: [before, after]
-    });
+export const getConfigAPI = async () => {
+    return await axios.get(`${baseURL}/config`);
 };

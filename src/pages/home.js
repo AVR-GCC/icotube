@@ -35,13 +35,15 @@ function Home({ currentUser, setUser }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const interval = setInterval(async () => {
+        const tryGetPosts = async () => {
             setLoading(true);
             const res = await getPostsAPI();
             setPosts(res.data.data);
             clearInterval(interval);
             setLoading(false);
-        }, 10000);
+        };
+        const interval = setInterval(tryGetPosts, 10000);
+        tryGetPosts();
     }, [setLoading, setPosts]);
 
     useEffect(() => {

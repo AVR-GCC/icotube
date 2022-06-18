@@ -19,12 +19,13 @@ function App() {
   const [config, setConfig] = useState(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      getConfigAPI(() => {}, (res) => {
-        setConfig(res.data);
-        clearInterval(interval);
-      });
-    }, 10000);
+    const tryGetConfig = async () => {
+      const res = await getConfigAPI();
+      setConfig(res.data);
+      clearInterval(interval);
+    };
+    const interval = setInterval(tryGetConfig, 10000);
+    tryGetConfig();
   }, []);
 
   // useEffect(() => { for google passport
