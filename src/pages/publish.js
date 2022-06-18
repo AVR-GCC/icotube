@@ -310,7 +310,7 @@ function Publish({ currentUser }) {
     const handleSubmit = () => {
         const errorsObj = {};
         let shouldSubmit = true;
-        for (let field of fields) {
+        for (let field of fields[postType]) {
             if (field.required && !defined(post[field.name]) && !defined(field.default)) {
                 errorsObj[field.name] = 'This field is required to submit';
                 shouldSubmit = false;
