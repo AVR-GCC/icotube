@@ -6,6 +6,8 @@ import { submitPostAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
 import {
+    Checkbox,
+    ListItemText,
     TextField,
     FormControl,
     InputLabel,
@@ -124,6 +126,7 @@ const fields = {
         {
             name: 'accepts',
             label: 'Accepts',
+            multiple: true,
             type: 'enum',
             enum: [
                 'BTC',
@@ -384,17 +387,22 @@ function Publish({ currentUser }) {
                     >
                         <InputLabel id={inputLabelId}>{showText}</InputLabel>
                         <Select
+                            multiple={field.multiple}
                             labelId={inputLabelId}
                             id={inputId}
-                            value={value || ''}
+                            value={value || (field.multiple ? [] : '')}
                             label={showText}
                             onChange={getHandleChange(field.name, event => event.target.value)}
+                            renderValue={field.multiple ? (selected) => selected.join(', ') : identity}
                         >
                             <MenuItem key={`${inputId}_none_option`} value=''>
                                 <em>None</em>
                             </MenuItem>
                             {field.enum.map((op) =>
-                                <MenuItem key={`${op}_option`} value={op}>{op}</MenuItem>
+                                <MenuItem key={`${op}_option`} value={op}>
+                                    {!!field.multiple && <Checkbox checked={(value || []).indexOf(op) > -1} />}
+                                    <ListItemText primary={op} />
+                                </MenuItem>
                             )}
                         </Select>
                         {/* <FormHelperText>Disabled</FormHelperText> */}
