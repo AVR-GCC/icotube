@@ -4,16 +4,18 @@ import { TextField } from '@mui/material';
 
 import { AddPhotoAlternate } from '@mui/icons-material';
 
-import { noop } from 'lodash';
+import { isString, noop } from 'lodash';
 
 import  '../styles/imageUpload.css';
 
 const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(undefined);
     const [inputRef, setInputRef] = useState(null);
     const [textInputRef, setTextInputRef] = useState(null);
 
     useEffect(() => {
+        if (selectedFile === undefined) return;
+        if (isString(selectedFile) && selectedFile.startsWith('data:image')) return;
         onChange(selectedFile);
     }, [selectedFile, onChange]);
 
