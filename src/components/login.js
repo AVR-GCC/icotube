@@ -6,11 +6,12 @@ import {
   loginAPI,
   signupAPI,
   // testAuthAPI,
+  getMeAPI,
   baseURL
 } from '../actions/searchAPI';
 import Modal from './modal';
 // refresh token
-import { setToken } from '../utils';
+import { getToken, setToken } from '../utils';
 
 const AuthModal = ({
   onSignIn,
@@ -252,6 +253,19 @@ const Login = ({
   onSignOut
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    const getMe = async () => {
+      const result = await getMeAPI(token);
+      if (result.data.success) {
+        onSignIn({ ...result.data.user });
+      }
+    }
+    const token = getToken();
+    if (!currentUser && token) {
+      getMe();
+    }
+  }, [currentUser, onSignIn]);
 
   const logout = () => {
     setToken(null);

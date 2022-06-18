@@ -1,5 +1,4 @@
 import axios from 'axios';
-import APIcall from './server';
 import { getToken } from '../utils'
 
 export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
@@ -10,6 +9,10 @@ export const getPostsAPI = async () => {
 
 export const submitPostAPI = async (body) => {
     return await axios.put(`${baseURL}/posts`, body, { withCredentials: true, headers: { Authorization: getToken() } });
+};
+
+export const getMeAPI = async (token) => {
+    return await axios.get(`${baseURL}/auth/get-me`, { withCredentials: true, headers: { Authorization: token } });
 };
 
 export const loginAPI = async ({ email, password, googleToken, imageUrl, before = () => {}, after = () => {} }) => {
