@@ -51,7 +51,7 @@ const fields = {
             default: 'Platform'
         },
         {
-            name: 'short-description',
+            name: 'shortDescription',
             label: 'Short Description',
             type: 'string',
             default: ''
@@ -92,7 +92,7 @@ const fields = {
             type: 'number'
         },
         {
-            name: 'soft-cap',
+            name: 'softCap',
             label: 'Soft Cap',
             type: 'number'
         },
