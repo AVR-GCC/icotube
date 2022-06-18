@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import  '../styles/publish.css';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
@@ -283,12 +283,12 @@ function Publish({ currentUser }) {
 
     const [notificationTextTopPx, setNotificationTextTopPx] = useState(55);
     const [notificationTextleftPercent, setNotificationTextleftPercent] = useState(0);
-    const [notificationTextRef, setNotificationTextRef] = useState(null);
-    const [publishMainContainerRef, setPublishMainContainerRef] = useState(null);
+    const notificationTextRef = useRef(null);
+    const publishMainContainerRef = useRef(null);
 
     useEffect(() => {
-        const pmcWidth = publishMainContainerRef?.clientWidth;
-        const ntWidth = notificationTextRef?.clientWidth;
+        const pmcWidth = publishMainContainerRef?.current?.clientWidth;
+        const ntWidth = notificationTextRef?.current?.clientWidth;
         const sizeRatio = ntWidth / (pmcWidth ? pmcWidth : 1);
         const srCompliment = 1 - sizeRatio;
         const leftPercentRaw = 100 * srCompliment / 2;
@@ -297,8 +297,6 @@ function Publish({ currentUser }) {
             setNotificationTextleftPercent(leftPercent);
         }
     }, [
-        publishMainContainerRef,
-        notificationTextRef,
         notificationText,
         notificationTextleftPercent
     ]);
@@ -524,9 +522,7 @@ function Publish({ currentUser }) {
                 <SideBar />
                 <div
                     className='publishMainContainer'
-                    ref={ref => {
-                        if (ref) setPublishMainContainerRef(ref);
-                    }}
+                    ref={publishMainContainerRef}
                     onScroll={(event) => {
                         const st = event.target.scrollTop;
                         if (st > 50) {
@@ -545,14 +541,12 @@ function Publish({ currentUser }) {
                     <div
                         className='notificationText'
                         style={{
-                            maxWidth: (publishMainContainerRef?.clientWidth || 0) / 2,
+                            maxWidth: (publishMainContainerRef?.current?.clientWidth || 0) / 2,
                             top: notificationTextTopPx,
                             left: `calc(240px + ${notificationTextleftPercent}%)`,
                             color: loading ? '#afaf33' : 'green'
                         }}
-                        ref={ref => {
-                            if (ref) setNotificationTextRef(ref);
-                        }}
+                        ref={notificationTextRef}
                     >
                         {loading && <div className='loadingIndicator'><CircularProgress size={20} /></div>}
                         {notificationText}
