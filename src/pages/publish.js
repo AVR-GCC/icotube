@@ -305,7 +305,7 @@ function Publish({ currentUser }) {
     //     setPostSubmitted(!postSubmitted);
     // }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const errorsObj = {};
         let shouldSubmit = true;
         for (let field of fields[postType]) {
@@ -315,22 +315,17 @@ function Publish({ currentUser }) {
             }
         }
         if (shouldSubmit) {
-            submitPostAPI({
-                    ...post
-                }, () => {
-                    setLoading(true);
-                    setNotificationText('Submitting post...');
-                }, (res) => {
-                    setLoading(false);
-                    const autoPublish = res?.data?.autoPublish;
-                    if (autoPublish) {
-                        setNotificationText(`Post: ${post.title} - published!`);
-                    } else {
-                        setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
-                        setPostSubmitted(true);
-                    }
-                }
-            );
+            setLoading(true);
+            setNotificationText('Submitting post...');
+            const res = await submitPostAPI({ ...post });
+            setLoading(false);
+            const autoPublish = res?.data?.autoPublish;
+            if (autoPublish) {
+                setNotificationText(`Post: ${post.title} - published!`);
+            } else if (res.success) {
+                setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
+                setPostSubmitted(true);
+            }
         } else {
             setErrors(errorsObj);
         }

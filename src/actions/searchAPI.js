@@ -8,10 +8,8 @@ export const getPostsAPI = async () => {
     return await axios.get(`${baseURL}/posts`);
 };
 
-export const submitPostAPI = async (body, before, after) => {
-    before();
-    const result = await axios.put(`${baseURL}/posts`, body, { withCredentials: true, headers: { Authorization: getToken() } });
-    after(result);
+export const submitPostAPI = async (body) => {
+    return await axios.put(`${baseURL}/posts`, body, { withCredentials: true, headers: { Authorization: getToken() } });
 };
 
 export const loginAPI = async ({ email, password, googleToken, imageUrl, before = () => {}, after = () => {} }) => {
