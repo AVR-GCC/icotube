@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { TextField } from '@mui/material';
 
@@ -8,10 +8,10 @@ import { isString, noop } from 'lodash';
 
 import  '../styles/imageUpload.css';
 
-const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
+const ImageUpload = ({ onChange = noop, width = 30, height = 30, enableFileUpload = false }) => {
     const [selectedFile, setSelectedFile] = useState(undefined);
-    const [inputRef, setInputRef] = useState(null);
-    const [textInputRef, setTextInputRef] = useState(null);
+    const inputRef = useRef(null);
+    const textInputRef = useRef(null);
 
     useEffect(() => {
         if (selectedFile === undefined) return;
@@ -42,20 +42,20 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
     }
 
     const handleUploadClick = event => {
-        var file = event.target.files[0];
+        const file = event.target.files[0];
         const reader = new FileReader();
-        var url = reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
 
         reader.onloadend = () => setSelectedFile(reader.result);
 
         setSelectedFile(file);
-        textInputRef.value = '';
+        if (textInputRef?.current) textInputRef.current.value = '';
     };
 
     const renderInitialState = () => (
         <div className="card">
             <input
-                ref={ref => setInputRef(ref)}
+                ref={inputRef}
                 accept="image/*"
                 className="input"
                 id="contained-button-file"
@@ -63,7 +63,7 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
                 onChange={handleUploadClick}
             />
             <label htmlFor="contained-button-file">
-                <div className="button" onClick={() => inputRef.value = null}>
+                <div className="button" onClick={() => inputRef.current.value = null}>
                     <AddPhotoAlternate />
                 </div>
             </label>
@@ -73,7 +73,7 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
     const renderSearchState = () => (
         <div className="url-container">
             <TextField
-                inputRef={ref => setTextInputRef(ref)}
+                inputRef={textInputRef}
                 key="search-input"
                 id="search-input"
                 label="Image URL"
@@ -84,7 +84,7 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
                     const url = event.target.value;
                     const result = await testImage(url);
                     if (result === 'success') {
-                        inputRef.value = null;
+                        if (inputRef?.current) inputRef.current.value = null;
                         setSelectedFile(url);
                     }
                 }}
@@ -108,14 +108,15 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30 }) => {
     }
 
     const imageResetHandler = () => {
-        inputRef.value = null;
+        if (inputRef?.current) inputRef.current.value = null;
+        if (textInputRef?.current) textInputRef.current.value = null;
         setSelectedFile(null);
     };
 
     return (
         <div className="root">
             {renderUploadedState()}
-            {renderInitialState()}
+            {enableFileUpload && renderInitialState()}
             {renderSearchState()}
         </div>
     );
