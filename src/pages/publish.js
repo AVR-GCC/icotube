@@ -89,8 +89,7 @@ const fields = {
         {
             name: 'amountPerUser',
             label: 'Price/Amount Per User',
-            type: 'number',
-            default: 'ERC20'
+            type: 'number'
         },
         {
             name: 'soft-cap',
@@ -138,11 +137,11 @@ const fields = {
             type: 'boolean',
             default: false
         },
-        {
-            name: 'restrictedCountries',
-            label: 'Restricted Countries',
-            type: 'boolean',
-        },
+        // { TODO - Implement
+        //     name: 'restrictedCountries',
+        //     label: 'Restricted Countries',
+        //     type: 'list',
+        // },
         {
             name: 'officialChat',
             label: 'Official Chat',
