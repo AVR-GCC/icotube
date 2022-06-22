@@ -27,11 +27,6 @@ import { identity } from 'lodash';
 const fields = {
     ICO: [
         {
-            name: 'name',
-            label: 'Submitter Name',
-            type: 'string'
-        },
-        {
             name: 'email',
             label: 'Submitter Email',
             type: 'string',
@@ -48,7 +43,16 @@ const fields = {
             type: 'enum',
             enum: [
                 'Platform',
-                'Blockchain Service'
+                'Blockchain Service',
+                'Gaming',
+                'Network',
+                'Market',
+                'Protocol',
+                'Defi',
+                'P2E',
+                'NFT',
+                'Web3',
+                'Other'
             ],
             default: 'Platform'
         },
@@ -56,6 +60,7 @@ const fields = {
             name: 'shortDescription',
             label: 'Short Description',
             type: 'string',
+            multiline: true,
             default: ''
         },
         {
@@ -84,9 +89,8 @@ const fields = {
         },
         {
             name: 'tokenType',
-            label: 'Token Type',
-            type: 'string',
-            default: 'ERC20'
+            label: 'Token Type (ERC-20 / BEP-20 / etc)',
+            type: 'string'
         },
         {
             name: 'amountPerUser',
@@ -280,11 +284,13 @@ function Publish({ currentUser }) {
     const [postType, setPostType] = useState('ICO');
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [routeError, setRouteError] = useState(false);
 
     const [notificationTextTopPx, setNotificationTextTopPx] = useState(55);
     const [notificationTextleftPercent, setNotificationTextleftPercent] = useState(0);
     const notificationTextRef = useRef(null);
     const publishMainContainerRef = useRef(null);
+    const inputRefs = useRef({});
 
     useEffect(() => {
         const pmcWidth = publishMainContainerRef?.current?.clientWidth;
@@ -316,15 +322,19 @@ function Publish({ currentUser }) {
         }
         if (shouldSubmit) {
             setLoading(true);
+            setRouteError(false);
             setNotificationText('Submitting post...');
             const res = await submitPostAPI({ ...post });
             setLoading(false);
             const autoPublish = res?.data?.autoPublish;
             if (autoPublish) {
                 setNotificationText(`Post: ${post.title} - published!`);
-            } else if (res.success) {
+            } else if (res?.data?.success) {
                 setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
                 setPostSubmitted(true);
+            } else if (!res?.data?.success) {
+                setRouteError(true);
+                setNotificationText(`Error: ${res?.data?.error?.message}`);
             }
         } else {
             setErrors(errorsObj);
@@ -372,34 +382,61 @@ function Publish({ currentUser }) {
                 );
             case 'enum':
                 return (
-                    <FormControl
-                        // sx={{ m: 1, minWidth: 120 }}
-                        variant='outlined'
-                        margin='normal'
-                        fullWidth
-                    >
-                        <InputLabel id={inputLabelId}>{showText}</InputLabel>
-                        <Select
-                            multiple={field.multiple}
-                            labelId={inputLabelId}
-                            id={inputId}
-                            value={value || (field.multiple ? [] : '')}
-                            label={showText}
-                            onChange={getHandleChange(field.name, event => event.target.value)}
-                            renderValue={field.multiple ? (selected) => selected.join(', ') : identity}
-                        >
-                            <MenuItem key={`${inputId}_none_option`} value=''>
-                                <em>None</em>
-                            </MenuItem>
-                            {field.enum.map((op) =>
-                                <MenuItem key={`${op}_option`} value={op}>
-                                    {!!field.multiple && <Checkbox checked={(value || []).indexOf(op) > -1} />}
-                                    <ListItemText primary={op} />
-                                </MenuItem>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <div style={{ flex: 1, margin: 5, marginLeft: 0 }}>
+                            <FormControl
+                                variant='outlined'
+                                margin='normal'
+                                fullWidth
+                            >
+                                <InputLabel id={inputLabelId}>{showText}</InputLabel>
+                                <Select
+                                    multiple={field.multiple}
+                                    labelId={inputLabelId}
+                                    id={inputId}
+                                    value={value || (field.multiple ? [] : '')}
+                                    label={showText}
+                                    onChange={getHandleChange(field.name, event => event.target.value)}
+                                    renderValue={field.multiple ? (selected) => selected.join(', ') : identity}
+                                >
+                                    <MenuItem key={`${inputId}_none_option`} value=''>
+                                        <em>None</em>
+                                    </MenuItem>
+                                    {field.enum.map((op) =>
+                                        <MenuItem key={`${op}_option`} value={op}>
+                                            {!!field.multiple && <Checkbox checked={(value || []).indexOf(op) > -1} />}
+                                            <ListItemText primary={op} />
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                                {/* <FormHelperText>Disabled</FormHelperText> */}
+                            </FormControl>
+                        </div>
+                        <div style={{ flex: 1, margin: 5, marginRight: 0 }}>
+                            {value === 'Other' && (
+                                <TextField
+                                    inputRef={ref => {
+                                        if (!inputRefs.current[`${field.name}Other`] && ref) {
+                                            setTimeout(() => ref.focus(), 100);
+                                            inputRefs.current[`${field.name}Other`] = ref
+                                        }
+                                    }}
+                                    error={!!errors[`${field.name}Other`]}
+                                    key={`${inputId}Other`}
+                                    id={`${inputId}Other`}
+                                    label={'Other'}
+                                    required={field.required}
+                                    multiline={field.multiline}
+                                    variant='outlined'
+                                    margin='normal'
+                                    fullWidth
+                                    value={post[`${field.name}Other`]}
+                                    onChange={getHandleChange(`${field.name}Other`, event => event.target.value)}
+                                    helperText={errors[`${field.name}Other`]}
+                                />
                             )}
-                        </Select>
-                        {/* <FormHelperText>Disabled</FormHelperText> */}
-                    </FormControl>
+                        </div>
+                    </div>
                 );
             case 'date':
                 return (
@@ -469,12 +506,12 @@ function Publish({ currentUser }) {
                 ))}
 
 
-                    {/* <Button
-                        variant='outlined'
-                        onClick={toggleSubmitted}
-                    >
-                        <span style={{ fontSize: 14 }}>Toggle Submit</span>
-                    </Button> */}
+                {/* <Button
+                    variant='outlined'
+                    onClick={toggleSubmitted}
+                >
+                    <span style={{ fontSize: 14 }}>Toggle Submit</span>
+                </Button> */}
 
                 <div className='publishButtonsContainer'>
                     <Button
@@ -510,6 +547,10 @@ function Publish({ currentUser }) {
         );
     };
 
+    let noteColor = 'green';
+    if (routeError) noteColor = 'red';
+    if (loading) noteColor = '#afaf33';
+
     return (
         <div>
             <TopBar currentUser={currentUser} />
@@ -530,7 +571,7 @@ function Publish({ currentUser }) {
                     }}
                 >
                     <div className='publishTitle'>
-                        Publish Funding Campaign
+                        Publish Crypto Project
                         {_typeToggle()}
                     </div>
                     <div
@@ -539,7 +580,7 @@ function Publish({ currentUser }) {
                             maxWidth: (publishMainContainerRef?.current?.clientWidth || 0) / 2,
                             top: notificationTextTopPx,
                             left: `calc(240px + ${notificationTextleftPercent}%)`,
-                            color: loading ? '#afaf33' : 'green'
+                            color: noteColor
                         }}
                         ref={notificationTextRef}
                     >
