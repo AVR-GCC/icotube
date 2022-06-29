@@ -1,61 +1,75 @@
-import axios from 'axios';
-import { getToken } from '../utils'
+import APIcall from './server';
 
-export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
+export const getPostAPI = async (postId) => {
+    return await APIcall({ method: 'GET', url: `posts/${postId}` });
+};
 
 export const getPostsAPI = async () => {
-    return await axios.get(`${baseURL}/posts`);
+    return await APIcall({ method: 'GET', url: 'posts' });
 };
 
 export const submitPostAPI = async (body) => {
-    return await axios.put(`${baseURL}/posts`, body, { withCredentials: true, headers: { Authorization: getToken() } });
+    return await APIcall({
+        method: 'PUT',
+        url: 'posts',
+        body,
+        withCredentials: true
+    });
 };
 
 export const getMeAPI = async (token) => {
-    return await axios.get(`${baseURL}/auth/get-me`, { withCredentials: true, headers: { Authorization: token } });
+    return await APIcall({
+        method: 'GET',
+        url: 'auth/get-me',
+        withCredentials: true,
+        token
+    });
 };
 
-export const loginAPI = async ({ email, password, googleToken, imageUrl, before = () => {}, after = () => {} }) => {
-    try {
-        before();
-        const result = await axios.post(`${baseURL}/auth/login`, { email, password, googleToken, imageUrl }, { withCredentials: true });
-        after(result);
-    } catch (e) {
-        after(e);
-    }
+export const loginAPI = async ({ email, password, googleToken, imageUrl }) => {
+    const body = { email, password, googleToken, imageUrl };
+    return await APIcall({
+        method: 'POST',
+        url: 'auth/login',
+        body,
+        withCredentials: true
+    });
 };
 
 export const loginSuccessAPI = async () => {
-    try {
-        const result = await axios.get(`${baseURL}/auth/login/success`, { withCredentials: true });
-        return (result);
-    } catch (e) {
-        return e;
-    }
+    return await APIcall({
+        method: 'GET',
+        url: 'auth/login/success',
+        withCredentials: true
+    });
 };
 
-export const signupAPI = async (email, password, before, after) => {
-    before();
-    const result = await axios.post(`${baseURL}/auth/signup`, { email, password });
-    after(result);
+export const signupAPI = async (email, password) => {
+    return await APIcall({
+        body: { email, password },
+        method: 'POST',
+        url: 'auth/signup'
+    });
 };
 
 export const testAuthAPI = async (before, after) => {
-    before();
-    const token = getToken();
-    console.log('token', token);
-    const result = await axios.get(`${baseURL}/check-auth`, { withCredentials: true, headers: { Authorization: token } });
-    after(result);
+    return await APIcall({
+        method: 'GET',
+        url: 'check-auth'
+    });
 };
 
 export const logoutAPI = async () => {
-    try {
-        await axios.get(`${baseURL}/auth/logout`, {}, { withCredentials: true });
-    } catch (e) {
-        console.log('e', e);
-    }
+    return await APIcall({
+        method: 'GET',
+        url: 'auth/logout',
+        withCredentials: true
+    });
 };
 
 export const getConfigAPI = async () => {
-    return await axios.get(`${baseURL}/config`);
+    return await APIcall({
+        method: 'GET',
+        url: 'config'
+    });
 };

@@ -6,9 +6,9 @@ import {
   loginAPI,
   signupAPI,
   // testAuthAPI,
-  getMeAPI,
-  baseURL
+  getMeAPI
 } from '../actions/searchAPI';
+import { baseURL } from '../actions/server';
 import Modal from './modal';
 // refresh token
 import { getToken, setToken } from '../utils';
@@ -65,7 +65,8 @@ const AuthModal = ({
   const signUpWithEmail = () => {
     removeErrors();
     if (email && password && confirmPassword && confirmPassword === password) {
-      signupAPI(email, password, () => {}, loginUser);
+      const res = signupAPI(email, password);
+      loginUser(res);
       return;
     }
     if (!email) {
@@ -87,14 +88,14 @@ const AuthModal = ({
   //   window.open(`${baseURL}/auth/google`, '_self');
   // };
 
-  const loginWithEmail = () => {
+  const loginWithEmail = async () => {
     removeErrors();
     if (email && password) {
-      loginAPI({
+      const res = await loginAPI({
         email,
-        password,
-        after: loginUser
+        password
       });
+      loginUser(res);
       return;
     }
     if (!email) {
@@ -259,6 +260,8 @@ const Login = ({
       const result = await getMeAPI(token);
       if (result.data.success) {
         onSignIn({ ...result.data.user });
+      } else {
+        setToken(null);
       }
     }
     const token = getToken();
