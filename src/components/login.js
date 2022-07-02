@@ -256,15 +256,15 @@ const Login = ({
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
+    const token = getToken();
     const getMe = async () => {
       const result = await getMeAPI(token);
-      if (result.data.success) {
+      if (result?.data?.success) {
         onSignIn({ ...result.data.user });
       } else {
         setToken(null);
       }
     }
-    const token = getToken();
     if (!currentUser && token) {
       getMe();
     }

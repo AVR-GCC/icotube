@@ -22,8 +22,11 @@ export const refreshTokenSetup = (res) => {
 };
 
 export const setToken = (token) => {
-    console.log('setToken token', token);
-    localStorage.setItem('tubeAuthToken', token);
+    if (defined(token)) {
+        localStorage.setItem('tubeAuthToken', token);
+    } else {
+        localStorage.removeItem('tubeAuthToken');
+    }
 };
 
 export const getToken = () => {

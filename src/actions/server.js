@@ -35,7 +35,7 @@ const APIcall = async ({
     } catch (e) {
         res = e;
     }
-    console.log(`API Call ${url} returned::`);
+    console.log(`| API Call ${url} returned |`);
     console.log('res:', res);
     console.log('--------------------');
     return res;
