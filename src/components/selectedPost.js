@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import '../styles/selectedPost.css';
 import {
     FullscreenRounded,
@@ -7,7 +7,10 @@ import {
     ArrowForwardIosRounded,
     Close
 } from '@mui/icons-material';
+import { Button } from '@mui/material';
 import ReactPlayer from 'react-player';
+import { UserContext } from '../App';
+import { useNavigate } from 'react-router-dom';
 
 function SelectedPost({
     post,
@@ -17,6 +20,8 @@ function SelectedPost({
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
     const playerPartRef = useRef();
+    const currentUser = useContext(UserContext);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (playerPartRef.current) {
@@ -41,10 +46,25 @@ function SelectedPost({
     }
 
     const _topIcons = () => (
-        <div className='social'>
-            <div className='socialButton'><FullscreenRounded /></div>
-            <div className='socialButton'><ReplyRounded /></div>
-        </div>
+        <React.Fragment>
+            {currentUser.email === post.email ? (
+                <Button
+                    variant="outlined"
+                    style={{ marginLeft: 20 }}
+                    onClick={() => {
+                        navigate(`/publish/${post._id}`);
+                    }}
+                >
+                    Edit
+                </Button>
+            ) : null}
+            <div className='hide'>
+                <div className='social'>
+                    <div className='socialButton'><FullscreenRounded /></div>
+                    <div className='socialButton'><ReplyRounded /></div>
+                </div>
+            </div>
+        </React.Fragment>
     );
 
     const _XButton = () => <div className='XButton' onClick={XClick}><Close /></div>;

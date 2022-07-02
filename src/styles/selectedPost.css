@@ -24,6 +24,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.edit-button {
+  margin-left: 10px;
+}
+
+.hide {
   opacity: 0;
 }
 

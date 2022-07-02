@@ -63,6 +63,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/:postId" element={<Home />} />
             <Route path="/publish" element={<Publish />} />
+            <Route path="/publish/:postId" element={<Publish />} />
           </Routes>
         </BrowserRouter>
       </div>

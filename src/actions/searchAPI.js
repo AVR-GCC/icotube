@@ -1,7 +1,9 @@
 import APIcall from './server';
 
 export const getPostAPI = async (postId) => {
-    return await APIcall({ method: 'GET', url: `posts/${postId}` });
+    const response = await APIcall({ method: 'GET', url: `posts/${postId}` });
+    if (response.data?.success) return response?.data?.data;
+    return response.error;
 };
 
 export const getPostsAPI = async () => {

@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import  '../styles/publish.css';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
+import { useParams } from 'react-router-dom';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
-import { submitPostAPI } from '../actions/searchAPI';
+import { submitPostAPI, getPostAPI } from '../actions/searchAPI';
 import { fields } from '../constants/postFields';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
@@ -40,6 +41,18 @@ function Publish({ currentUser }) {
     const notificationTextRef = useRef(null);
     const publishMainContainerRef = useRef(null);
     const inputRefs = useRef({});
+
+    const { postId } = useParams();
+
+    useEffect(() => {
+        const getPost = async (id) => {
+            const myPost = await getPostAPI(id);
+            setPost(myPost);
+        }
+        if (postId) {
+            getPost(postId)
+        }
+    }, [postId]);
 
     useEffect(() => {
         const pmcWidth = publishMainContainerRef?.current?.clientWidth;
@@ -109,8 +122,8 @@ function Publish({ currentUser }) {
     const _field = (field) => {
         const inputId = `${field.name}_input`;
         const inputLabelId = `${field.name}_input_label`;
-        const showText = field.label || field.name;
-        const value = post[field.name] || field.default;
+        const showText = field.label || field.name || '';
+        const value = post[field.name] || field.default || '';
         switch (field.type) {
             case 'string':
                 return (
@@ -125,6 +138,7 @@ function Publish({ currentUser }) {
                         margin='normal'
                         fullWidth
                         value={value}
+                        InputLabelProps={{ shrink: !!value }}
                         onChange={getHandleChange(field.name, event => event.target.value)}
                         helperText={errors[field.name]}
                     />
