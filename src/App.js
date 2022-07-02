@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createContext } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { getConfigAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
 import Login from './components/login';
+export const UserContext = createContext();
 
 function App() {
   /*
@@ -40,31 +41,32 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-      />
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      />
-      <div className={'loginContainer'}>
-        <Login
-          currentUser={user}
-          clientId={config?.clientId}
-          onSignIn={newUser => setUser(newUser)}
-          onSignOut={signOut}
+    <UserContext.Provider value={user}>
+      <div className="App">
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
         />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        />
+        <div className={'loginContainer'}>
+          <Login
+            clientId={config?.clientId}
+            onSignIn={newUser => setUser(newUser)}
+            onSignOut={signOut}
+          />
+        </div>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/:postId" element={<Home />} />
+            <Route path="/publish" element={<Publish />} />
+          </Routes>
+        </BrowserRouter>
       </div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home currentUser={user} />} />
-          <Route path="/:postId" element={<Home currentUser={user} />} />
-          <Route path="/publish" element={<Publish currentUser={user} />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    </UserContext.Provider>
   );
 }
 

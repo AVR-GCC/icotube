@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { TextField, Button } from '@mui/material';
@@ -12,6 +12,7 @@ import { baseURL } from '../actions/server';
 import Modal from './modal';
 // refresh token
 import { getToken, setToken } from '../utils';
+import { UserContext } from '../App';
 
 const AuthModal = ({
   onSignIn,
@@ -249,11 +250,11 @@ const AuthModal = ({
 // }
 
 const Login = ({
-  currentUser,
   onSignIn,
   onSignOut
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const currentUser = useContext(UserContext);
 
   useEffect(() => {
     const token = getToken();
