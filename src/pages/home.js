@@ -9,7 +9,7 @@ import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 
-function Home({ currentUser, setUser }) {
+function Home({ currentUser }) {
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
@@ -19,17 +19,6 @@ function Home({ currentUser, setUser }) {
 
     const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
     const mainRef = useRef(null);
-
-    // const videoRefresher = useRef(null);
-
-    // useEffect(() => {
-    //     videoRefresher.current = setInterval(() => {
-    //         const curHoveredPost = hoveredPost;
-    //         setHoveredPost(null);
-    //         setHoveredPost(curHoveredPost);
-    //     }, 5000);
-    //     return () => clearInterval(videoRefresher.current);
-    // }, [hoveredPost])
 
     const { postId } = useParams();
     const navigate = useNavigate();
@@ -58,6 +47,23 @@ function Home({ currentUser, setUser }) {
             navigate(`/${posts[selectedPost]._id}`);
         }
     }, [selectedPost, posts, navigate]);
+
+    const removePost = (id) => {
+        const removePostIndex = findIndex(posts, post => post._id === id);
+        if (removePostIndex !== -1) {
+            const newPosts = [...posts];
+            newPosts.splice(removePostIndex, 1);
+            if (removePostIndex === selectedPost) {
+                setSelectedPost(-1);
+            }
+            setPosts(newPosts);
+        }
+    }
+
+    const leavePost = () => {
+        setSelectedPost(-1);
+        navigate('/');
+    }
 
     const _post = (post, index) => {
         // console.log('index', index);
@@ -148,10 +154,8 @@ function Home({ currentUser, setUser }) {
                         post={posts[selectedPost]}
                         rightClick={selectedPost >= posts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
                         leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
-                        XClick={() => {
-                            setSelectedPost(-1);
-                            navigate('/');
-                        }}
+                        XClick={leavePost}
+                        removePost={removePost}
                     />
                 )}
                 {!isMobile.current && <SideBar currentUser={currentUser} />}

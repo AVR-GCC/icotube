@@ -1,5 +1,11 @@
 import APIcall from './server';
 
+export const deletePostAPI = async (postId) => {
+    const response = await APIcall({ method: 'DELETE', url: `posts/${postId}`, withCredentials: true });
+    if (response.data?.success) return { success: true };
+    return response.error;
+};
+
 export const getPostAPI = async (postId) => {
     const response = await APIcall({ method: 'GET', url: `posts/${postId}` });
     if (response.data?.success) return response?.data?.data;

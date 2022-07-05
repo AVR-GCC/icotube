@@ -7,6 +7,7 @@ import {
     ArrowForwardIosRounded,
     Close
 } from '@mui/icons-material';
+import { deletePostAPI } from '../actions/searchAPI';
 import { Button } from '@mui/material';
 import ReactPlayer from 'react-player';
 import { UserContext } from '../App';
@@ -16,7 +17,8 @@ function SelectedPost({
     post,
     rightClick,
     leftClick,
-    XClick
+    XClick,
+    removePost
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
     const playerPartRef = useRef();
@@ -48,15 +50,31 @@ function SelectedPost({
     const _topIcons = () => (
         <React.Fragment>
             {currentUser && currentUser.email === post.email ? (
-                <Button
-                    variant="outlined"
-                    style={{ marginLeft: 20 }}
-                    onClick={() => {
-                        navigate(`/publish/${post._id}`);
-                    }}
-                >
-                    Edit
-                </Button>
+                <div className='ownerButtons'>
+                    <Button
+                        variant="outlined"
+                        onClick={() => {
+                            navigate(`/publish/${post._id}`);
+                        }}
+                    >
+                        Edit
+                    </Button>
+                    <Button
+                        color="error"
+                        variant="outlined"
+                        style={{ marginLeft: 20 }}
+                        onClick={async () => {
+                            const res = await deletePostAPI(post._id);
+                            if (res?.success) {
+                                removePost(post._id);
+                            } else {
+                                alert(res);
+                            }
+                        }}
+                    >
+                        Delete
+                    </Button>
+                </div>
             ) : null}
             <div className='hide'>
                 <div className='social'>
