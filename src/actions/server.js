@@ -5,8 +5,11 @@ export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-
 const functions = {
     GET: axios.get,
     PUT: axios.put,
-    POST: axios.post
+    POST: axios.post,
+    DELETE: axios.delete
 }
+
+const withBody = ['PUT', 'POST'];
 
 const APIcall = async ({
     url,
@@ -21,15 +24,18 @@ const APIcall = async ({
     console.log('body:', body);
     let res = null;
     const headers = { "Content-Type": "application/json" };
-    if (withCredentials) headers.Authorization = token;
+    if (withCredentials) {
+        console.log('withCredentials');
+        headers.Authorization = token;
+    }
     const fullUrl = `${baseURL}/${url}`;
     const options = {
         withCredentials,
         headers
     };
-    const params = method === 'GET'
-        ? [fullUrl, options]
-        : [fullUrl, body, options];
+    const params = withBody.includes(method)
+        ? [fullUrl, body, options]
+        : [fullUrl, options];
     try {
         res = await functions[method](...params);
     } catch (e) {
