@@ -81,14 +81,22 @@ function Home({ currentUser, setUser }) {
                     setSelectedPost(index);
                 }}
             >
-                <ReactPlayer
-                    playing={hoveredPost === post._id}
-                    height={313}
-                    width={313}
-                    url={post.videoUrl}
-                    muted={true}
-                    controls={false}
-                />
+                {post.videoUrl ? (
+                    <ReactPlayer
+                        playing={hoveredPost === post._id}
+                        height={313}
+                        width={313}
+                        url={post.videoUrl}
+                        muted={true}
+                        controls={false}
+                    />
+                ) : (
+                    <img
+                        style={{ height: 313, width: 313 }}
+                        src={post.logo}
+                        alt={post.title}
+                    />
+                )}
                 <div className={'boxICOTextSection'}>
                     <div className={'boxICOTitle'}>{post.title}</div>
                     <div>{post.type}</div>

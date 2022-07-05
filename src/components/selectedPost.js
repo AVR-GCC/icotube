@@ -99,18 +99,31 @@ function SelectedPost({
     );
 
     const _player = () => (
-        <div
-            className='playerPart'
-            ref={playerPartRef}
-        >
-            <ReactPlayer
-                url={post.videoUrl}
-                muted={false}
-                controls={true}
-                height={playerSize.height}
-                width={playerSize.width}
-            />
-        </div>
+        post.videoUrl ? (
+            <div
+                className='playerPart'
+                ref={playerPartRef}
+            >
+                <ReactPlayer
+                    url={post.videoUrl}
+                    muted={false}
+                    controls={true}
+                    height={playerSize.height}
+                    width={playerSize.width}
+                />
+            </div>
+        ) : (
+            <div
+                className='playerPart'
+                ref={playerPartRef}
+            >
+                <img
+                    style={{ height: playerSize.height, width: playerSize.width }}
+                    src={post.logo}
+                    alt={post.title}
+                />
+            </div>
+        )
     );
 
     const _videoSection = () => (
