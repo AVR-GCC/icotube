@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../App';
 import { Upcoming, History, NewReleases } from '@mui/icons-material';
 import '../styles/sideBar.css';
 
-function SideBar(props) {
-    const { currentUser } = props;
+function SideBar() {
+    const currentUser = useContext(UserContext);
     const navigate = useNavigate();
     const navigateToMain = () => {
         navigate('/');
