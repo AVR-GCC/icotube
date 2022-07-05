@@ -47,7 +47,7 @@ function SelectedPost({
 
     const _topIcons = () => (
         <React.Fragment>
-            {currentUser.email === post.email ? (
+            {currentUser && currentUser.email === post.email ? (
                 <Button
                     variant="outlined"
                     style={{ marginLeft: 20 }}
