@@ -8,10 +8,11 @@ import {
     Close
 } from '@mui/icons-material';
 import { deletePostAPI } from '../actions/searchAPI';
-import { Button } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import ReactPlayer from 'react-player';
 import { UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
+import { fields } from '../constants/postFields';
 
 function SelectedPost({
     post,
@@ -152,12 +153,31 @@ function SelectedPost({
         </div>
     );
 
+    const _showField = (field, post) => {
+        const value = post[field.name];
+        if (field.type === 'date') {
+            return new Date(value).toLocaleDateString();
+        }
+        if (field.multiple) {
+            return value.join(', ');
+        }
+        return value;
+    }
+
     const _infoSection = () => (
         <div className='infoSection'>
             <div className='infoBox'>
                 <div className='titleText'>{post.title}</div>
-                <div className='infoText'>{post.description}</div>
+                <div className='infoText'>{post.shortDescription}</div>
                 <div className='linkText'>{post.homepage}</div>
+                <Divider style={{ marginBottom: 20 }} variant="middle" />
+                {fields.ICO.map(field => (
+                    <div className='showFieldContainer' key={`${field.name}_show`}>
+                        <div className='infoText' style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>{field.label}:&nbsp;</div>
+                        <div className='infoText'>{_showField(field, post)}</div>
+                    </div>
+                ))}
+                <div className='spacer' />
             </div>
         </div>
     );
