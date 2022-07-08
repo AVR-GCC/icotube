@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { getToken } from '../utils'
+
+const verbose = process.env.NODE_ENV !== 'production';
 export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
 
 const functions = {
@@ -11,6 +13,12 @@ const functions = {
 
 const withBody = ['PUT', 'POST'];
 
+const print = (...strs) => {
+    if (verbose) {
+        console.log(...strs);
+    }
+}
+
 const APIcall = async ({
     url,
     method,
@@ -18,14 +26,14 @@ const APIcall = async ({
     withCredentials = false,
     token = getToken()
 }) => {
-    console.log('----- API Call -----');
-    console.log('url:', url);
-    console.log('method:', method);
-    console.log('body:', body);
+    print('----- API Call -----');
+    print('url:', url);
+    print('method:', method);
+    print('body:', body);
     let res = null;
     const headers = { "Content-Type": "application/json" };
     if (withCredentials) {
-        console.log('withCredentials');
+        print('withCredentials');
         headers.Authorization = token;
     }
     const fullUrl = `${baseURL}/${url}`;
@@ -41,9 +49,9 @@ const APIcall = async ({
     } catch (e) {
         res = e;
     }
-    console.log(`| API Call ${url} returned |`);
-    console.log('res:', res);
-    console.log('--------------------');
+    print(`| API Call ${url} returned |`);
+    print('res:', res);
+    print('--------------------');
     return res;
 }
 
