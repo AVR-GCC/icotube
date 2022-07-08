@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import  '../styles/publish.css';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 import { useParams } from 'react-router-dom';
+import { UserContext } from '../App';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI, getPostAPI } from '../actions/searchAPI';
 import { fields } from '../constants/postFields';
@@ -26,8 +27,9 @@ import { defined } from '../utils';
 import ImageUpload from '../components/imageUpload';
 import { identity } from 'lodash';
 
-function Publish({ currentUser }) {
+function Publish() {
     // const [loading, setLoading] = useState(false);
+    const currentUser = useContext(UserContext);
     const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});
@@ -38,6 +40,7 @@ function Publish({ currentUser }) {
 
     const [notificationTextTopPx, setNotificationTextTopPx] = useState(55);
     const [notificationTextleftPercent, setNotificationTextleftPercent] = useState(0);
+    const mounted = useRef(false);
     const notificationTextRef = useRef(null);
     const publishMainContainerRef = useRef(null);
     const inputRefs = useRef({});
@@ -68,6 +71,11 @@ function Publish({ currentUser }) {
         notificationText,
         notificationTextleftPercent
     ]);
+
+    useEffect(() => {
+        mounted.current = true;
+        return () => mounted.current = false;
+    }, []);
 
     // const toggleSubmitted = () => {
     //     setPostSubmitted(!postSubmitted);
