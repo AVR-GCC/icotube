@@ -230,6 +230,7 @@ function Publish() {
                         <ImageUpload
                             height={200}
                             width={200}
+                            value={value}
                             onChange={getHandleChange(field.name)}
                         />
                     </div>

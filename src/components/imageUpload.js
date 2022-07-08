@@ -8,8 +8,8 @@ import { isString, noop } from 'lodash';
 
 import  '../styles/imageUpload.css';
 
-const ImageUpload = ({ onChange = noop, width = 30, height = 30, enableFileUpload = false }) => {
-    const [selectedFile, setSelectedFile] = useState(undefined);
+const ImageUpload = ({ onChange = noop, width = 30, height = 30, enableFileUpload = false, value }) => {
+    const [selectedFile, setSelectedFile] = useState(value);
     const inputRef = useRef(null);
     const textInputRef = useRef(null);
 
@@ -18,6 +18,13 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30, enableFileUploa
         if (isString(selectedFile) && selectedFile.startsWith('data:image')) return;
         onChange(selectedFile);
     }, [selectedFile, onChange]);
+
+    useEffect(() => {
+        if (value) {
+            setSelectedFile(value);
+            textInputRef.current.value = value;
+        }
+    }, [setSelectedFile, value]);
 
     function testImage(url) {
         return new Promise(function (resolve) {
