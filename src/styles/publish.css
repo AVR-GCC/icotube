@@ -1,13 +1,10 @@
 .MuiFormLabel-root {
-  color: rgb(90, 91, 95) !important;
-}
-
-.MuiFilledInput-input {
-  color: #fff !important;
+  color: rgb(157, 160, 170) !important;
 }
 
 .MuiOutlinedInput-root {
-  color: #fff !important;
+  color: #ffffff !important;
+  background-color: #252525;
 }
 
 .MuiIconButton-root {
@@ -72,13 +69,16 @@
 
 .toggleTypeContainer {
   margin-top: 30px;
-  background: #212121;
+  background: #252525;
   border-radius: 5px;
 }
 
 .imageUploadContainer {
   border: 1px solid #00000030;
   border-radius: 4px;
+  background-color: #252525;
+  margin-top: 15px;
+  margin-bottom: 5px;
 }
 
 .switchContainer {
@@ -86,6 +86,9 @@
   align-items: center;
   border: 1px solid #00000030;
   border-radius: 4px;
+  background-color: #252525;
+  margin-bottom: 5px;
+  margin-top: 15px;
 }
 
 .imageUploadContainer:hover {
@@ -99,7 +102,7 @@
 .sectionTitleText {
   padding: 16.5px 14px;
   padding-bottom: 6.5px;
-  color: rgb(90, 91, 95);
+  color: rgb(157, 160, 170);
   font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: 400;
   font-size: 1rem;

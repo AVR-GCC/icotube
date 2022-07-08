@@ -175,7 +175,7 @@ function Publish() {
             case 'enum':
                 return (
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
-                        <div style={{ flex: 1, margin: 5, marginLeft: 0 }}>
+                        <div style={{ flex: 1, marginTop: 16, marginRight: 10, marginBottom: value === 'Other' ? 0 : 8 }}>
                             <FormControl
                                 variant='outlined'
                                 margin='normal'
@@ -204,7 +204,7 @@ function Publish() {
                                 {/* <FormHelperText>Disabled</FormHelperText> */}
                             </FormControl>
                         </div>
-                        <div style={{ flex: 1, margin: 5, marginRight: 0 }}>
+                        <div style={{ flex: 1 }}>
                             {value === 'Other' && (
                                 <TextField
                                     inputRef={ref => {
@@ -232,7 +232,7 @@ function Publish() {
                 );
             case 'date':
                 return (
-                    <div style={{ margin: 8 }}>
+                    <div style={{ margin: 15, marginLeft: 5 }}>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 margin='normal'
