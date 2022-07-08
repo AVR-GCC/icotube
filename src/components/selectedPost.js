@@ -155,8 +155,22 @@ function SelectedPost({
 
     const _showField = (field, post) => {
         const value = post[field.name];
+        if (field.type === 'boolean') {
+            return value ? 'Yes' : 'No';
+        }
         if (field.type === 'date') {
             return new Date(value).toLocaleDateString();
+        }
+        if (field.type === 'image') {
+            return (
+                <img
+                    width={50}
+                    height={50}
+                    src={value}
+                    style={{ marginLeft: 20 }}
+                    alt="Logo"
+                />
+            );
         }
         if (field.multiple) {
             return value.join(', ');
