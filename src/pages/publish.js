@@ -151,6 +151,26 @@ function Publish() {
                         helperText={errors[field.name]}
                     />
                 );
+            case 'number':
+                return (
+                    <TextField
+                        error={!!errors[field.name]}
+                        key={inputId}
+                        id={inputId}
+                        label={showText}
+                        required={field.required}
+                        multiline={field.multiline}
+                        variant='outlined'
+                        margin='normal'
+                        type='number'
+                        onWheel={event => event.target.blur()}
+                        fullWidth
+                        value={value}
+                        InputLabelProps={{ shrink: !!value }}
+                        onChange={getHandleChange(field.name, event => event.target.value)}
+                        helperText={errors[field.name]}
+                    />
+                );
             case 'enum':
                 return (
                     <div style={{ display: 'flex', flexDirection: 'row' }}>
