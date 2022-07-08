@@ -19,7 +19,8 @@ import {
     CircularProgress,
     Button,
     ToggleButton,
-    ToggleButtonGroup
+    ToggleButtonGroup,
+    Switch
 } from '@mui/material';
 import { LocalizationProvider, DatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -253,6 +254,13 @@ function Publish() {
                             value={value}
                             onChange={getHandleChange(field.name)}
                         />
+                    </div>
+                );
+            case 'boolean':
+                return (
+                    <div className='switchContainer'>
+                        <div className='sectionTitleText' style={{ marginBottom: 10 }}>{showText}</div>
+                        <Switch checked={!!value} onChange={getHandleChange(field.name, event => event.target.checked)} />
                     </div>
                 );
             default:
