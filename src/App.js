@@ -5,7 +5,7 @@ import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
 import Login from './components/login';
-export const UserContext = createContext();
+export const AppContext = createContext();
 
 function App() {
   /*
@@ -41,7 +41,7 @@ function App() {
   }
 
   return (
-    <UserContext.Provider value={user}>
+    <AppContext.Provider value={{ user, config }}>
       <div className="App">
         <link
           rel="stylesheet"
@@ -67,7 +67,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-    </UserContext.Provider>
+    </AppContext.Provider>
   );
 }
 

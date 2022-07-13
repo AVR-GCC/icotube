@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import  '../styles/publish.css';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 import { useParams } from 'react-router-dom';
-import { UserContext } from '../App';
+import { AppContext } from '../App';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI, getPostAPI } from '../actions/searchAPI';
 import { fields } from '../constants/postFields';
@@ -30,7 +30,8 @@ import { identity } from 'lodash';
 
 function Publish() {
     // const [loading, setLoading] = useState(false);
-    const currentUser = useContext(UserContext);
+    const appContext = useContext(AppContext);
+    const currentUser = appContext?.user;
     const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});

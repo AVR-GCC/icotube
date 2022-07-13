@@ -12,7 +12,7 @@ import { baseURL } from '../actions/server';
 import Modal from './modal';
 // refresh token
 import { getToken, setToken } from '../utils';
-import { UserContext } from '../App';
+import { AppContext } from '../App';
 
 const AuthModal = ({
   onSignIn,
@@ -254,7 +254,8 @@ const Login = ({
   onSignOut
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const currentUser = useContext(UserContext);
+  const appContext = useContext(AppContext);
+  const currentUser = appContext?.user;
 
   useEffect(() => {
     const token = getToken();

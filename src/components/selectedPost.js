@@ -10,7 +10,7 @@ import {
 import { deletePostAPI } from '../actions/searchAPI';
 import { Button, Divider } from '@mui/material';
 import ReactPlayer from 'react-player';
-import { UserContext } from '../App';
+import { AppContext } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { fields } from '../constants/postFields';
 
@@ -23,7 +23,8 @@ function SelectedPost({
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
     const playerPartRef = useRef();
-    const currentUser = useContext(UserContext);
+    const appContext = useContext(AppContext);
+    const currentUser = appContext?.user;
     const navigate = useNavigate();
 
     useEffect(() => {
