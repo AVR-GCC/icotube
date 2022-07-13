@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import  '../styles/publish.css';
+import { useNavigate } from 'react-router-dom';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 import { useParams } from 'react-router-dom';
 import { AppContext } from '../App';
@@ -46,6 +47,10 @@ function Publish() {
     const notificationTextRef = useRef(null);
     const publishMainContainerRef = useRef(null);
     const inputRefs = useRef({});
+    const navigate = useNavigate();
+    const navigateToPost = (postId) => {
+        navigate(`/${postId}`);
+    }
 
     const { postId } = useParams();
 
@@ -101,6 +106,7 @@ function Publish() {
             const autoPublish = res?.data?.autoPublish;
             if (autoPublish) {
                 setNotificationText(`Post: ${post.title} - published!`);
+                navigateToPost(res?.data?.post?._id);
             } else if (res?.data?.success) {
                 setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
                 setPostSubmitted(true);
@@ -339,6 +345,7 @@ function Publish() {
                             // customMetadata={'custom-metadata-1248'}
                             onPaymentDetected={(arg) => {
                                 setNotificationText(`Payment made! The post will appear when the payment is confirmed`);
+                                setTimeout(navigateToPost, 3000);
                             }}
                             disabled={!postSubmitted}
                         />
