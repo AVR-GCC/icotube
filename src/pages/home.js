@@ -54,7 +54,7 @@ function Home({ currentUser }) {
             const newPosts = [...posts];
             newPosts.splice(removePostIndex, 1);
             if (removePostIndex === selectedPost) {
-                setSelectedPost(-1);
+                leavePost();
             }
             setPosts(newPosts);
         }
