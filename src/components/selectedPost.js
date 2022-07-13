@@ -25,6 +25,10 @@ function SelectedPost({
     const playerPartRef = useRef();
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
+    const allowEdit = currentUser && (
+        currentUser.email === post.email
+        || appContext?.config?.freePostWhitelist?.includes(currentUser.email)
+    );
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,7 +55,7 @@ function SelectedPost({
 
     const _topIcons = () => (
         <React.Fragment>
-            {currentUser && currentUser.email === post.email ? (
+            {allowEdit ? (
                 <div className='ownerButtons'>
                     <Button
                         variant="outlined"
@@ -71,6 +75,7 @@ function SelectedPost({
                                 removePost(post._id);
                             } else {
                                 alert(res);
+                                alert(res?.data?.error?.message);
                             }
                         }}
                     >
