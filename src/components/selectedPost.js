@@ -74,7 +74,7 @@ function SelectedPost({
                             if (res?.success) {
                                 removePost(post._id);
                             } else {
-                                alert(res);
+                                console.log('ress', res);
                                 alert(res?.data?.error?.message);
                             }
                         }}
