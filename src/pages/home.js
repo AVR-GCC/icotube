@@ -16,6 +16,7 @@ function Home({ currentUser }) {
     const [hoveredPost, setHoveredPost] = useState(null);
     const [autoplayTimer, setAutoplayTimer] = useState(null);
     const [selectedPost, setSelectedPost] = useState(-1);
+    const [loadingPost, setLoadingPost] = useState(0);
 
     const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
     const mainRef = useRef(null);
@@ -87,8 +88,11 @@ function Home({ currentUser }) {
                     setSelectedPost(index);
                 }}
             >
-                {post.videoUrl ? (
+                {post.videoUrl && index <= loadingPost ? (
                     <ReactPlayer
+                        onReady={() => {
+                            setLoadingPost(index + 1);
+                        }}
                         playing={hoveredPost === post._id}
                         height={313}
                         width={313}

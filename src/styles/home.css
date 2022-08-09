@@ -48,7 +48,7 @@
   margin: 20px;
   width: 313px;
   height: 450px;
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 .boxICOTextSection {
