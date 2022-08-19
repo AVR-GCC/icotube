@@ -2,6 +2,9 @@ import React from 'react';
 import ReactPlayer from 'react-player';
 import  '../styles/post.css';
 
+const height = 313;
+const width = 313;
+
 function Post({
     post,
     index,
@@ -12,25 +15,40 @@ function Post({
     setLoadingPost,
     hoveredPost
 }) {
-    const _postContent = (post, index) => post.videoUrl && index <= loadingPost ? (
-        <ReactPlayer
-            onReady={() => {
-                setLoadingPost(index + 1);
-            }}
-            playing={hoveredPost === post._id}
-            height={313}
-            width={313}
-            url={post.videoUrl}
-            muted={true}
-            controls={false}
-        />
-    ) : (
-        <img
-            style={{ height: 313, width: 313 }}
-            src={post.logo}
-            alt={post.title}
-        />
-    )
+    const _postContent = (post, index) => {
+        const showPlayer = post.videoUrl && index <= loadingPost;
+        const showImage = !showPlayer && !!post.logo;
+
+        let content = <div style={{ height, width }} />;
+
+        if (showPlayer) {
+            content = (
+                <ReactPlayer
+                    onReady={() => {
+                        setLoadingPost(index + 1);
+                    }}
+                    playing={hoveredPost === post._id}
+                    height={height}
+                    width={width}
+                    url={post.videoUrl}
+                    muted={true}
+                    controls={false}
+                />
+            )
+        }
+
+        if (showImage) {
+            content = (
+                <img
+                    style={{ height, width }}
+                    src={post.logo}
+                    alt={post.title}
+                />
+            )
+        }
+
+        return content;
+    }
 
     const _postText = (post) => (
         <div className={'boxICOTextSection'}>
@@ -44,6 +62,8 @@ function Post({
         </div>
     )
 
+    const content = _postContent(post, index);
+
     return (
         <div
             key={post._id}
@@ -52,7 +72,7 @@ function Post({
             onMouseLeave={onMouseLeave}
             onClick={() => onClick(index)}
         >
-            {_postContent(post, index)}
+            {content}
             {_postText(post)}
         </div>
     );
