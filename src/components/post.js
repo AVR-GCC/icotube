@@ -52,8 +52,18 @@ function Post({
 
     const _postText = (post) => (
         <div className={'boxICOTextSection'}>
-            <div className={'boxICOTitle'}>{post.title}</div>
-            <div className={'boxICODescriptionHolder'}>{post.shortDescription}</div>
+            <div
+                className={'boxICOTitle'}
+                title={post.title}
+            >
+                {post.title}
+            </div>
+            <div
+                className={'boxICODescriptionHolder'}
+                title={post.shortDescription}
+            >
+                {post.shortDescription}
+            </div>
         </div>
     )
 
