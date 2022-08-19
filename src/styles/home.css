@@ -44,35 +44,6 @@
   flex-wrap: wrap;
 }
 
-.postContainer {
-  margin: 20px;
-  width: 313px;
-  height: 450px;
-  cursor: pointer !important;
-}
-
-.boxICOTextSection {
-  padding: 15px 0px;
-  color: antiquewhite;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.boxICODescriptionHolder {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  text-align: start;
-}
-
-.boxICOTitle {
-  font-weight: 500;
-  font-size: 21px;
-}
-
 .apLabel {
   align-self: center;
   color: #ffffff55;

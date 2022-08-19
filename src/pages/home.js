@@ -8,6 +8,7 @@ import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
+import Post from '../components/post';
 
 function Home({ currentUser }) {
     const [loading, setLoading] = useState(false);
@@ -66,59 +67,35 @@ function Home({ currentUser }) {
         navigate('/');
     }
 
-    const _post = (post, index) => {
-        // console.log('index', index);
-        // console.log('hoveredPost', hoveredPost);
-        return (
-            <div
-                key={post._id}
-                className={'postContainer'}
-                onMouseEnter={() => {
-                    setHoveredPost(null);
-                    setAutoplayTimer(setTimeout(() => {
-                        setHoveredPost(post._id);
-                    }, 3000));
-                }}
-                onMouseLeave={() => {
-                    clearTimeout(autoplayTimer);
-                    setHoveredPost(null);
-                    setAutoplayTimer(null);
-                }}
-                onClick={() => {
-                    setSelectedPost(index);
-                }}
-            >
-                {post.videoUrl && index <= loadingPost ? (
-                    <ReactPlayer
-                        onReady={() => {
-                            setLoadingPost(index + 1);
-                        }}
-                        playing={hoveredPost === post._id}
-                        height={313}
-                        width={313}
-                        url={post.videoUrl}
-                        muted={true}
-                        controls={false}
-                    />
-                ) : (
-                    <img
-                        style={{ height: 313, width: 313 }}
-                        src={post.logo}
-                        alt={post.title}
-                    />
-                )}
-                <div className={'boxICOTextSection'}>
-                    <div className={'boxICOTitle'}>{post.title}</div>
-                    <div>{post.type}</div>
-                    <div>Fundraising Goal: {
-                        post.fundraisingGoal === undefined ?
-                        'NOT SET' : post.fundraisingGoal
-                    }</div>
-                    <div className={'boxICODescriptionHolder'}>{post.description}</div>
-                </div>
-            </div>
-        );
+    const onMouseEnterPost = (post) => {
+        setHoveredPost(null);
+        setAutoplayTimer(setTimeout(() => {
+            setHoveredPost(post._id);
+        }, 3000));
     }
+
+    const onMouseLeavePost = () => {
+        clearTimeout(autoplayTimer);
+        setHoveredPost(null);
+        setAutoplayTimer(null);
+    }
+
+    const onClickPost = (index) => {
+        setSelectedPost(index);
+    }
+
+    const _post = (post, index) => (
+        <Post
+            post={post}
+            index={index}
+            onMouseEnter={onMouseEnterPost}
+            onMouseLeave={onMouseLeavePost}
+            onClick={onClickPost}
+            loadingPost={loadingPost}
+            setLoadingPost={setLoadingPost}
+            hoveredPost={hoveredPost}
+        />
+    );
 
     const _main = () => {
         const postWidth = 353;
