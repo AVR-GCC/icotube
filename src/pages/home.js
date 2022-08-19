@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { findIndex } from 'lodash';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
@@ -7,8 +6,8 @@ import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
-import { CircularProgress } from '@mui/material';
 import Post from '../components/post';
+import Loader from '../components/loader';
 
 function Home({ currentUser }) {
     const [loading, setLoading] = useState(false);
@@ -121,7 +120,7 @@ function Home({ currentUser }) {
     if (loading) {
         return (
             <div className={'loaderContainer'}>
-                <CircularProgress size={50} />
+                <Loader />
             </div>
         );
     }
