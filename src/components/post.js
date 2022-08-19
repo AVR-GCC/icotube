@@ -53,12 +53,7 @@ function Post({
     const _postText = (post) => (
         <div className={'boxICOTextSection'}>
             <div className={'boxICOTitle'}>{post.title}</div>
-            <div>{post.type}</div>
-            <div>Fundraising Goal: {
-                post.fundraisingGoal === undefined ?
-                'NOT SET' : post.fundraisingGoal
-            }</div>
-            <div className={'boxICODescriptionHolder'}>{post.description}</div>
+            <div className={'boxICODescriptionHolder'}>{post.shortDescription}</div>
         </div>
     )
 
