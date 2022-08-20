@@ -51,10 +51,3 @@
   color: rgb(53, 100, 161);
 }
 
-.publishLinkDisabled {
-  position: fixed;
-  bottom: 20px;
-  color: rgb(84, 85, 87);
-  cursor: default;
-}
-

@@ -18,6 +18,7 @@ function App() {
   */
   const [user, setUser] = useState(null);
   const [config, setConfig] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     const tryGetConfig = async () => {
@@ -56,11 +57,22 @@ function App() {
             clientId={config?.clientId}
             onSignIn={newUser => setUser(newUser)}
             onSignOut={signOut}
+            openModal={openModal}
           />
         </div>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route
+              path="/"
+              element={
+                <Home
+                  openLogin={() => {
+                    console.log('yuo yuio');
+                    setOpenModal(!openModal)
+                  }}
+                />
+              }
+            />
             <Route path="/:postId" element={<Home />} />
             <Route path="/publish" element={<Publish />} />
             <Route path="/publish/:postId" element={<Publish />} />

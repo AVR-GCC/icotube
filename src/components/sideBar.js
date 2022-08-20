@@ -4,7 +4,7 @@ import { AppContext } from '../App';
 import { Upcoming, History, NewReleases } from '@mui/icons-material';
 import '../styles/sideBar.css';
 
-function SideBar() {
+function SideBar({ openLogin }) {
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
     const navigate = useNavigate();
@@ -47,10 +47,12 @@ function SideBar() {
             </div>
             <div
                 title={currentUser ? 'Publish a new post' : 'Please log in to publish'}
-                className={currentUser ? 'publishLink' : 'publishLinkDisabled'}
+                className={'publishLink'}
                 onClick={() => {
                     if (currentUser) {
                         navigateToPublish();
+                    } else {
+                        openLogin();
                     }
                 }}
             >

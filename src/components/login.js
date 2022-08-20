@@ -250,12 +250,17 @@ const AuthModal = ({
 // }
 
 const Login = ({
+  openModal = false,
   onSignIn,
   onSignOut
 }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(openModal);
   const appContext = useContext(AppContext);
   const currentUser = appContext?.user;
+
+  useEffect(() => {
+    setModalOpen(!modalOpen);
+  }, [openModal]);
 
   useEffect(() => {
     const token = getToken();

@@ -9,7 +9,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Post from '../components/post';
 import Loader from '../components/loader';
 
-function Home({ currentUser }) {
+function Home({ currentUser, openLogin }) {
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
@@ -138,7 +138,7 @@ function Home({ currentUser }) {
                         removePost={removePost}
                     />
                 )}
-                {!isMobile.current && <SideBar currentUser={currentUser} />}
+                {!isMobile.current && <SideBar currentUser={currentUser} openLogin={openLogin} />}
                 {_main()}
             </div>
         </div>
