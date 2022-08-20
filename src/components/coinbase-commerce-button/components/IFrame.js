@@ -142,6 +142,7 @@ export default class IFrame extends React.Component<Props, State> {
         break;
       case 'checkout_modal_closed':
         onModalClose();
+        break;
       default:
         // Do nothing
         break;
@@ -158,11 +159,12 @@ export default class IFrame extends React.Component<Props, State> {
 
     return (
       <div className="coinbase-commerce-iframe-container">
-        {loading || src === null && (
+        {(loading || src === null) && (
           <div className="commerce-loading-spinner"/>
         )}
         {src !== null && (
           <iframe
+            title="coinbase-commerce-iframe"
             onLoad={this.handleIFrameLoaded}
             className="coinbase-commerce-iframe"
             src={src}
