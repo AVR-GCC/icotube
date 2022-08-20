@@ -191,12 +191,15 @@ function SelectedPost({
                 <div className='infoText'>{post.shortDescription}</div>
                 <div className='linkText'>{post.homepage}</div>
                 <Divider style={{ marginBottom: 20 }} variant="middle" />
-                {fields.ICO.map(field => (
+                {fields.ICO.map(field => field.name !== 'email' && !!post[field.name] && (
                     <div className='showFieldContainer' key={`${field.name}_show`}>
                         <div className='infoText' style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>{field.label}:&nbsp;</div>
                         <div className='infoText'>{_showField(field, post)}</div>
                     </div>
                 ))}
+                <div className='spacer' />
+                <div className='spacer' />
+                <div className='spacer' />
                 <div className='spacer' />
             </div>
         </div>
