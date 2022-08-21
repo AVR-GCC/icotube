@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { findIndex, sortBy, orderBy } from 'lodash';
+import { findIndex, orderBy } from 'lodash';
 import  '../styles/home.css';
-import { getPostsAPI, loginAPI } from '../actions/searchAPI';
+import { getPostsAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
@@ -17,6 +17,7 @@ function Home({ currentUser, openLogin }) {
     const [autoplayTimer, setAutoplayTimer] = useState(null);
     const [selectedPost, setSelectedPost] = useState(-1);
     const [loadingPost, setLoadingPost] = useState(0);
+    const [postsPerRow, setPostsPerRow] = useState(4);
 
     const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
     const mainRef = useRef(null);
@@ -28,7 +29,7 @@ function Home({ currentUser, openLogin }) {
     const navigate = useNavigate();
 
     const toDate = str => new Date(str);
-    const isRunning = (post) => toDate(post.startDate) < today && today < toDate(post.endDate);
+    const isRunning = (post) => toDate(post.startDate) <= today && today <= toDate(post.endDate);
     const isEnded = (post) => toDate(post.endDate) < today;
 
     const today = toDate();
@@ -129,6 +130,9 @@ function Home({ currentUser, openLogin }) {
         if (mainRef.current) {
             numPosts = Math.floor(mainRef.current.clientWidth / postWidth);
         }
+        if (numPosts !== postsPerRow) {
+            setPostsPerRow(numPosts);
+        }
         return (
             <div
                 className="mainContainer"
@@ -145,8 +149,8 @@ function Home({ currentUser, openLogin }) {
     };
 
     const scrollToIndex = (index) => {
-        const line = Math.floor(index / 4) + 1;
-        const pixels = line * 450;
+        const line = Math.floor((index - 1) / postsPerRow);
+        const pixels = line * 490;
         mainRef.current.scroll({ top: pixels });
     }
 
@@ -173,8 +177,11 @@ function Home({ currentUser, openLogin }) {
                 )}
                 {!isMobile.current && (
                     <SideBar
+                        clickUpcoming={() => {
+                            scrollToIndex(0);
+                        }}
                         clickRunning={() => {
-                            scrollToIndex(runningIndex.current)
+                            scrollToIndex(runningIndex.current);
                         }}
                         clickEnded={() => {
                             scrollToIndex(endedIndex.current);

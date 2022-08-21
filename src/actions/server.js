@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getToken } from '../utils'
 
-const verbose = process.env.NODE_ENV !== 'production';
+const verbose = false;
 export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
 
 const functions = {

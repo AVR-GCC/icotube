@@ -18,7 +18,7 @@ function App() {
   */
   const [user, setUser] = useState(null);
   const [config, setConfig] = useState(null);
-  const [openModal, setOpenModal] = useState(false);
+  const [toggleModal, setTogglenModal] = useState(false);
 
   useEffect(() => {
     const tryGetConfig = async () => {
@@ -57,7 +57,7 @@ function App() {
             clientId={config?.clientId}
             onSignIn={newUser => setUser(newUser)}
             onSignOut={signOut}
-            openModal={openModal}
+            toggleModal={toggleModal}
           />
         </div>
         <BrowserRouter>
@@ -67,8 +67,7 @@ function App() {
               element={
                 <Home
                   openLogin={() => {
-                    console.log('yuo yuio');
-                    setOpenModal(!openModal)
+                    setTogglenModal(!toggleModal)
                   }}
                 />
               }

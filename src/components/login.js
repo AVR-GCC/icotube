@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { TextField, Button } from '@mui/material';
@@ -250,17 +250,21 @@ const AuthModal = ({
 // }
 
 const Login = ({
-  openModal = false,
+  toggleModal = true,
   onSignIn,
   onSignOut
 }) => {
-  const [modalOpen, setModalOpen] = useState(openModal);
+  const [modalOpen, setModalOpen] = useState(false);
   const appContext = useContext(AppContext);
   const currentUser = appContext?.user;
 
+  const mounted = useRef(false);
+
   useEffect(() => {
-    setModalOpen(!modalOpen);
-  }, [openModal]);
+    if (mounted.current) {
+      setModalOpen(!modalOpen);
+    }
+  }, [toggleModal]);
 
   useEffect(() => {
     const token = getToken();
@@ -276,6 +280,11 @@ const Login = ({
       getMe();
     }
   }, [currentUser, onSignIn]);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => mounted.current = false;
+  }, []);
 
   const logout = () => {
     setToken(null);

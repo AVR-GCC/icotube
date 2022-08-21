@@ -7,7 +7,8 @@ import '../styles/sideBar.css';
 function SideBar({
     openLogin,
     clickRunning,
-    clickEnded
+    clickEnded,
+    clickUpcoming
 }) {
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
@@ -22,7 +23,11 @@ function SideBar({
             <div
                 className={'section'}
                 onClick={() => {
-                    navigate('/');
+                    if (clickUpcoming) {
+                        clickUpcoming();
+                    } else {
+                        navigate('/');
+                    }
                 }}
             >
                 <div className="icon"><Upcoming /></div>
