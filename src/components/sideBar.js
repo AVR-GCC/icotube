@@ -4,13 +4,14 @@ import { AppContext } from '../App';
 import { Upcoming, History, NewReleases } from '@mui/icons-material';
 import '../styles/sideBar.css';
 
-function SideBar({ openLogin }) {
+function SideBar({
+    openLogin,
+    clickRunning,
+    clickEnded
+}) {
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
     const navigate = useNavigate();
-    const navigateToMain = () => {
-        navigate('/');
-    }
 
     const navigateToPublish = () => {
         navigate('/publish');
@@ -21,7 +22,7 @@ function SideBar({ openLogin }) {
             <div
                 className={'section'}
                 onClick={() => {
-                    navigateToMain();
+                    navigate('/');
                 }}
             >
                 <div className="icon"><Upcoming /></div>
@@ -30,7 +31,11 @@ function SideBar({ openLogin }) {
             <div
                 className={'section'}
                 onClick={() => {
-                    navigateToMain();
+                    if (clickRunning) {
+                        clickRunning();
+                    } else {
+                        navigate('/?scrollTo=running');
+                    }
                 }}
             >
                 <div className="icon"><NewReleases /></div>
@@ -39,7 +44,11 @@ function SideBar({ openLogin }) {
             <div
                 className={'section'}
                 onClick={() => {
-                    navigateToMain();
+                    if (clickEnded) {
+                        clickEnded();
+                    } else {
+                        navigate('/?scrollTo=ended');
+                    }
                 }}
             >
                 <div className="icon"><History /></div>

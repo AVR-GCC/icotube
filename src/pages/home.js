@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { findIndex } from 'lodash';
+import { findIndex, sortBy, orderBy } from 'lodash';
 import  '../styles/home.css';
-import { getPostsAPI } from '../actions/searchAPI';
+import { getPostsAPI, loginAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
@@ -20,21 +20,48 @@ function Home({ currentUser, openLogin }) {
 
     const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
     const mainRef = useRef(null);
+    const runningIndex = useRef(0);
+    const endedIndex = useRef(0);
 
     const { postId } = useParams();
+    const scrollTo = new URLSearchParams(window.location.search).get('scrollTo');
     const navigate = useNavigate();
+
+    const toDate = str => new Date(str);
+    const isRunning = (post) => toDate(post.startDate) < today && today < toDate(post.endDate);
+    const isEnded = (post) => toDate(post.endDate) < today;
+
+    const today = toDate();
 
     useEffect(() => {
         const tryGetPosts = async () => {
             setLoading(true);
             const res = await getPostsAPI();
-            setPosts(res.data.data);
+            const gotPosts = res?.data?.data;
+            const sortedPosts = orderBy(gotPosts, p => p.endDate, 'desc');
+            setPosts(sortedPosts);
             clearInterval(interval);
+            for (let i = 0; i < sortedPosts.length; i++) {
+                if (!runningIndex.current && isRunning(sortedPosts[i])) runningIndex.current = i;
+                if (!endedIndex.current && isEnded(sortedPosts[i])) {
+                    endedIndex.current = i;
+                }
+            }
             setLoading(false);
         };
         const interval = setInterval(tryGetPosts, 10000);
         tryGetPosts();
     }, [setLoading, setPosts]);
+
+    useEffect(() => {
+        if (scrollTo) {
+            setTimeout(() => {
+                const correctRef = scrollTo === 'running' ? runningIndex : endedIndex;
+                scrollToIndex(correctRef.current);
+                navigate('/');
+            }, 500);
+        }
+    })
 
     useEffect(() => {
         if (postId && posts.length) {
@@ -117,6 +144,12 @@ function Home({ currentUser, openLogin }) {
         );
     };
 
+    const scrollToIndex = (index) => {
+        const line = Math.floor(index / 4) + 1;
+        const pixels = line * 450;
+        mainRef.current.scroll({ top: pixels });
+    }
+
     if (loading) {
         return (
             <div className={'loaderContainer'}>
@@ -138,7 +171,18 @@ function Home({ currentUser, openLogin }) {
                         removePost={removePost}
                     />
                 )}
-                {!isMobile.current && <SideBar currentUser={currentUser} openLogin={openLogin} />}
+                {!isMobile.current && (
+                    <SideBar
+                        clickRunning={() => {
+                            scrollToIndex(runningIndex.current)
+                        }}
+                        clickEnded={() => {
+                            scrollToIndex(endedIndex.current);
+                        }}
+                        currentUser={currentUser}
+                        openLogin={openLogin}
+                    />
+                )}
                 {_main()}
             </div>
         </div>
