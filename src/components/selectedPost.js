@@ -14,6 +14,11 @@ import { AppContext } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { fields } from '../constants/postFields';
 
+const fieldsToNotShow = [
+    'email',
+    'videoUrl'
+];
+
 function SelectedPost({
     post,
     rightClick,
@@ -189,11 +194,25 @@ function SelectedPost({
             <div className='infoBox'>
                 <div className='titleText'>{post.title}</div>
                 <div className='infoText'>{post.shortDescription}</div>
-                <div className='linkText'>{post.homepage}</div>
+                <div
+                    className='linkText'
+                    onClick={() => window.open(post.homepage)}
+                >
+                    {post.homepage}
+                </div>
                 <Divider style={{ marginBottom: 20 }} variant="middle" />
-                {fields.ICO.map(field => field.name !== 'email' && !!post[field.name] && (
+                {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
                     <div className='showFieldContainer' key={`${field.name}_show`}>
-                        <div className='infoText' style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>{field.label}:&nbsp;</div>
+                        <div
+                            className='infoText'
+                            style={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                minWidth: 'fit-content'
+                            }}
+                        >
+                            {field.label}:&nbsp;&nbsp;&nbsp;
+                        </div>
                         <div className='infoText'>{_showField(field, post)}</div>
                     </div>
                 ))}
