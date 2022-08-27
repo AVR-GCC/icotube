@@ -32,3 +32,17 @@ export const setToken = (token) => {
 export const getToken = () => {
     return localStorage.getItem('tubeAuthToken');
 };
+
+export const retryUntilSuccess = (func, intervalTime = 10000) => {
+    return new Promise((resolve) => {
+        const tryOnce = async () => {
+            const res = await func();
+            if (res.success) {
+                clearInterval(interval);
+                resolve(res);
+            }
+        };
+        const interval = setInterval(tryOnce, intervalTime);
+        tryOnce();
+    });
+};

@@ -5,6 +5,7 @@ import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
 import Login from './components/login';
+import { retryUntilSuccess } from './utils';
 export const AppContext = createContext();
 
 function App() {
@@ -21,13 +22,13 @@ function App() {
   const [toggleModal, setTogglenModal] = useState(false);
 
   useEffect(() => {
-    const tryGetConfig = async () => {
+    retryUntilSuccess(async () => {
       const res = await getConfigAPI();
-      setConfig(res.data);
-      clearInterval(interval);
-    };
-    const interval = setInterval(tryGetConfig, 10000);
-    tryGetConfig();
+      if (res.data) {
+        setConfig(res.data);
+      }
+      return ({ success: !!res.data });
+    });
   }, []);
 
   // useEffect(() => { for google passport

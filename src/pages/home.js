@@ -8,6 +8,7 @@ import SelectedPost from '../components/selectedPost';
 import { useParams, useNavigate } from 'react-router-dom';
 import Post from '../components/post';
 import Loader from '../components/loader';
+import { retryUntilSuccess } from '../utils';
 
 function Home({ currentUser, openLogin }) {
     const [loading, setLoading] = useState(false);
@@ -34,24 +35,24 @@ function Home({ currentUser, openLogin }) {
         const isEnded = (post) => toDate(post.endDate) < today;
 
         const today = new Date();
-        const tryGetPosts = async () => {
+        retryUntilSuccess(async () => {
             setLoading(true);
             const res = await getPostsAPI();
             const gotPosts = res?.data?.data;
-            setPosts(gotPosts);
-            clearInterval(interval);
-            for (let i = 0; i < gotPosts.length; i++) {
-                if (!runningIndex.current && isRunning(gotPosts[i])) {
-                    runningIndex.current = i;
+            if (gotPosts) {
+                setPosts(gotPosts);
+                for (let i = 0; i < gotPosts.length; i++) {
+                    if (!runningIndex.current && isRunning(gotPosts[i])) {
+                        runningIndex.current = i;
+                    }
+                    if (!endedIndex.current && isEnded(gotPosts[i])) {
+                        endedIndex.current = i;
+                    }
                 }
-                if (!endedIndex.current && isEnded(gotPosts[i])) {
-                    endedIndex.current = i;
-                }
+                setLoading(false);
             }
-            setLoading(false);
-        };
-        const interval = setInterval(tryGetPosts, 10000);
-        tryGetPosts();
+            return ({ success: !!gotPosts });
+        });
     }, [setLoading, setPosts]);
 
     useEffect(() => {
