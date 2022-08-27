@@ -33,7 +33,7 @@ function Home({ currentUser, openLogin }) {
         const isRunning = (post) => toDate(post.startDate) <= today && today <= toDate(post.endDate);
         const isEnded = (post) => toDate(post.endDate) < today;
 
-        const today = toDate();
+        const today = new Date();
         const tryGetPosts = async () => {
             setLoading(true);
             const res = await getPostsAPI();
@@ -41,7 +41,9 @@ function Home({ currentUser, openLogin }) {
             setPosts(gotPosts);
             clearInterval(interval);
             for (let i = 0; i < gotPosts.length; i++) {
-                if (!runningIndex.current && isRunning(gotPosts[i])) runningIndex.current = i;
+                if (!runningIndex.current && isRunning(gotPosts[i])) {
+                    runningIndex.current = i;
+                }
                 if (!endedIndex.current && isEnded(gotPosts[i])) {
                     endedIndex.current = i;
                 }
