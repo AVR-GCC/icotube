@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { findIndex, orderBy } from 'lodash';
+import { findIndex } from 'lodash';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
@@ -28,23 +28,21 @@ function Home({ currentUser, openLogin }) {
     const scrollTo = new URLSearchParams(window.location.search).get('scrollTo');
     const navigate = useNavigate();
 
-    const toDate = str => new Date(str);
-    const isRunning = (post) => toDate(post.startDate) <= today && today <= toDate(post.endDate);
-    const isEnded = (post) => toDate(post.endDate) < today;
-
-    const today = toDate();
-
     useEffect(() => {
+        const toDate = str => new Date(str);
+        const isRunning = (post) => toDate(post.startDate) <= today && today <= toDate(post.endDate);
+        const isEnded = (post) => toDate(post.endDate) < today;
+
+        const today = toDate();
         const tryGetPosts = async () => {
             setLoading(true);
             const res = await getPostsAPI();
             const gotPosts = res?.data?.data;
-            const sortedPosts = orderBy(gotPosts, p => p.endDate, 'desc');
-            setPosts(sortedPosts);
+            setPosts(gotPosts);
             clearInterval(interval);
-            for (let i = 0; i < sortedPosts.length; i++) {
-                if (!runningIndex.current && isRunning(sortedPosts[i])) runningIndex.current = i;
-                if (!endedIndex.current && isEnded(sortedPosts[i])) {
+            for (let i = 0; i < gotPosts.length; i++) {
+                if (!runningIndex.current && isRunning(gotPosts[i])) runningIndex.current = i;
+                if (!endedIndex.current && isEnded(gotPosts[i])) {
                     endedIndex.current = i;
                 }
             }
@@ -112,16 +110,18 @@ function Home({ currentUser, openLogin }) {
     }
 
     const _post = (post, index) => (
-        <Post
-            post={post}
-            index={index}
-            onMouseEnter={onMouseEnterPost}
-            onMouseLeave={onMouseLeavePost}
-            onClick={onClickPost}
-            loadingPost={loadingPost}
-            setLoadingPost={setLoadingPost}
-            hoveredPost={hoveredPost}
-        />
+        <div key={`${index}_post`}>
+            <Post
+                post={post}
+                index={index}
+                onMouseEnter={onMouseEnterPost}
+                onMouseLeave={onMouseLeavePost}
+                onClick={onClickPost}
+                loadingPost={loadingPost}
+                setLoadingPost={setLoadingPost}
+                hoveredPost={hoveredPost}
+            />
+        </div>
     );
 
     const _main = () => {
