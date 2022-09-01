@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { findIndex } from 'lodash';
+import { useParams, useNavigate } from 'react-router-dom';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
 import SideBar from '../components/sideBar';
 import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
-import { useParams, useNavigate } from 'react-router-dom';
 import Post from '../components/post';
 import Loader from '../components/loader';
 import { retryUntilSuccess } from '../utils';
@@ -144,7 +144,7 @@ function Home({ currentUser, openLogin }) {
                 {/* <Search /> */}
                 <div className="subMainContainer" style={{ width: numPosts * postWidth }}>
                     <div className="postsContainer">
-                        {posts.map((post, index) => _post(post, index))}
+                        {posts.map(_post)}
                     </div>
                 </div>
             </div>
