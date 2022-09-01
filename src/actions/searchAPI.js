@@ -12,8 +12,14 @@ export const getPostAPI = async (postId) => {
     return response;
 };
 
-export const getPostsAPI = async () => {
-    return await APIcall({ method: 'GET', url: 'posts' });
+export const getPostsAPI = async ({
+    skip = 0,
+    limit = 8,
+    sort = { startDate: -1 },
+    filter = {}
+}) => {
+    const url = `posts?skip=${skip}&limit=${limit}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify(filter)}`;
+    return await APIcall({ method: 'GET', url });
 };
 
 export const submitPostAPI = async (body) => {

@@ -37,7 +37,7 @@ function Home({ currentUser, openLogin }) {
         const today = new Date();
         retryUntilSuccess(async () => {
             setLoading(true);
-            const res = await getPostsAPI();
+            const res = await getPostsAPI({});
             const gotPosts = res?.data?.data;
             if (gotPosts) {
                 setPosts(gotPosts);
