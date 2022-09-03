@@ -1,14 +1,11 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import  '../styles/publish.css';
 import { useNavigate } from 'react-router-dom';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 import { useParams } from 'react-router-dom';
-import { AppContext } from '../App';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI, getPostAPI } from '../actions/searchAPI';
 import { fields } from '../constants/postFields';
-import SideBar from '../components/sideBar';
-import TopBar from '../components/topBar';
 import {
     Checkbox,
     ListItemText,
@@ -31,8 +28,6 @@ import { identity } from 'lodash';
 
 function Publish() {
     // const [loading, setLoading] = useState(false);
-    const appContext = useContext(AppContext);
-    const currentUser = appContext?.user;
     const [postSubmitted, setPostSubmitted] = useState(false);
     const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});
@@ -360,44 +355,38 @@ function Publish() {
     if (loading) noteColor = '#afaf33';
 
     return (
-        <div>
-            <TopBar currentUser={currentUser} />
-            <div className='topContainer'>
-                <SideBar />
-                <div
-                    className='publishMainContainer'
-                    ref={publishMainContainerRef}
-                    onScroll={(event) => {
-                        const st = event.target.scrollTop;
-                        if (st > 50) {
-                            if (notificationTextTopPx > 5) {
-                                setNotificationTextTopPx(5);
-                            }
-                        } else {
-                            setNotificationTextTopPx(55 - st);
-                        }
-                    }}
-                >
-                    <div className='publishTitle'>
-                        Publish Crypto Project
-                        {_typeToggle()}
-                    </div>
-                    <div
-                        className='notificationText'
-                        style={{
-                            maxWidth: (publishMainContainerRef?.current?.clientWidth || 0) / 2,
-                            top: notificationTextTopPx,
-                            left: `calc(240px + ${notificationTextleftPercent}%)`,
-                            color: noteColor
-                        }}
-                        ref={notificationTextRef}
-                    >
-                        {loading && <div className='loadingIndicator'><CircularProgress size={20} /></div>}
-                        {notificationText}
-                    </div>
-                    {_main()}
-                </div>
+        <div
+            className='publishMainContainer'
+            ref={publishMainContainerRef}
+            onScroll={(event) => {
+                const st = event.target.scrollTop;
+                if (st > 50) {
+                    if (notificationTextTopPx > 5) {
+                        setNotificationTextTopPx(5);
+                    }
+                } else {
+                    setNotificationTextTopPx(55 - st);
+                }
+            }}
+        >
+            <div className='publishTitle'>
+                Publish Crypto Project
+                {_typeToggle()}
             </div>
+            <div
+                className='notificationText'
+                style={{
+                    maxWidth: (publishMainContainerRef?.current?.clientWidth || 0) / 2,
+                    top: notificationTextTopPx,
+                    left: `calc(240px + ${notificationTextleftPercent}%)`,
+                    color: noteColor
+                }}
+                ref={notificationTextRef}
+            >
+                {loading && <div className='loadingIndicator'><CircularProgress size={20} /></div>}
+                {notificationText}
+            </div>
+            {_main()}
         </div>
     );
 }

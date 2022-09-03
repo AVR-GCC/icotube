@@ -1,5 +1,7 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, useRef } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import SideBar from './components/sideBar';
+import TopBar from './components/topBar';
 import { getConfigAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
@@ -20,6 +22,7 @@ function App() {
   const [user, setUser] = useState(null);
   const [config, setConfig] = useState(null);
   const [toggleModal, setTogglenModal] = useState(false);
+  const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
 
   useEffect(() => {
     retryUntilSuccess(async () => {
@@ -65,14 +68,25 @@ function App() {
             toggleModal={toggleModal}
           />
         </div>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home openLogin={openLogin} />} />
-            <Route path="/:postId" element={<Home openLogin={openLogin} />} />
-            <Route path="/publish" element={<Publish />} />
-            <Route path="/publish/:postId" element={<Publish />} />
-          </Routes>
-        </BrowserRouter>
+        <div>
+          <BrowserRouter>
+            <TopBar currentUser={user} />
+            <div className='topContainer'>
+              {!isMobile.current && (
+                  <SideBar
+                      currentUser={user}
+                      openLogin={openLogin}
+                  />
+              )}
+              <Routes>
+                <Route path="/" element={<Home openLogin={openLogin} />} />
+                <Route path="/:postId" element={<Home openLogin={openLogin} />} />
+                <Route path="/publish" element={<Publish />} />
+                <Route path="/publish/:postId" element={<Publish />} />
+              </Routes>
+            </div>
+          </BrowserRouter>
+        </div>
       </div>
     </AppContext.Provider>
   );

@@ -1,16 +1,14 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { findIndex } from 'lodash';
 import { useParams, useNavigate } from 'react-router-dom';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
-import SideBar from '../components/sideBar';
-import TopBar from '../components/topBar';
 import SelectedPost from '../components/selectedPost';
 import Post from '../components/post';
 import Loader from '../components/loader';
 import { retryUntilSuccess } from '../utils';
 
-function Home({ currentUser, openLogin }) {
+function Home() {
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
 
@@ -20,7 +18,6 @@ function Home({ currentUser, openLogin }) {
     const [loadingPost, setLoadingPost] = useState(0);
     const [postsPerRow, setPostsPerRow] = useState(4);
 
-    const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
     const mainRef = useRef(null);
     const runningIndex = useRef(0);
     const endedIndex = useRef(0);
@@ -166,36 +163,18 @@ function Home({ currentUser, openLogin }) {
     }
 
     return (
-        <div>
-            <TopBar currentUser={currentUser} />
-            <div className={'topContainer'}>
-                {selectedPost !== -1 && (
-                    <SelectedPost
-                        post={posts[selectedPost]}
-                        rightClick={selectedPost >= posts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
-                        leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
-                        XClick={leavePost}
-                        removePost={removePost}
-                    />
-                )}
-                {!isMobile.current && (
-                    <SideBar
-                        clickUpcoming={() => {
-                            scrollToIndex(0);
-                        }}
-                        clickRunning={() => {
-                            scrollToIndex(runningIndex.current);
-                        }}
-                        clickEnded={() => {
-                            scrollToIndex(endedIndex.current);
-                        }}
-                        currentUser={currentUser}
-                        openLogin={openLogin}
-                    />
-                )}
-                {_main()}
-            </div>
-        </div>
+        <React.Fragment>
+            {selectedPost !== -1 && (
+                <SelectedPost
+                    post={posts[selectedPost]}
+                    rightClick={selectedPost >= posts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
+                    leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
+                    XClick={leavePost}
+                    removePost={removePost}
+                />
+            )}
+            {_main()}
+        </React.Fragment>
     );
 }
 
