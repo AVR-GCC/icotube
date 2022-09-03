@@ -6,7 +6,6 @@ import { getConfigAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
-import Login from './components/login';
 import { retryUntilSuccess } from './utils';
 export const AppContext = createContext();
 
@@ -60,17 +59,14 @@ function App() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <div className={'loginContainer'}>
-          <Login
-            clientId={config?.clientId}
-            onSignIn={newUser => setUser(newUser)}
-            onSignOut={signOut}
-            toggleModal={toggleModal}
-          />
-        </div>
         <div>
           <BrowserRouter>
-            <TopBar currentUser={user} />
+            <TopBar
+              currentUser={user}
+              setUser={setUser}
+              signOut={signOut}
+              toggleModal={toggleModal}
+            />
             <div className='topContainer'>
               {!isMobile.current && (
                   <SideBar
