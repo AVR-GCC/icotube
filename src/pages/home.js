@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { findIndex } from 'lodash';
 import { useParams, useNavigate } from 'react-router-dom';
 import  '../styles/home.css';
@@ -23,7 +23,7 @@ function Home() {
     const { postId, category = 'upcoming' } = useParams();
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const fetchPosts = useCallback(() => {
         retryUntilSuccess(async () => {
             setLoading(true);
             const res = await getPostsAPI({ category });
@@ -35,6 +35,10 @@ function Home() {
             return ({ success: !!gotPosts });
         });
     }, [setLoading, setPosts, category]);
+
+    useEffect(() => {
+        fetchPosts();
+    }, [fetchPosts]);
 
     useEffect(() => {
         if (postId && posts.length) {
