@@ -64,6 +64,10 @@ function Home() {
         }
     }, [selectedPost, posts, navigate, category]);
 
+    useEffect(() => {
+        setLoadingPost(0);
+    }, [category]);
+
     const removePost = (id) => {
         const removePostIndex = findIndex(posts, post => post._id === id);
         if (removePostIndex !== -1) {
