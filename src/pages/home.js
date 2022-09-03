@@ -23,7 +23,6 @@ function Home() {
     const endedIndex = useRef(0);
 
     const { postId, category = 'upcoming' } = useParams();
-    const scrollTo = new URLSearchParams(window.location.search).get('scrollTo');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -34,7 +33,7 @@ function Home() {
         const today = new Date();
         retryUntilSuccess(async () => {
             setLoading(true);
-            const res = await getPostsAPI({});
+            const res = await getPostsAPI({ category });
             const gotPosts = res?.data?.data;
             if (gotPosts) {
                 setPosts(gotPosts);
@@ -50,17 +49,7 @@ function Home() {
             }
             return ({ success: !!gotPosts });
         });
-    }, [setLoading, setPosts]);
-
-    useEffect(() => {
-        if (scrollTo) {
-            setTimeout(() => {
-                const correctRef = scrollTo === 'running' ? runningIndex : endedIndex;
-                scrollToIndex(correctRef.current);
-                navigate('/');
-            }, 500);
-        }
-    })
+    }, [setLoading, setPosts, category]);
 
     useEffect(() => {
         if (postId && posts.length) {
@@ -73,7 +62,7 @@ function Home() {
         if (selectedPost !== -1) {
             navigate(`/${category}/${posts[selectedPost]._id}`);
         }
-    }, [selectedPost, posts, navigate]);
+    }, [selectedPost, posts, navigate, category]);
 
     const removePost = (id) => {
         const removePostIndex = findIndex(posts, post => post._id === id);
@@ -147,12 +136,6 @@ function Home() {
             </div>
         );
     };
-
-    const scrollToIndex = (index) => {
-        const line = Math.floor((index - 1) / postsPerRow);
-        const pixels = line * 490;
-        mainRef.current.scroll({ top: pixels });
-    }
 
     if (loading) {
         return (

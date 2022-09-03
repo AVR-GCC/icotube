@@ -16,9 +16,18 @@ export const getPostsAPI = async ({
     skip = 0,
     limit = 8,
     sort = { startDate: -1 },
-    filter = {}
+    filter = {},
+    category
 }) => {
-    const url = `posts?skip=${skip}&limit=${limit}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify(filter)}`;
+    const today = new Date();
+    let categoryFilter = { startDate: { $gt: today } };
+    if (category === 'running') {
+        categoryFilter = { startDate: { $lte: today }, endDate: { $gte: today } };
+    }
+    if (category === 'ended') {
+        categoryFilter = {endDate: { $lt: today } };
+    }
+    const url = `posts?skip=${skip}&limit=${limit}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
     return await APIcall({ method: 'GET', url });
 };
 
