@@ -42,6 +42,10 @@ function App() {
     setUser(null);
   }
 
+  const openLogin = () => {
+    setTogglenModal(!toggleModal);
+  }
+
   return (
     <AppContext.Provider value={{ user, config }}>
       <div className="App">
@@ -63,17 +67,8 @@ function App() {
         </div>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <Home
-                  openLogin={() => {
-                    setTogglenModal(!toggleModal)
-                  }}
-                />
-              }
-            />
-            <Route path="/:postId" element={<Home />} />
+            <Route path="/" element={<Home openLogin={openLogin} />} />
+            <Route path="/:postId" element={<Home openLogin={openLogin} />} />
             <Route path="/publish" element={<Publish />} />
             <Route path="/publish/:postId" element={<Publish />} />
           </Routes>
