@@ -19,32 +19,17 @@ function Home() {
     const [postsPerRow, setPostsPerRow] = useState(4);
 
     const mainRef = useRef(null);
-    const runningIndex = useRef(0);
-    const endedIndex = useRef(0);
 
     const { postId, category = 'upcoming' } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        const toDate = str => new Date(str);
-        const isRunning = (post) => toDate(post.startDate) <= today && today <= toDate(post.endDate);
-        const isEnded = (post) => toDate(post.endDate) < today;
-
-        const today = new Date();
         retryUntilSuccess(async () => {
             setLoading(true);
             const res = await getPostsAPI({ category });
             const gotPosts = res?.data?.data;
             if (gotPosts) {
                 setPosts(gotPosts);
-                for (let i = 0; i < gotPosts.length; i++) {
-                    if (!runningIndex.current && isRunning(gotPosts[i])) {
-                        runningIndex.current = i;
-                    }
-                    if (!endedIndex.current && isEnded(gotPosts[i])) {
-                        endedIndex.current = i;
-                    }
-                }
                 setLoading(false);
             }
             return ({ success: !!gotPosts });
