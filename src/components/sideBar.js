@@ -14,14 +14,19 @@ function SideBar({
     const currentUser = appContext?.user;
     const navigate = useNavigate();
 
+    const category = window.location.pathname.split('/')[1];
+
     const navigateToPublish = () => {
         navigate('/publish');
     }
+
+    const getStyle = section => section === category ? { backgroundColor: 'rgb(255, 255, 255, 0.2)' } : {};
 
     return (
         <div className={'sideBar'}>
             <div
                 className={'section'}
+                style={getStyle('')}
                 onClick={() => {
                     if (clickUpcoming) {
                         clickUpcoming();
@@ -35,11 +40,12 @@ function SideBar({
             </div>
             <div
                 className={'section'}
+                style={getStyle('running')}
                 onClick={() => {
                     if (clickRunning) {
                         clickRunning();
                     } else {
-                        navigate('/?scrollTo=running');
+                        navigate('/running');
                     }
                 }}
             >
@@ -48,11 +54,12 @@ function SideBar({
             </div>
             <div
                 className={'section'}
+                style={getStyle('ended')}
                 onClick={() => {
                     if (clickEnded) {
                         clickEnded();
                     } else {
-                        navigate('/?scrollTo=ended');
+                        navigate('/ended');
                     }
                 }}
             >

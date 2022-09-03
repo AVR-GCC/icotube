@@ -76,7 +76,8 @@ function App() {
               )}
               <Routes>
                 <Route path="/" element={<Home openLogin={openLogin} />} />
-                <Route path="/:postId" element={<Home openLogin={openLogin} />} />
+                <Route path="/:category" element={<Home openLogin={openLogin} />} />
+                <Route path="/:category/:postId" element={<Home openLogin={openLogin} />} />
                 <Route path="/publish" element={<Publish />} />
                 <Route path="/publish/:postId" element={<Publish />} />
               </Routes>

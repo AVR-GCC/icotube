@@ -22,7 +22,7 @@ function Home() {
     const runningIndex = useRef(0);
     const endedIndex = useRef(0);
 
-    const { postId } = useParams();
+    const { postId, category = 'upcoming' } = useParams();
     const scrollTo = new URLSearchParams(window.location.search).get('scrollTo');
     const navigate = useNavigate();
 
@@ -71,7 +71,7 @@ function Home() {
 
     useEffect(() => {
         if (selectedPost !== -1) {
-            navigate(`/${posts[selectedPost]._id}`);
+            navigate(`/${category}/${posts[selectedPost]._id}`);
         }
     }, [selectedPost, posts, navigate]);
 
@@ -89,7 +89,7 @@ function Home() {
 
     const leavePost = () => {
         setSelectedPost(-1);
-        navigate('/');
+        navigate(`/${category}`);
     }
 
     const onMouseEnterPost = (post) => {
