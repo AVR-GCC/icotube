@@ -29,7 +29,7 @@ function App() {
       if (res.data) {
         setConfig(res.data);
       }
-      return ({ success: !!res.data });
+      return ({ data: { success: !!res.data } });
     });
   }, []);
 

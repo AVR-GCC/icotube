@@ -45,6 +45,12 @@
   flex-wrap: wrap;
 }
 
+.bottomLoaderContainer {
+  height: 70px;
+  display: flex;
+  justify-content: center;
+}
+
 .apLabel {
   align-self: center;
   color: #ffffff55;

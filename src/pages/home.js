@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { findIndex } from 'lodash';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 import  '../styles/home.css';
 import { getPostsAPI } from '../actions/searchAPI';
 import SelectedPost from '../components/selectedPost';
@@ -8,37 +9,74 @@ import Post from '../components/post';
 import Loader from '../components/loader';
 import { retryUntilSuccess } from '../utils';
 
+const BATCH_SIZE = 8;
+
+const startCategoryState = {
+    curCategory: 'upcoming',
+    posts: [],
+    loadingPost: 0,
+    fetchedPost: 0,
+    gotLastPost: false
+}
+
 function Home() {
+    const [categoryState, setCategoryState] = useState({ ...startCategoryState });
+    const {
+        curCategory,
+        posts,
+        loadingPost,
+        fetchedPost,
+        gotLastPost
+    } = categoryState;
+
     const [loading, setLoading] = useState(false);
-    const [posts, setPosts] = useState([]);
 
     const [hoveredPost, setHoveredPost] = useState(null);
     const [autoplayTimer, setAutoplayTimer] = useState(null);
     const [selectedPost, setSelectedPost] = useState(-1);
-    const [loadingPost, setLoadingPost] = useState(0);
     const [postsPerRow, setPostsPerRow] = useState(4);
 
     const mainRef = useRef(null);
+    const lastLoaded = useRef(0);
 
     const { postId, category = 'upcoming' } = useParams();
+
+    useEffect(() => {
+        lastLoaded.current = 0;
+        setCategoryState({ ...startCategoryState, curCategory: category });
+    }, [category]);
+
     const navigate = useNavigate();
 
-    const fetchPosts = useCallback(() => {
-        retryUntilSuccess(async () => {
+    const fetchPosts = async () => {
+        if (category === curCategory) {
             setLoading(true);
-            const res = await getPostsAPI({ category });
+            const res = await retryUntilSuccess(() => getPostsAPI({ category: curCategory, skip: fetchedPost, limit: BATCH_SIZE }));
             const gotPosts = res?.data?.data;
             if (gotPosts) {
-                setPosts(gotPosts);
+                setCategoryState({
+                    curCategory,
+                    posts: [...posts, ...gotPosts],
+                    fetchedPost: fetchedPost + gotPosts.length,
+                    gotLastPost: gotPosts.length < BATCH_SIZE,
+                    loadingPost: categoryState.loadingPost
+                });
                 setLoading(false);
             }
-            return ({ success: !!gotPosts });
-        });
-    }, [setLoading, setPosts, category]);
+        }
+    };
+
+    const setLoadingPost = (newLoadingPost) => {
+        setCategoryState({ ...categoryState, loadingPost: newLoadingPost });
+    }
+
+    const setPosts = (newPosts) => {
+        setCategoryState({ ...categoryState, posts: newPosts });
+    }
 
     useEffect(() => {
         fetchPosts();
-    }, [fetchPosts]);
+    }, [curCategory]);
 
     useEffect(() => {
         if (postId && posts.length) {
@@ -49,13 +87,9 @@ function Home() {
 
     useEffect(() => {
         if (selectedPost !== -1) {
-            navigate(`/${category}/${posts[selectedPost]._id}`);
+            navigate(`/${curCategory}/${posts[selectedPost]._id}`);
         }
-    }, [selectedPost, posts, navigate, category]);
-
-    useEffect(() => {
-        setLoadingPost(0);
-    }, [category]);
+    }, [selectedPost, posts, navigate, curCategory]);
 
     const removePost = (id) => {
         const removePostIndex = findIndex(posts, post => post._id === id);
@@ -71,7 +105,7 @@ function Home() {
 
     const leavePost = () => {
         setSelectedPost(-1);
-        navigate(`/${category}`);
+        navigate(`/${curCategory}`);
     }
 
     const onMouseEnterPost = (post) => {
@@ -119,18 +153,34 @@ function Home() {
             <div
                 className="mainContainer"
                 ref={mainRef}
+                onScroll={(arg) => {
+                    const node = arg.target;
+                    const isBottom = node.scrollTop + node.offsetHeight === node.scrollHeight;
+                    if (isBottom && !gotLastPost && lastLoaded.current !== fetchedPost) {
+                        lastLoaded.current = fetchedPost;
+                        fetchPosts();
+                    }
+                }}
             >
                 {/* <Search /> */}
-                <div className="subMainContainer" style={{ width: numPosts * postWidth }}>
+                <div
+                    className="subMainContainer"
+                    style={{ width: numPosts * postWidth }}
+                >
                     <div className="postsContainer">
                         {posts.map(_post)}
                     </div>
+                    {loading && (
+                        <div className="bottomLoaderContainer">
+                            <CircularProgress size={50} />
+                        </div>
+                    )}
                 </div>
             </div>
         );
     };
 
-    if (loading) {
+    if (loading && !posts.length) {
         return (
             <div className={'loaderContainer'}>
                 <Loader />

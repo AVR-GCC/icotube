@@ -37,7 +37,7 @@ export const retryUntilSuccess = (func, intervalTime = 10000) => {
     return new Promise((resolve) => {
         const tryOnce = async () => {
             const res = await func();
-            if (res.success) {
+            if (res.data.success) {
                 clearInterval(interval);
                 resolve(res);
             }
