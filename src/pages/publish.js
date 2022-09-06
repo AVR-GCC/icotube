@@ -20,8 +20,12 @@ import {
     ToggleButtonGroup,
     Switch
 } from '@mui/material';
-import { LocalizationProvider, DatePicker } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+
+// import { LocalizationProvider, DatePicker } from '@mui/lab';
+// import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+
 import { defined } from '../utils';
 import ImageUpload from '../components/imageUpload';
 import { identity } from 'lodash';
@@ -234,8 +238,8 @@ function Publish() {
                 );
             case 'date':
                 return (
-                    <div style={{ margin: 15, marginLeft: 5 }}>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <div style={{ margin: '15px 15px 15px 0' }}>
+                        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                             <DatePicker
                                 margin='normal'
                                 label={showText}
@@ -243,7 +247,20 @@ function Publish() {
                                 onChange={getHandleChange(field.name)}
                                 renderInput={(params) => <TextField {...params} />}
                             />
-                        </LocalizationProvider>
+                        </LocalizationProvider> */}
+                        <div
+                            className='sectionTitleText'
+                            style={{
+                                pointerEvents: 'none',
+                                position: 'relative',
+                                top: 46,
+                                zIndex: 2,
+                                marginTop: -46
+                            }}
+                        >
+                            {showText}
+                        </div>
+                         <DatePicker onChange={getHandleChange(field.name)} selected={new Date(value)} />
                     </div>
                 );
             case 'image':
