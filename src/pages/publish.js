@@ -49,12 +49,22 @@ function Publish() {
     const inputRefs = useRef({});
     const navigate = useNavigate();
     const navigateToPost = (postId) => {
-        navigate(`/${postId}`);
+        let category = 'upcoming';
+        const today = new Date();
+        if (today > new Date(post.startDate)) {
+            if (!post.endDate || today <= new Date(post.endDate)) {
+                category = 'running';
+            } else {
+                category = 'ended';
+            }
+        }
+        navigate(`/${category}/${postId}`);
     }
 
     const { postId } = useParams();
 
     useEffect(() => {
+        console.log('1');
         const getPost = async (id) => {
             const myPost = await getPostAPI(id);
             setPost(myPost);
@@ -74,10 +84,7 @@ function Publish() {
         if (leftPercent !== notificationTextleftPercent) {
             setNotificationTextleftPercent(leftPercent);
         }
-    }, [
-        notificationText,
-        notificationTextleftPercent
-    ]);
+    }, [notificationText]);
 
     useEffect(() => {
         mounted.current = true;
