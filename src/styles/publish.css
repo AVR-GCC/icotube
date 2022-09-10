@@ -70,6 +70,10 @@
   border: none;
 }
 
+.hideDate .react-datepicker__input-container > input {
+  color: transparent !important;
+}
+
 .publishMainContainer {
   flex: 7;
   display: flex;
@@ -167,4 +171,24 @@
   font-size: 1rem;
   line-height: 1.4375em;
   cursor: default;
+}
+
+.dateFieldHolder {
+  display: flex;
+  align-items: center;
+}
+
+.XIcon {
+  padding: 5px;
+  cursor: pointer;
+  color: rgb(157, 160, 170);
+  border-radius: 50%;
+}
+
+.XIcon:hover {
+  background-color: rgb(255, 255, 255, 0.1);
+}
+
+.XIcon:active {
+  color:rgb(255, 255, 255, 0.9)
 }

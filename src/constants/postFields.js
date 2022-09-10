@@ -54,7 +54,7 @@ export const fields = {
             name: 'endDate',
             label: 'End Date',
             type: 'date',
-            default: Date.now()
+            optional: true
         },
         {
             name: 'ticker',

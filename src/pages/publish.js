@@ -25,6 +25,7 @@ import {
 // import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { HighlightOff } from '@mui/icons-material';
 
 import { defined } from '../utils';
 import ImageUpload from '../components/imageUpload';
@@ -238,29 +239,42 @@ function Publish() {
                 );
             case 'date':
                 return (
-                    <div style={{ margin: '15px 15px 15px 0' }}>
-                        {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            <DatePicker
-                                margin='normal'
-                                label={showText}
-                                value={value}
-                                onChange={getHandleChange(field.name)}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider> */}
-                        <div
-                            className='sectionTitleText'
-                            style={{
-                                pointerEvents: 'none',
-                                position: 'relative',
-                                top: 46,
-                                zIndex: 2,
-                                marginTop: -46
-                            }}
-                        >
-                            {showText}
+                    <div className='dateFieldHolder'>
+                        <div style={{ margin: '15px 15px 15px 0' }}>
+                            {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    margin='normal'
+                                    label={showText}
+                                    value={value}
+                                    onChange={getHandleChange(field.name)}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider> */}
+                            <div
+                                className='sectionTitleText'
+                                style={{
+                                    pointerEvents: 'none',
+                                    position: 'relative',
+                                    top: 46,
+                                    zIndex: 2,
+                                    marginTop: -46
+                                }}
+                            >
+                                {showText}
+                            </div>
+                            <div className={value ? '' : 'hideDate'}>
+                                <DatePicker
+                                    onChange={getHandleChange(field.name)}
+                                    selected={value ? new Date(value) : new Date()}
+                                />
+                            </div>
                         </div>
-                         <DatePicker onChange={getHandleChange(field.name)} selected={new Date(value)} />
+                        {field.optional && (
+                            <HighlightOff
+                                className='XIcon'
+                                onClick={() => getHandleChange(field.name)(null)}
+                            />
+                        )}
                     </div>
                 );
             case 'image':

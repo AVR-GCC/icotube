@@ -22,10 +22,10 @@ export const getPostsAPI = async ({
     const today = new Date();
     let categoryFilter = { startDate: { $gt: today } };
     if (category === 'running') {
-        categoryFilter = { startDate: { $lte: today }, endDate: { $gte: today } };
+        categoryFilter = { startDate: { $lte: today }, $or: [{ endDate: null }, { endDate: { $gte: today } }] };
     }
     if (category === 'ended') {
-        categoryFilter = {endDate: { $lt: today } };
+        categoryFilter = { endDate: { $lt: today } };
     }
     const url = `posts?skip=${skip}&limit=${limit}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
     return await APIcall({ method: 'GET', url });
