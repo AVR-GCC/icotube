@@ -30,7 +30,7 @@ function SelectedPost({
     const playerPartRef = useRef();
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
-    const allowEdit = currentUser && (
+    const allowEdit = currentUser && !!post && (
         currentUser.email === post.email
         || appContext?.config?.freePostWhitelist?.includes(currentUser.email)
     );
@@ -159,7 +159,7 @@ function SelectedPost({
     const _videoSection = () => (
         <div className='videoSection'>
             {_leftArrow()}
-            {_player()}
+            {!!post && _player()}
             {_rightArrow()}
         </div>
     );
@@ -191,36 +191,38 @@ function SelectedPost({
 
     const _infoSection = () => (
         <div className='infoSection'>
-            <div className='infoBox'>
-                <div className='titleText'>{post.title}</div>
-                <div className='infoText'>{post.shortDescription}</div>
-                <div
-                    className='linkText'
-                    onClick={() => window.open(post.homepage)}
-                >
-                    {post.homepage}
-                </div>
-                <Divider style={{ marginBottom: 20 }} variant="middle" />
-                {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
-                    <div className='showFieldContainer' key={`${field.name}_show`}>
-                        <div
-                            className='infoText'
-                            style={{
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                minWidth: 'fit-content'
-                            }}
-                        >
-                            {field.label}:&nbsp;&nbsp;&nbsp;
-                        </div>
-                        <div className='infoText'>{_showField(field, post)}</div>
+            {!!post && (
+                <div className='infoBox'>
+                    <div className='titleText'>{post.title}</div>
+                    <div className='infoText'>{post.shortDescription}</div>
+                    <div
+                        className='linkText'
+                        onClick={() => window.open(post.homepage)}
+                    >
+                        {post.homepage}
                     </div>
-                ))}
-                <div className='spacer' />
-                <div className='spacer' />
-                <div className='spacer' />
-                <div className='spacer' />
-            </div>
+                    <Divider style={{ marginBottom: 20 }} variant="middle" />
+                    {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
+                        <div className='showFieldContainer' key={`${field.name}_show`}>
+                            <div
+                                className='infoText'
+                                style={{
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    minWidth: 'fit-content'
+                                }}
+                            >
+                                {field.label}:&nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div className='infoText'>{_showField(field, post)}</div>
+                        </div>
+                    ))}
+                    <div className='spacer' />
+                    <div className='spacer' />
+                    <div className='spacer' />
+                    <div className='spacer' />
+                </div>
+            )}
         </div>
     );
 

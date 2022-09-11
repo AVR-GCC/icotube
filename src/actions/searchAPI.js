@@ -14,7 +14,7 @@ export const getPostAPI = async (postId) => {
 
 export const getPostsAPI = async ({
     skip = 0,
-    limit = 8,
+    limit,
     sort = { startDate: -1 },
     filter = {},
     category
@@ -27,7 +27,10 @@ export const getPostsAPI = async ({
     if (category === 'ended') {
         categoryFilter = { endDate: { $lt: today } };
     }
-    const url = `posts?skip=${skip}&limit=${limit}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
+    let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
+    if (limit) {
+        url += `&limit=${limit}`;
+    }
     return await APIcall({ method: 'GET', url });
 };
 

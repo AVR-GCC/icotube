@@ -14,6 +14,7 @@ const BATCH_SIZE = 8;
 const startCategoryState = {
     curCategory: 'upcoming',
     posts: [],
+    selectedPost: -1,
     loadingPost: 0,
     fetchedPost: 0,
     gotLastPost: false
@@ -38,6 +39,7 @@ function Home() {
 
     const mainRef = useRef(null);
     const lastLoaded = useRef(0);
+    const pauseNavigate = useRef(false);
 
     const { postId, category = 'upcoming' } = useParams();
 
@@ -54,9 +56,10 @@ function Home() {
             const res = await retryUntilSuccess(() => getPostsAPI({ category: curCategory, skip: fetchedPost, limit: BATCH_SIZE }));
             const gotPosts = res?.data?.data;
             if (gotPosts) {
+                const newPosts = [...posts, ...gotPosts];
                 setCategoryState({
                     curCategory,
-                    posts: [...posts, ...gotPosts],
+                    posts: newPosts,
                     fetchedPost: fetchedPost + gotPosts.length,
                     gotLastPost: gotPosts.length < BATCH_SIZE,
                     loadingPost: categoryState.loadingPost
@@ -65,6 +68,28 @@ function Home() {
             }
         }
     };
+
+    const fetchPostsToId = async (id) => {
+        pauseNavigate.current = true;
+        const singleRes = await retryUntilSuccess(() => getPostsAPI({ filter: { _id: id } }));
+        const gotSelectedPost = (singleRes?.data?.data || []);
+        setCategoryState({
+            ...categoryState,
+            posts: [...posts, ...gotSelectedPost],
+            selectedPost: posts.length
+        });
+        const rest = await retryUntilSuccess(() => getPostsAPI({ filter: { startDate: { $lte: gotSelectedPost.startDate } } }));
+        const gotPosts = rest?.data?.data;
+        const selectedIndex = findIndex(gotPosts, p => p._id === id);
+        if (selectedIndex !== -1) {
+            setCategoryState({
+                ...categoryState,
+                posts: gotPosts,
+                selectedPost: selectedIndex,
+                fetchedPost: selectedIndex + 1
+            });
+        }
+    }
 
     const setLoadingPost = (newLoadingPost) => {
         setCategoryState({ ...categoryState, loadingPost: newLoadingPost });
@@ -80,13 +105,18 @@ function Home() {
 
     useEffect(() => {
         if (postId && posts.length) {
-            const index = findIndex(posts, post => post._id === postId);
-            setSelectedPost(index);
+            let index = findIndex(posts, post => post._id === postId);
+            if (index === -1) {
+                fetchPostsToId(postId);
+            } else {
+                setSelectedPost(index);
+            }
         }
     }, [postId, posts, setSelectedPost]);
 
     useEffect(() => {
-        if (selectedPost !== -1) {
+        if (selectedPost !== -1 && posts[selectedPost]._id !== postId && !pauseNavigate.current) {
+            pauseNavigate.current = true;
             navigate(`/${curCategory}/${posts[selectedPost]._id}`);
         }
     }, [selectedPost, posts, navigate, curCategory]);
