@@ -16,7 +16,8 @@ import { fields } from '../constants/postFields';
 
 const fieldsToNotShow = [
     'email',
-    'videoUrl'
+    'videoUrl',
+    'homepage'
 ];
 
 function SelectedPost({
@@ -214,10 +215,12 @@ function SelectedPost({
                                 style={{
                                     whiteSpace: 'nowrap',
                                     overflow: 'hidden',
-                                    minWidth: 'fit-content'
+                                    minWidth: 'fit-content',
+                                    textDecoration: 'underline',
+                                    marginBottom: 10
                                 }}
                             >
-                                {field.label}:&nbsp;&nbsp;&nbsp;
+                                {field.label}:
                             </div>
                             <div className='infoText'>{_showField(field, post)}</div>
                         </div>
