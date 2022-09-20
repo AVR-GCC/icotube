@@ -58,6 +58,15 @@ function SelectedPost({
         cursor: 'pointer'
     }
 
+    const _link = (uri) => (
+        <div
+            className='linkText'
+            onClick={() => window.open(uri)}
+        >
+            {uri}
+        </div>
+    )
+
     const _topIcons = () => (
         <React.Fragment>
             {allowEdit ? (
@@ -186,7 +195,7 @@ function SelectedPost({
         if (field.multiple) {
             return value.join(', ');
         }
-        return value;
+        return field.link ? _link(value) : value;
     }
 
     const _infoSection = () => (
@@ -195,12 +204,8 @@ function SelectedPost({
                 <div className='infoBox'>
                     <div className='titleText'>{post.title}</div>
                     <div className='infoText'>{post.shortDescription}</div>
-                    <div
-                        className='linkText'
-                        onClick={() => window.open(post.homepage)}
-                    >
-                        {post.homepage}
-                    </div>
+                    {_link(post.homepage)}
+                    <div className='spacer' />
                     <Divider style={{ marginBottom: 20 }} variant="middle" />
                     {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
                         <div className='showFieldContainer' key={`${field.name}_show`}>

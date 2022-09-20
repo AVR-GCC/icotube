@@ -151,21 +151,25 @@ export const fields = {
             name: 'whitepaperLink',
             label: 'Whitepaper Link',
             type: 'string',
+            link: true,
         },
         {
             name: 'officialChat',
             label: 'Official Chat',
             type: 'string',
+            link: true,
         },
         {
             name: 'github',
             label: 'Github',
             type: 'string',
+            link: true,
         },
         {
             name: 'bitcoinTalk',
             label: 'Bitcoin Talk',
             type: 'string',
+            link: true,
         },
         {
             name: 'logo',
@@ -176,11 +180,13 @@ export const fields = {
             name: 'homepage',
             label: 'Homepage',
             type: 'string',
+            link: true,
         },
         {
             name: 'videoUrl',
             label: 'Video URL',
-            type: 'string'
+            type: 'string',
+            link: true,
         },
     ],
     Airdrop: [

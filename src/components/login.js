@@ -222,6 +222,7 @@ const AuthModal = ({
       >
         {signUp ? "Login" : "Join"}
       </div>
+      <div className='spacer' />
     </div>
   );
 
@@ -229,7 +230,7 @@ const AuthModal = ({
     <Modal
       clickOutside={() => closeModal()}
       height={height}
-      width={280}
+      width={300}
     >
       <div className='loginModal'>
         {_title()}
