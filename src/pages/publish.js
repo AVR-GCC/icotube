@@ -154,7 +154,7 @@ function Publish() {
                         error={!!errors[field.name]}
                         key={inputId}
                         id={inputId}
-                        label={showText}
+                        label={field.placeholder && !value ? field.placeholder : showText}
                         required={field.required}
                         multiline={field.multiline}
                         variant='outlined'
