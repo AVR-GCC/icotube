@@ -23,17 +23,27 @@ function Post({
 
         if (showPlayer) {
             content = (
-                <ReactPlayer
-                    onReady={() => {
-                        setLoadingPost(index + 1);
-                    }}
-                    playing={hoveredPost === post._id}
-                    height={height}
-                    width={width}
-                    url={post.videoUrl}
-                    muted={true}
-                    controls={false}
-                />
+                <div>
+                    <div
+                        style={{
+                            position: 'absolute',
+                            height,
+                            width,
+                            cursor: 'pointer'
+                        }}
+                    />
+                    <ReactPlayer
+                        onReady={() => {
+                            setLoadingPost(index + 1);
+                        }}
+                        playing={hoveredPost === post._id}
+                        height={height}
+                        width={width}
+                        url={post.videoUrl}
+                        muted={true}
+                        controls={false}
+                    />
+                </div>
             )
         }
 
