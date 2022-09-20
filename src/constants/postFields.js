@@ -128,13 +128,8 @@ export const fields = {
         {
             name: 'accepts',
             label: 'Accepts',
-            multiple: true,
-            type: 'enum',
-            enum: [
-                'BTC',
-                'Ethereum',
-                'USDT'
-            ],
+            type: 'string',
+            placeholder: 'BTC, ETH, USD...'
         },
         {
             name: 'isWhitelist',
