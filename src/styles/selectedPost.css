@@ -118,6 +118,7 @@
 
 .showFieldContainer {
   display: flex;
+  flex-direction: column;
 }
 
 .spacer {
@@ -134,7 +135,7 @@
 }
 
 .infoText {
-  color: rgba(65,65,65,1) !important;
+  color: rgb(0, 0, 0) !important;
   font-size: 15px;
   white-space: pre-wrap;
   max-height: 650px;
