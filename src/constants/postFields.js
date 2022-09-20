@@ -31,6 +31,14 @@ export const fields = {
             default: 'Platform'
         },
         {
+            name: 'importantNote',
+            label: 'Important Note',
+            type: 'string',
+            placeholder: 'ICO will take place on X platform at 00:00 GMT',
+            multiline: true,
+            default: ''
+        },
+        {
             name: 'shortDescription',
             label: 'Short Description',
             type: 'string',
@@ -43,6 +51,22 @@ export const fields = {
             type: 'string',
             multiline: true,
             default: ''
+        },
+        {
+            name: 'tokenRole',
+            label: 'Token Role',
+            type: 'enum',
+            enum: [
+                'Utility',
+                'Payment',
+                'Security',
+                'Stablecoin',
+                'Asset-backed',
+                'DeFi token',
+                'NFT',
+                'Other'
+            ],
+            default: 'Platform'
         },
         {
             name: 'startDate',
@@ -123,6 +147,11 @@ export const fields = {
         //     label: 'Restricted Countries',
         //     type: 'list',
         // },
+        {
+            name: 'whitepaperLink',
+            label: 'Whitepaper Link',
+            type: 'string',
+        },
         {
             name: 'officialChat',
             label: 'Official Chat',
