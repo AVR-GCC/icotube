@@ -34,6 +34,15 @@
   background: #ffffff80;
 }
 
+.categoryTitle {
+  color: #d3d2d2;
+  margin: 20px;
+  font-size: 30px;
+  font-weight: 100;
+  position: fixed;
+  text-shadow: 0 0 3px black;
+}
+
 .subMainContainer {
   display: flex;
   flex-direction: column;

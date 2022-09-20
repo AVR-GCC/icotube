@@ -20,6 +20,12 @@ const startCategoryState = {
     gotLastPost: false
 }
 
+const categoryNames = {
+    upcoming: 'Upcoming ICOs',
+    running: 'Running ICOs',
+    ended: 'Ended ICOs',
+}
+
 function Home() {
     const [categoryState, setCategoryState] = useState({ ...startCategoryState });
     const {
@@ -192,7 +198,9 @@ function Home() {
                     }
                 }}
             >
+                <div className='categoryTitle'>{categoryNames[category]}</div>
                 {/* <Search /> */}
+                <div className='spacer' style={{ margin: 40 }} />
                 <div
                     className="subMainContainer"
                     style={{ width: numPosts * postWidth }}
