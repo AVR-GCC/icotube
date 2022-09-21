@@ -37,14 +37,15 @@ function SelectedPost({
     );
     const navigate = useNavigate();
 
-    useEffect(() => {
+    const adjustPlayerSize = () => {
         if (playerPartRef.current) {
             const goodRatio = 64 / 36;
-            const thisRatio = playerPartRef.current.offsetWidth / playerPartRef.current.offsetHeight;
+            const availableHeight = window.innerHeight - 170;
+            const thisRatio = playerPartRef.current.offsetWidth / availableHeight;
             let height = 360;
             let width = 640;
             if (thisRatio > goodRatio) {
-                height = playerPartRef.current.offsetHeight;
+                height = availableHeight;
                 width = goodRatio * height;
             } else {
                 width = playerPartRef.current.offsetWidth;
@@ -52,6 +53,15 @@ function SelectedPost({
             }
             setPlayerSize({ width, height });
         }
+    }
+
+    useEffect(() => {
+        adjustPlayerSize();
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener('resize', adjustPlayerSize);
+        return () => window.removeEventListener('resize', adjustPlayerSize);
     }, []);
 
     const arrowStyle = {
@@ -117,7 +127,7 @@ function SelectedPost({
     );
 
     const _leftArrow = () => (
-        <div className='arrowPart'>
+        <div className='arrowPart' style={{ marginTop: playerPartRef?.current?.offsetHeight / 2 - 25 }}>
             {!!leftClick && (
                 <ArrowBackIosNewRounded
                     style={arrowStyle}
@@ -128,7 +138,7 @@ function SelectedPost({
     );
 
     const _rightArrow = () => (
-        <div className='arrowPart'>
+        <div className='arrowPart' style={{ marginTop: playerPartRef?.current?.offsetHeight / 2 - 25 }}>
             {!!rightClick && (
                 <ArrowForwardIosRounded
                     style={arrowStyle}

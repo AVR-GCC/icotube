@@ -60,7 +60,7 @@
 .videoSection {
   flex: 7;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .arrowPart {
@@ -79,8 +79,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 10;
-  height: 100%;
+  flex: 5;
 }
 
 .infoSection {
