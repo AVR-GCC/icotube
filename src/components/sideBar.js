@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
-import { Upcoming, History, NewReleases } from '@mui/icons-material';
+import { Upcoming, History, NewReleases, AlarmAdd } from '@mui/icons-material';
+import { Divider } from '@mui/material';
 import '../styles/sideBar.css';
 
 function SideBar({
@@ -22,8 +23,8 @@ function SideBar({
 
     const getStyle = section => section === category ? { backgroundColor: 'rgb(255, 255, 255, 0.2)' } : {};
 
-    return (
-        <div className={'sideBar'}>
+    const _icoCategories = () => (
+        <React.Fragment>
             <div
                 className={'section'}
                 style={getStyle('')}
@@ -66,19 +67,48 @@ function SideBar({
                 <div className="icon"><History /></div>
                 Ended ICOs
             </div>
-            <div
-                title={currentUser ? 'Publish a new post' : 'Please log in to publish'}
-                className={'publishLink'}
-                onClick={() => {
-                    if (currentUser) {
-                        navigateToPublish();
-                    } else {
-                        openLogin();
-                    }
-                }}
-            >
-                Publish
-            </div>
+        </React.Fragment>
+    );
+
+    const _alertPage = () => (
+        <div
+            className={'section'}
+            style={getStyle('alert')}
+            onClick={() => {
+                navigate('/alert');
+            }}
+        >
+            <div className="icon"><AlarmAdd /></div>
+            Alert
+        </div>
+    );
+
+    const _publishButton = () => (
+        <div
+            title={currentUser ? 'Publish a new post' : 'Please log in to publish'}
+            className={'publishLink'}
+            onClick={() => {
+                if (currentUser) {
+                    navigateToPublish();
+                } else {
+                    openLogin();
+                }
+            }}
+        >
+            Publish
+        </div>
+    )
+
+    const _divider = () => (
+        <Divider style={{ width: '95%', margin: 5, background: 'rgb(255, 255, 255, 0.1)' }} variant="middle" />
+    );
+
+    return (
+        <div className={'sideBar'}>
+            {_icoCategories()}
+            {_divider()}
+            {_alertPage()}
+            {_publishButton()}
         </div>
     );
 }

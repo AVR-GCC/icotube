@@ -99,3 +99,17 @@ export const getConfigAPI = async () => {
         url: 'config'
     });
 };
+
+export const addAlertAPI = async (email) => {
+    return await APIcall({
+        method: 'PUT',
+        url: `alert/${email}`
+    });
+};
+
+export const removeAlertAPI = async (email) => {
+    return await APIcall({
+        method: 'DELETE',
+        url: `alert/${email}`
+    });
+};

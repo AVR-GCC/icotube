@@ -6,6 +6,7 @@ import { getConfigAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
+import Alert from './pages/alert';
 import { retryUntilSuccess } from './utils';
 export const AppContext = createContext();
 
@@ -80,6 +81,7 @@ function App() {
                 <Route path="/:category/:postId" element={<Home openLogin={openLogin} />} />
                 <Route path="/publish" element={<Publish />} />
                 <Route path="/publish/:postId" element={<Publish />} />
+                <Route path="/alert" element={<Alert />} />
               </Routes>
             </div>
           </BrowserRouter>
