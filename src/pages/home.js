@@ -26,7 +26,9 @@ const categoryNames = {
     ended: 'Ended ICOs',
 }
 
-function Home() {
+function Home({
+    isMobile
+}) {
     const [categoryState, setCategoryState] = useState({ ...startCategoryState });
     const {
         curCategory,
@@ -187,7 +189,7 @@ function Home() {
         }
         return (
             <div
-                className="mainContainer"
+                className={`mainContainer${isMobile ? ' mobileMainContainer' : ''}`}
                 ref={mainRef}
                 onScroll={(arg) => {
                     const node = arg.target;

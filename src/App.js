@@ -75,9 +75,9 @@ function App() {
                   openLogin={openLogin}
               />
               <Routes>
-                <Route path="/" element={<Home openLogin={openLogin} />} />
-                <Route path="/:category" element={<Home openLogin={openLogin} />} />
-                <Route path="/:category/:postId" element={<Home openLogin={openLogin} />} />
+                <Route path="/" element={<Home openLogin={openLogin} isMobile={isMobile.current} />} />
+                <Route path="/:category" element={<Home openLogin={openLogin} isMobile={isMobile.current} />} />
+                <Route path="/:category/:postId" element={<Home openLogin={openLogin} isMobile={isMobile.current} />} />
                 <Route path="/publish" element={<Publish />} />
                 <Route path="/publish/:postId" element={<Publish />} />
                 <Route path="/alert" element={<Alert />} />
