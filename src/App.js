@@ -69,12 +69,11 @@ function App() {
               toggleModal={toggleModal}
             />
             <div className='topContainer'>
-              {!isMobile.current && (
-                  <SideBar
-                      currentUser={user}
-                      openLogin={openLogin}
-                  />
-              )}
+              <SideBar
+                  isMobile={isMobile.current}
+                  currentUser={user}
+                  openLogin={openLogin}
+              />
               <Routes>
                 <Route path="/" element={<Home openLogin={openLogin} />} />
                 <Route path="/:category" element={<Home openLogin={openLogin} />} />

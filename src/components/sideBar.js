@@ -9,11 +9,13 @@ function SideBar({
     openLogin,
     clickRunning,
     clickEnded,
-    clickUpcoming
+    clickUpcoming,
+    isMobile
 }) {
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
     const navigate = useNavigate();
+    if (isMobile) return null;
 
     const category = window.location.pathname.split('/')[1];
 
