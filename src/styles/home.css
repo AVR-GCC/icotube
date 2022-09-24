@@ -10,6 +10,10 @@
   scroll-behavior: smooth;
 }
 
+.mobileMainContainer {
+  margin-left: 6px;
+}
+
 /* width */
 .mainContainer::-webkit-scrollbar {
   width: 12px;
@@ -37,7 +41,7 @@
 /* Track */
 .mobileMainContainer::-webkit-scrollbar-track {
   background: transparent;
-  border-left: solid 1px transparent;
+  border-left: none;
 }
 
 /* Handle */

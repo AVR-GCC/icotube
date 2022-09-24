@@ -5,8 +5,13 @@
     cursor: pointer !important;
 }
 
+.mobilePostContainer {
+    margin: 0;
+    width: calc(100% + 6px);
+}
+
 .boxICOTextSection {
-    padding: 15px 0px;
+    padding: 15px 15px;
     color: antiquewhite;
     display: flex;
     flex-direction: column;

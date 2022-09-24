@@ -164,7 +164,7 @@ function Home({
     }
 
     const _post = (post, index) => (
-        <div key={`${index}_post`}>
+        <div key={`${index}_post`} style={{ width: isMobile ? '100%' : 'unset' }}>
             <Post
                 post={post}
                 index={index}
@@ -174,6 +174,7 @@ function Home({
                 loadingPost={loadingPost}
                 setLoadingPost={setLoadingPost}
                 hoveredPost={hoveredPost}
+                isMobile={isMobile}
             />
         </div>
     );
@@ -205,7 +206,7 @@ function Home({
                 <div className='spacer' style={{ margin: 40 }} />
                 <div
                     className="subMainContainer"
-                    style={{ width: numPosts * postWidth }}
+                    style={{ width: isMobile ? '100%' : numPosts * postWidth }}
                 >
                     <div className="postsContainer">
                         {posts.map(_post)}

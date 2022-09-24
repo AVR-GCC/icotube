@@ -13,7 +13,8 @@ function Post({
     onClick,
     loadingPost,
     setLoadingPost,
-    hoveredPost
+    hoveredPost,
+    isMobile
 }) {
     useEffect(() => {
         if (index === loadingPost && !post.videoUrl) setLoadingPost(index + 1);
@@ -30,23 +31,25 @@ function Post({
                 <div>
                     <div
                         style={{
-                            position: 'absolute',
+                            position: 'relative',
                             height,
-                            width,
+                            width: isMobile ? '100%' : width,
                             cursor: 'pointer'
                         }}
                     />
-                    <ReactPlayer
-                        onReady={() => {
-                            setLoadingPost(index + 1);
-                        }}
-                        playing={hoveredPost === post._id}
-                        height={height}
-                        width={width}
-                        url={post.videoUrl}
-                        muted={true}
-                        controls={false}
-                    />
+                    <div style={{ marginTop: -height }}>
+                        <ReactPlayer
+                            onReady={() => {
+                                setLoadingPost(index + 1);
+                            }}
+                            playing={hoveredPost === post._id}
+                            height={height}
+                            width={isMobile ? '100%' : width}
+                            url={post.videoUrl}
+                            muted={true}
+                            controls={false}
+                        />
+                    </div>
                 </div>
             )
         }
@@ -54,7 +57,7 @@ function Post({
         if (showImage) {
             content = (
                 <img
-                    style={{ height, width }}
+                    style={{ height, width: isMobile ? '100%' : width }}
                     src={post.logo}
                     alt={post.title}
                 />
@@ -86,7 +89,7 @@ function Post({
     return (
         <div
             key={post._id}
-            className={'postContainer'}
+            className={`postContainer${isMobile ? ' mobilePostContainer' : ''}`}
             onMouseEnter={() => onMouseEnter(post)}
             onMouseLeave={onMouseLeave}
             onClick={() => onClick(index)}
