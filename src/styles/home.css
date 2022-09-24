@@ -18,15 +18,15 @@
 /* Track */
 ::-webkit-scrollbar-track {
   background: #212121;
-  border-left: solid 1px rgb(255, 255, 255, 0.1);
+  border-left: solid 1px #373737;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #ffffff50;
+  background: #424242;
+  border-left: solid 1px #373737;
   border-radius: 5px;
-  border-left: solid 3px #212121;
-  border-right: solid 3px #212121;
+  box-shadow: inset 3px 0px 0px 0px #212121;
 }
 
 /* Handle on hover */

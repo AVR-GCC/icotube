@@ -94,7 +94,7 @@
 }
 
 /* width */
-::-webkit-scrollbar {
+.infoSection::-webkit-scrollbar {
   width: 6px;
 }
 
