@@ -6,8 +6,7 @@ const Modal = ({
     height = 500,
     width = 500
 }) => {
-    // 15 is half of the padding
-    const padding = 30;
+    const padding = 60;
     const top = window.innerHeight / 2 - height / 2 - padding / 2;
     const left = window.innerWidth / 2 - width / 2 - padding / 2;
     return (
