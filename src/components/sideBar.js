@@ -15,7 +15,6 @@ function SideBar({
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
     const navigate = useNavigate();
-    if (isMobile) return null;
 
     const category = window.location.pathname.split('/')[1];
 
@@ -28,7 +27,7 @@ function SideBar({
     const _icoCategories = () => (
         <React.Fragment>
             <div
-                className={'section'}
+                className={isMobile ? 'bottomSection' : 'section'}
                 style={getStyle('')}
                 onClick={() => {
                     if (clickUpcoming) {
@@ -39,10 +38,10 @@ function SideBar({
                 }}
             >
                 <div className="icon"><Upcoming /></div>
-                Upcoming ICOs
+                Upcoming{isMobile ? '' : ' ICOs'}
             </div>
             <div
-                className={'section'}
+                className={isMobile ? 'bottomSection' : 'section'}
                 style={getStyle('running')}
                 onClick={() => {
                     if (clickRunning) {
@@ -53,10 +52,10 @@ function SideBar({
                 }}
             >
                 <div className="icon"><NewReleases /></div>
-                Running ICOs
+                Running{isMobile ? '' : ' ICOs'}
             </div>
             <div
-                className={'section'}
+                className={isMobile ? 'bottomSection' : 'section'}
                 style={getStyle('ended')}
                 onClick={() => {
                     if (clickEnded) {
@@ -67,14 +66,14 @@ function SideBar({
                 }}
             >
                 <div className="icon"><History /></div>
-                Ended ICOs
+                Ended{isMobile ? '' : ' ICOs'}
             </div>
         </React.Fragment>
     );
 
     const _alertPage = () => (
         <div
-            className={'section'}
+            className={isMobile ? 'bottomSection' : 'section'}
             style={getStyle('alert')}
             onClick={() => {
                 navigate('/alert');
@@ -106,11 +105,11 @@ function SideBar({
     );
 
     return (
-        <div className={'sideBar'}>
+        <div className={isMobile ? 'bottomBar' : 'sideBar'}>
             {_icoCategories()}
-            {_divider()}
+            {!isMobile && _divider()}
             {_alertPage()}
-            {_publishButton()}
+            {!isMobile && _publishButton()}
         </div>
     );
 }

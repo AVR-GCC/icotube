@@ -9,6 +9,19 @@
   border-right: 1px solid rgb(255, 255, 255, 0.1);
 }
 
+.bottomBar {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgb(33, 33, 33);
+  overflow: auto;
+  height: 50px;
+  width: 100%;
+  border-top: 1px solid rgb(255, 255, 255, 0.1);
+  bottom: 0;
+}
+
 .section {
   color: rgb(255, 255, 255);
   cursor: pointer;
@@ -32,12 +45,39 @@
   width: 192px;
 }
 
+.bottomSection {
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-family: Roboto, Noto, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  height: 50px;
+  min-height: 50px;
+  min-width: 0px;
+  padding-bottom: 0px;
+  padding-left: 12px;
+  padding-right: 12px;
+  padding-top: 0px;
+  position: relative;
+  text-size-adjust: 100%;
+  white-space: nowrap;
+  width: 50px;
+}
+
 .section:hover {
   background-color: rgb(255, 255, 255, 0.1);
 }
 
 .icon {
   margin-right: 24px;
+}
+
+.bottomSection .icon {
+  margin-top: 5px;
+  margin-right: 0;
 }
 
 .publishLink {
