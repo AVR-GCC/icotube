@@ -49,11 +49,11 @@
 }
 
 .react-datepicker__month {
-  background-color: rgb(21, 21, 21) !important;
+  background-color: #151515 !important;
 }
 
 .react-datepicker__month-container {
-  background-color: rgb(21, 21, 21) !important;
+  background-color: #151515 !important;
 }
 
 .react-datepicker__input-container > input {

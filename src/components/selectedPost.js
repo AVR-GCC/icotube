@@ -73,6 +73,7 @@ function SelectedPost({
         <div
             className='linkText'
             onClick={() => window.open(uri)}
+            style={{ height: 18 }}
         >
             {uri}
         </div>
@@ -217,7 +218,7 @@ function SelectedPost({
                     <div className='infoText'>{post.shortDescription}</div>
                     {_link(post.homepage)}
                     <div className='spacer' />
-                    <Divider style={{ marginBottom: 20 }} variant="middle" />
+                    <Divider style={{ marginBottom: 20, background: '#999' }} variant="middle" />
                     {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
                         <div className='showFieldContainer' key={`${field.name}_show`}>
                             <div

@@ -4,7 +4,7 @@
   right: 0px;
   bottom: 0px;
   left: 0px;
-  background-color: rgb(255, 255, 255, 0.95);
+  background-color: #151515;
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -105,7 +105,7 @@
 
 /* Handle */
 .infoSection::-webkit-scrollbar-thumb {
-  background: #00000050;
+  background: #ffffff50;
   border-radius: 3px;
   border: none;
 }
@@ -126,7 +126,7 @@
 }
 
 .titleText {
-  color: rgba(65,65,65,1) !important;
+  color: rgba(220,220,220,1) !important;
   font-weight: 500;
   font-size: 40px;
   margin-bottom: 18px;
@@ -134,7 +134,7 @@
 }
 
 .infoText {
-  color: rgb(0, 0, 0) !important;
+  color: rgb(220,220,220) !important;
   font-size: 15px;
   white-space: pre-wrap;
   max-height: 650px;
