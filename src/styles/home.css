@@ -12,6 +12,7 @@
 
 .mobileMainContainer {
   margin-left: 6px;
+  height: calc(100% - 51px);
 }
 
 /* width */
