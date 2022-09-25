@@ -21,7 +21,8 @@
 }
 
 .ownerButtons {
-  margin-left: 20px;
+  display: flex;
+  margin-left: 10px;
 }
 
 .social {
@@ -88,8 +89,7 @@
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
-  margin-left: 100px;
-  margin-top: 20px;
+  margin-left: 10px;
   margin-right: 5px;
 }
 

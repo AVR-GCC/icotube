@@ -25,9 +25,11 @@ function SelectedPost({
     rightClick,
     leftClick,
     XClick,
-    removePost
+    removePost,
+    isMobile
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
+    const [infoHeight, setInfoHeight] = useState(1000);
     const playerPartRef = useRef();
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
@@ -41,23 +43,29 @@ function SelectedPost({
         if (playerPartRef.current) {
             const goodRatio = 64 / 36;
             const availableHeight = window.innerHeight - 170;
-            const thisRatio = playerPartRef.current.offsetWidth / availableHeight;
+            const availableWidth = isMobile ? window.innerWidth : playerPartRef.current.offsetWidth;
+            const thisRatio = availableWidth / availableHeight;
             let height = 360;
             let width = 640;
             if (thisRatio > goodRatio) {
                 height = availableHeight;
                 width = goodRatio * height;
             } else {
-                width = playerPartRef.current.offsetWidth;
+                width = availableWidth;
                 height = width / goodRatio;
             }
             setPlayerSize({ width, height });
+            let newInfoHeight = playerPartRef?.current?.getBoundingClientRect().height;
+            if (isMobile) {
+                newInfoHeight = window.innerHeight - height - newInfoHeight + 25;
+            }
+            setInfoHeight(newInfoHeight);
         }
     }
 
     useEffect(() => {
         adjustPlayerSize();
-    }, []);
+    }, [playerPartRef.current]);
 
     useEffect(() => {
         window.addEventListener('resize', adjustPlayerSize);
@@ -95,7 +103,7 @@ function SelectedPost({
                     <Button
                         color="error"
                         variant="outlined"
-                        style={{ marginLeft: 20 }}
+                        style={{ marginLeft: 10 }}
                         onClick={async () => {
                             const res = await deletePostAPI(post._id);
                             if (res?.success) {
@@ -110,12 +118,14 @@ function SelectedPost({
                     </Button>
                 </div>
             ) : null}
-            <div className='hide'>
-                <div className='social'>
-                    <div className='socialButton'><FullscreenRounded /></div>
-                    <div className='socialButton'><ReplyRounded /></div>
+            {!allowEdit && (
+                <div className='hide'>
+                    <div className='social'>
+                        <div className='socialButton'><FullscreenRounded /></div>
+                        <div className='socialButton'><ReplyRounded /></div>
+                    </div>
                 </div>
-            </div>
+            )}
         </React.Fragment>
     );
 
@@ -151,11 +161,11 @@ function SelectedPost({
     );
 
     const _player = () => (
-        post.videoUrl ? (
-            <div
-                className='playerPart'
-                ref={playerPartRef}
-            >
+        <div
+            className='playerPart'
+            ref={playerPartRef}
+        >
+            {post.videoUrl ? (
                 <ReactPlayer
                     url={post.videoUrl}
                     muted={false}
@@ -163,26 +173,21 @@ function SelectedPost({
                     height={playerSize.height}
                     width={playerSize.width}
                 />
-            </div>
-        ) : (
-            <div
-                className='playerPart'
-                ref={playerPartRef}
-            >
+            ) : (
                 <img
                     style={{ height: playerSize.height, width: playerSize.width }}
                     src={post.logo}
                     alt={post.title}
                 />
-            </div>
-        )
+            )}
+        </div>
     );
 
     const _videoSection = () => (
-        <div className='videoSection'>
-            {_leftArrow()}
+        <div className='videoSection' style={{ maxHeight: playerSize.height }}>
+            {!isMobile && _leftArrow()}
             {!!post && _player()}
-            {_rightArrow()}
+            {!isMobile && _rightArrow()}
         </div>
     );
 
@@ -211,43 +216,48 @@ function SelectedPost({
         return field.link ? _link(value) : value;
     }
 
-    const _infoSection = () => (
-        <div className='infoSection'>
-            {!!post && (
-                <div className='infoBox'>
-                    <div className='titleText'>{post.title}</div>
-                    <div className='infoText'>{post.shortDescription}</div>
-                    {_link(post.homepage)}
-                    <div className='spacer' />
-                    <Divider style={{ marginBottom: 20, background: '#999' }} variant="middle" />
-                    {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
-                        <div className='showFieldContainer' key={`${field.name}_show`}>
-                            <div
-                                className='infoText'
-                                style={{
-                                    whiteSpace: 'nowrap',
-                                    overflow: 'hidden',
-                                    minWidth: 'fit-content',
-                                    textDecoration: 'underline',
-                                    marginBottom: 10
-                                }}
-                            >
-                                {field.label}:
+    const _infoSection = () => {
+        const style = { maxHeight: infoHeight };
+        if (isMobile) {
+            style.marginTop = 10;
+        }
+        return (
+            <div
+                className='infoSection'
+                style={style}
+            >
+                {!!post && (
+                    <div className='infoBox'>
+                        <div className='titleText' style={{ fontSize: isMobile ? 30 : 40 }}>{post.title}</div>
+                        <div className='infoText'>{post.shortDescription}</div>
+                        {_link(post.homepage)}
+                        <div className='spacer' />
+                        <Divider style={{ marginBottom: 20, background: '#999' }} variant="middle" />
+                        {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
+                            <div className='showFieldContainer' key={`${field.name}_show`}>
+                                <div
+                                    className='infoText'
+                                    style={{
+                                        whiteSpace: 'nowrap',
+                                        overflow: 'hidden',
+                                        minWidth: 'fit-content',
+                                        textDecoration: 'underline',
+                                        marginBottom: 10
+                                    }}
+                                >
+                                    {field.label}:
+                                </div>
+                                <div className='infoText'>{_showField(field, post)}</div>
                             </div>
-                            <div className='infoText'>{_showField(field, post)}</div>
-                        </div>
-                    ))}
-                    <div className='spacer' />
-                    <div className='spacer' />
-                    <div className='spacer' />
-                    <div className='spacer' />
-                </div>
-            )}
-        </div>
-    );
+                        ))}
+                    </div>
+                )}
+            </div>
+        )
+    };
 
     const _bottomPart = () => (
-        <div className='bottomPart'>
+        <div className='bottomPart' style={{ flexDirection: isMobile ? 'column' : 'row' }}>
             {_videoSection()}
             {_infoSection()}
         </div>

@@ -238,6 +238,7 @@ function Home({
                     leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
                     XClick={leavePost}
                     removePost={removePost}
+                    isMobile={isMobile}
                 />
             )}
             {_main()}
