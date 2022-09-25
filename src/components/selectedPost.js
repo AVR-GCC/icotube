@@ -66,7 +66,8 @@ function SelectedPost({
 
     const arrowStyle = {
         fontSize: 50,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        color: '#DCDCDC'
     }
 
     const _link = (uri) => (
@@ -118,7 +119,7 @@ function SelectedPost({
         </React.Fragment>
     );
 
-    const _XButton = () => <div className='XButton' onClick={XClick}><Close /></div>;
+    const _XButton = () => <div style={{ color: '#DCDCDC' }} className='XButton' onClick={XClick}><Close /></div>;
 
     const _postTopBar = () => (
         <div className='postTopBar'>

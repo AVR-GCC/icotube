@@ -126,7 +126,7 @@
 }
 
 .titleText {
-  color: rgba(220,220,220,1) !important;
+  color: #DCDCDC !important;
   font-weight: 500;
   font-size: 40px;
   margin-bottom: 18px;
@@ -134,7 +134,7 @@
 }
 
 .infoText {
-  color: rgb(220,220,220) !important;
+  color: #DCDCDC !important;
   font-size: 15px;
   white-space: pre-wrap;
   max-height: 650px;
