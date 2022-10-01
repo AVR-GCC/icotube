@@ -16,6 +16,7 @@ import { fields } from '../constants/postFields';
 
 const fieldsToNotShow = [
     'email',
+    'shortDescription',
     'videoUrl',
     'homepage'
 ];
@@ -29,7 +30,6 @@ function SelectedPost({
     isMobile
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
-    const [infoHeight, setInfoHeight] = useState(1000);
     const playerPartRef = useRef();
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
@@ -43,7 +43,7 @@ function SelectedPost({
         if (playerPartRef.current) {
             const goodRatio = 64 / 36;
             const availableHeight = window.innerHeight - 170;
-            const availableWidth = isMobile ? window.innerWidth : playerPartRef.current.offsetWidth;
+            const availableWidth = window.innerWidth - (isMobile ? 20 : 100);
             const thisRatio = availableWidth / availableHeight;
             let height = 360;
             let width = 640;
@@ -55,11 +55,6 @@ function SelectedPost({
                 height = width / goodRatio;
             }
             setPlayerSize({ width, height });
-            let newInfoHeight = playerPartRef?.current?.getBoundingClientRect().height;
-            if (isMobile) {
-                newInfoHeight = window.innerHeight - height - newInfoHeight + 25;
-            }
-            setInfoHeight(newInfoHeight);
         }
     }
 
@@ -139,7 +134,7 @@ function SelectedPost({
     );
 
     const _leftArrow = () => (
-        <div className='arrowPart' style={{ marginTop: playerPartRef?.current?.offsetHeight / 2 - 25 }}>
+        <div className='arrowPart'>
             {!!leftClick && (
                 <ArrowBackIosNewRounded
                     style={arrowStyle}
@@ -150,7 +145,7 @@ function SelectedPost({
     );
 
     const _rightArrow = () => (
-        <div className='arrowPart' style={{ marginTop: playerPartRef?.current?.offsetHeight / 2 - 25 }}>
+        <div className='arrowPart'>
             {!!rightClick && (
                 <ArrowForwardIosRounded
                     style={arrowStyle}
@@ -185,9 +180,7 @@ function SelectedPost({
 
     const _videoSection = () => (
         <div className='videoSection' style={{ maxHeight: playerSize.height }}>
-            {!isMobile && _leftArrow()}
             {!!post && _player()}
-            {!isMobile && _rightArrow()}
         </div>
     );
 
@@ -217,15 +210,8 @@ function SelectedPost({
     }
 
     const _infoSection = () => {
-        const style = { maxHeight: infoHeight };
-        if (isMobile) {
-            style.marginTop = 10;
-        }
         return (
-            <div
-                className='infoSection'
-                style={style}
-            >
+            <div className='infoSection' style={{ width: playerSize.width }}>
                 {!!post && (
                     <div className='infoBox'>
                         <div className='titleText' style={{ fontSize: isMobile ? 30 : 40 }}>{post.title}</div>
@@ -257,9 +243,13 @@ function SelectedPost({
     };
 
     const _bottomPart = () => (
-        <div className='bottomPart' style={{ flexDirection: isMobile ? 'column' : 'row' }}>
-            {_videoSection()}
-            {_infoSection()}
+        <div className='bottomPart' style={{ height: window.innerHeight - 136 }}>
+            {!isMobile && _leftArrow()}
+            <div className='bottomPartCenter'>
+                {_videoSection()}
+                {_infoSection()}
+            </div>
+            {!isMobile && _rightArrow()}
         </div>
     );
 

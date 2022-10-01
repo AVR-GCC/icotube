@@ -12,12 +12,12 @@
 }
 
 .postTopBar {
-  margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   z-index: 999;
+  border-bottom: 1px solid #ffffff50;
 }
 
 .ownerButtons {
@@ -46,7 +46,7 @@
 }
 
 .XButton {
-  margin: 20px;
+  margin: 15px;
   margin-right: 30px;
   font-size: 25px;
   font-weight: 100;
@@ -54,8 +54,20 @@
 }
 
 .bottomPart {
+  margin-top: 5px;
   display: flex;
+  flex-direction: row;
   height: 100%;
+}
+
+.bottomPartCenter {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-items: center;
+  padding: 0 15px;
 }
 
 .videoSection {
@@ -80,31 +92,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 5;
 }
 
 .infoSection {
-  flex: 3;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  margin-top: 10px;
   margin-left: 10px;
   margin-right: 5px;
 }
 
 /* width */
-.infoSection::-webkit-scrollbar {
+.bottomPartCenter::-webkit-scrollbar {
   width: 6px;
 }
 
 /* Track */
-.infoSection::-webkit-scrollbar-track {
+.bottomPartCenter::-webkit-scrollbar-track {
   background: transparent;
 }
 
 /* Handle */
-.infoSection::-webkit-scrollbar-thumb {
+.bottomPartCenter::-webkit-scrollbar-thumb {
   background: #ffffff50;
   border-radius: 3px;
   border: none;
