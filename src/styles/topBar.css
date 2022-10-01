@@ -10,6 +10,18 @@
 }
 
 .logo {
-  margin-left: 73px;
-  cursor: default;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.logoText {
+  margin-left: 8px;
+  font-weight: 550;
+  font-size: 32px;
+  color: lightgrey;
+  transform: scaleX(0.7);
+  transform-origin: 0;
+  letter-spacing: -2px;
 }

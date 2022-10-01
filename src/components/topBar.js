@@ -24,6 +24,7 @@ function TopBar(props) {
                 }}
             >
                 <img style={{ height: 30, width: 70 }} src={logoPNG} alt="logo" />
+                <div className='logoText'>ICOTube</div>
             </div>
             <Login
                 onSignIn={setUser}
