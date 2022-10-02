@@ -203,6 +203,9 @@ function SelectedPost({
                 />
             );
         }
+        if (field.type === 'number') {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
         if (field.multiple) {
             return value.join(', ');
         }

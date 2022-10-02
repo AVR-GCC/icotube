@@ -46,6 +46,12 @@ export const fields = {
             default: ''
         },
         {
+            name: 'fundraisingGoal',
+            label: 'Fundraising Goal',
+            type: 'string',
+            default: ''
+        },
+        {
             name: 'description',
             label: 'Long Description',
             type: 'string',
