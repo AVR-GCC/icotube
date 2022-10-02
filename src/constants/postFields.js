@@ -46,12 +46,6 @@ export const fields = {
             default: ''
         },
         {
-            name: 'fundraisingGoal',
-            label: 'Fundraising Goal',
-            type: 'string',
-            default: ''
-        },
-        {
             name: 'description',
             label: 'Long Description',
             type: 'string',
@@ -109,6 +103,11 @@ export const fields = {
         {
             name: 'cap',
             label: 'Hard Cap',
+            type: 'number'
+        },
+        {
+            name: 'fundraisingGoal',
+            label: 'Fundraising Goal',
             type: 'number'
         },
         {
