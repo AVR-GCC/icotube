@@ -25,3 +25,9 @@
   transform-origin: 0;
   letter-spacing: -2px;
 }
+
+.topBarTitle {
+  margin: 20px;
+  font-size: 25px;
+  color: antiquewhite;
+}

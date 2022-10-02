@@ -32,7 +32,6 @@ function Alert() {
 
     return (
         <div className="mainContainer">
-            <div className='categoryTitle' style={{ position: 'unset' }}>Register for Alerts</div>
             <TextField
                 // error={!!errors[`${field.name}Other`]}
                 // key={`${inputId}Other`}

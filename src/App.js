@@ -63,6 +63,7 @@ function App() {
         <div>
           <BrowserRouter>
             <TopBar
+              isMobile={isMobile.current}
               currentUser={user}
               setUser={setUser}
               signOut={signOut}

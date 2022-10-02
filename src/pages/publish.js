@@ -64,7 +64,6 @@ function Publish() {
     const { postId } = useParams();
 
     useEffect(() => {
-        console.log('1');
         const getPost = async (id) => {
             const myPost = await getPostAPI(id);
             setPost(myPost);
@@ -407,8 +406,7 @@ function Publish() {
                 }
             }}
         >
-            <div className='publishTitle'>
-                Publish Crypto Project
+            <div className='typeToggle'>
                 {_typeToggle()}
             </div>
             <div

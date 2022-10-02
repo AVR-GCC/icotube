@@ -20,12 +20,6 @@ const startCategoryState = {
     gotLastPost: false
 }
 
-const categoryNames = {
-    upcoming: 'Upcoming ICOs',
-    running: 'Running ICOs',
-    ended: 'Ended ICOs',
-}
-
 function Home({
     isMobile
 }) {
@@ -201,9 +195,6 @@ function Home({
                     }
                 }}
             >
-                <div className='categoryTitle'>{categoryNames[category]}</div>
-                {/* <Search /> */}
-                <div className='spacer' style={{ margin: 40 }} />
                 <div
                     className="subMainContainer"
                     style={{ width: isMobile ? '100%' : numPosts * postWidth }}
