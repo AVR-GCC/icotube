@@ -387,6 +387,20 @@ function Publish() {
         );
     };
 
+    const _publisherNotes = () => (
+        <div className='publishNotes'>
+            <div className='infoText'>
+                Notes for publishers:
+            </div>
+            <div className='infoText'>
+                *   Email field is mandatory, the person registered with this email will be the one who can edit this post.
+            </div>
+            <div className='infoText'>
+                *   Please provide as much information as possible about your crypto project.
+            </div>
+        </div>
+    )
+;
     let noteColor = 'green';
     if (routeError) noteColor = 'red';
     if (loading) noteColor = '#afaf33';
@@ -422,6 +436,7 @@ function Publish() {
                 {loading && <div className='loadingIndicator'><CircularProgress size={20} /></div>}
                 {notificationText}
             </div>
+            {_publisherNotes()}
             {_main()}
         </div>
     );

@@ -84,6 +84,11 @@
   overflow-x: hidden;
 }
 
+.publishNotes {
+  padding-left: 50px;
+  padding-top: 10px;
+}
+
 .publishInputContainer {
   display: flex;
   flex-direction: column;
@@ -91,6 +96,7 @@
   height: auto;
   width: 600px;
   padding: 50px;
+  padding-top: 10px;
 }
 
 .publishButtonsContainer {
