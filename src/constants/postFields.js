@@ -12,61 +12,29 @@ export const fields = {
             type: 'string'
         },
         {
-            name: 'type',
-            label: 'Project Category',
-            type: 'enum',
-            enum: [
-                'Platform',
-                'Blockchain Service',
-                'Gaming',
-                'Network',
-                'Market',
-                'Protocol',
-                'Defi',
-                'P2E',
-                'NFT',
-                'Web3',
-                'Other'
-            ],
-            default: 'Platform'
-        },
-        {
             name: 'importantNote',
             label: 'Important Note',
             type: 'string',
-            placeholder: 'ICO will take place on X platform at 00:00 GMT',
+            placeholder: 'Important Note: "ICO will take place on X platform at 00:00 GMT"',
             multiline: true,
             default: ''
         },
         {
-            name: 'shortDescription',
-            label: 'Short Description',
+            name: 'logo',
+            label: 'Logo',
+            type: 'image',
+        },
+        {
+            name: 'homepage',
+            label: 'Homepage',
             type: 'string',
-            multiline: true,
-            default: ''
+            link: true,
         },
         {
-            name: 'description',
-            label: 'Long Description',
+            name: 'videoUrl',
+            label: 'Video URL',
             type: 'string',
-            multiline: true,
-            default: ''
-        },
-        {
-            name: 'tokenRole',
-            label: 'Token Role',
-            type: 'enum',
-            enum: [
-                'Utility',
-                'Payment',
-                'Security',
-                'Stablecoin',
-                'Asset-backed',
-                'DeFi token',
-                'NFT',
-                'Other'
-            ],
-            default: 'Platform'
+            link: true,
         },
         {
             name: 'startDate',
@@ -86,13 +54,34 @@ export const fields = {
             type: 'string'
         },
         {
-            name: 'tokenType',
-            label: 'Token Type (ERC-20 / BEP-20 / etc)',
-            type: 'string'
+            name: 'coinExplorerLink',
+            label: 'Coin Explorer Link',
+            type: 'string',
+            link: true
         },
         {
-            name: 'amountPerUser',
-            label: 'Price/Amount Per User',
+            name: 'whitepaperLink',
+            label: 'Whitepaper Link',
+            type: 'string',
+            link: true,
+        },
+        {
+            name: 'shortDescription',
+            label: 'Short Description',
+            type: 'string',
+            multiline: true,
+            default: ''
+        },
+        {
+            name: 'description',
+            label: 'Long Description',
+            type: 'string',
+            multiline: true,
+            default: ''
+        },
+        {
+            name: 'fundraisingGoal',
+            label: 'Fundraising Goal',
             type: 'number'
         },
         {
@@ -106,11 +95,6 @@ export const fields = {
             type: 'number'
         },
         {
-            name: 'fundraisingGoal',
-            label: 'Fundraising Goal',
-            type: 'number'
-        },
-        {
             name: 'totalTokens',
             label: 'Total Tokens',
             type: 'number'
@@ -118,6 +102,11 @@ export const fields = {
         {
             name: 'availableTokens',
             label: 'Available Tokens',
+            type: 'number'
+        },
+        {
+            name: 'amountPerUser',
+            label: 'Price/Amount Per User',
             type: 'number'
         },
         {
@@ -134,7 +123,7 @@ export const fields = {
             name: 'accepts',
             label: 'Accepts',
             type: 'string',
-            placeholder: 'BTC, ETH, USD...'
+            placeholder: 'Accepts: "BTC, ETH, USD..."'
         },
         {
             name: 'isWhitelist',
@@ -142,26 +131,49 @@ export const fields = {
             type: 'boolean',
             default: false
         },
-        // { TODO - Implement
-        //     name: 'restrictedCountries',
-        //     label: 'Restricted Countries',
-        //     type: 'list',
-        // },
         {
-            name: 'whitepaperLink',
-            label: 'Whitepaper Link',
-            type: 'string',
-            link: true,
+            name: 'type',
+            label: 'Project Category',
+            type: 'enum',
+            enum: [
+                'Platform',
+                'Blockchain Service',
+                'Gaming',
+                'Network',
+                'Market',
+                'Protocol',
+                'Defi',
+                'P2E',
+                'NFT',
+                'Web3',
+                'Other'
+            ],
+            default: 'Platform'
+        },
+        {
+            name: 'tokenRole',
+            label: 'Token Role',
+            type: 'enum',
+            enum: [
+                'Utility',
+                'Payment',
+                'Security',
+                'Stablecoin',
+                'Asset-backed',
+                'DeFi token',
+                'NFT',
+                'Other'
+            ],
+            default: 'Platform'
+        },
+        {
+            name: 'tokenType',
+            label: 'Token Type (ERC-20 / BEP-20 / etc)',
+            type: 'string'
         },
         {
             name: 'officialChat',
             label: 'Official Chat',
-            type: 'string',
-            link: true,
-        },
-        {
-            name: 'github',
-            label: 'Github',
             type: 'string',
             link: true,
         },
@@ -172,22 +184,22 @@ export const fields = {
             link: true,
         },
         {
-            name: 'logo',
-            label: 'Logo',
-            type: 'image',
-        },
-        {
-            name: 'homepage',
-            label: 'Homepage',
+            name: 'github',
+            label: 'Github',
             type: 'string',
             link: true,
         },
         {
-            name: 'videoUrl',
-            label: 'Video URL',
+            name: 'linkedinLink',
+            label: 'LinkedIn Link',
             type: 'string',
-            link: true,
+            link: true
         },
+        // { TODO - Implement
+        //     name: 'restrictedCountries',
+        //     label: 'Restricted Countries',
+        //     type: 'list',
+        // },
     ],
     Airdrop: [
         {
