@@ -15,10 +15,13 @@ import { useNavigate } from 'react-router-dom';
 import { fields } from '../constants/postFields';
 
 const fieldsToNotShow = [
+    'title',
     'email',
     'shortDescription',
     'videoUrl',
-    'homepage'
+    'homepage',
+    'importantNote',
+    'logo'
 ];
 
 function SelectedPost({
@@ -221,6 +224,7 @@ function SelectedPost({
                         <div className='infoText'>{post.shortDescription}</div>
                         {_link(post.homepage)}
                         <div className='spacer' />
+                        <div className='infoText'>{post.importantNote}</div>
                         <Divider style={{ marginBottom: 20, background: '#ffffff50' }} />
                         {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
                             <div className='showFieldContainer' key={`${field.name}_show`}>
