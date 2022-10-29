@@ -36,7 +36,7 @@ function TopBar(props) {
                 style={logoStyle}
             >
                 <img style={{ height: 30, width: 70 }} src={logoPNG} alt="logo" />
-                <div className='logoText'>ICOTube</div>
+                <div className='logoText'>ICOTube2</div>
             </div>
             <div className='topBarTitle' style={titleStyle}>{pageNames[page]}</div>
             <Login
