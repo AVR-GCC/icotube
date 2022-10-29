@@ -97,9 +97,11 @@
 .infoSection {
   display: flex;
   flex-direction: column;
-  margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 5px;
+  background: #151515;
+  padding-top: 10px;
+  padding-left: 10px;
+  padding-right: 5px;
+  z-index: 2;
 }
 
 /* width */
