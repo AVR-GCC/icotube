@@ -51,14 +51,13 @@ function SelectedPost({
             let height = 360;
             let width = 640;
             if (thisRatio > goodRatio) {
-                height = availableHeight + 140;
+                height = availableHeight;
                 width = goodRatio * height;
             } else {
                 width = availableWidth;
-                height = width / goodRatio + 140;
+                height = width / goodRatio;
             }
-            const boundingRect = playerPartRef.current.getBoundingClientRect();
-            setPlayerSize({ top: boundingRect.top, left: boundingRect.left, width, height });
+            setPlayerSize({ width, height });
         }
     }
 
@@ -165,22 +164,13 @@ function SelectedPost({
             ref={playerPartRef}
         >
             {post.videoUrl ? (
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }}
-                >
-                    <div style={{ marginBottom: -60 }} />
-                    <ReactPlayer
-                        url={post.videoUrl}
-                        muted={false}
-                        controls={true}
-                        height={playerSize.height}
-                        width={playerSize.width}
-                    />
-                    <div style={{ marginBottom: -60 }} />
-                </div>
+                <ReactPlayer
+                    url={post.videoUrl}
+                    muted={false}
+                    controls={true}
+                    height={playerSize.height}
+                    width={playerSize.width}
+                />
             ) : (
                 <img
                     style={{ height: playerSize.height, width: playerSize.width }}
