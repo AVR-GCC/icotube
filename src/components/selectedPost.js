@@ -45,7 +45,8 @@ function SelectedPost({
     const adjustPlayerSize = () => {
         if (playerPartRef.current) {
             const goodRatio = 64 / 36;
-            const availableHeight = window.innerHeight - 170;
+            const endOfScreenBuffer = 95;
+            const availableHeight = window.innerHeight - 126 - endOfScreenBuffer;
             const availableWidth = window.innerWidth - (isMobile ? 20 : 100);
             const thisRatio = availableWidth / availableHeight;
             let height = 360;
@@ -250,7 +251,7 @@ function SelectedPost({
     };
 
     const _bottomPart = () => (
-        <div className='bottomPart' style={{ height: window.innerHeight - 136 }}>
+        <div className='bottomPart' style={{ height: window.innerHeight - 126 }}>
             {!isMobile && _leftArrow()}
             <div className='bottomPartCenter'>
                 {_videoSection()}
