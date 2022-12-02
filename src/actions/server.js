@@ -23,7 +23,7 @@ const APIcall = async ({
     url,
     method,
     body,
-    withCredentials = false,
+    withCredentials = true,
     token = getToken()
 }) => {
     print('----- API Call -----');

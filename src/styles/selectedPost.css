@@ -134,12 +134,44 @@
   width: 20px;
 }
 
+.likeButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 55px;
+  background-color: #353130;
+  color: #EAEAEA;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none;
+  cursor: default;
+}
+
+.likeButton:not(.disabled) {
+  cursor: pointer;
+}
+
+.likeButton:hover:not(.disabled) {
+  background-color: #494647;
+}
+
 .titleText {
   color: #DCDCDC !important;
   font-weight: 500;
   font-size: 25px;
-  margin-bottom: 18px;
+  margin-bottom: 5px;
   word-wrap: break-word;
+}
+
+.subtitleSection {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .infoText {
@@ -149,6 +181,5 @@
   max-height: 650px;
   overflow-y: auto;
   word-wrap: break-word;
-  margin-bottom: 30px;
   padding-bottom: 1px;
 }

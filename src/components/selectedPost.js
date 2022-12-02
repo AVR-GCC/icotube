@@ -5,14 +5,17 @@ import {
     ReplyRounded,
     ArrowBackIosNewRounded,
     ArrowForwardIosRounded,
-    Close
+    Close,
+    ThumbUp,
+    ThumbUpOffAlt
 } from '@mui/icons-material';
-import { deletePostAPI } from '../actions/searchAPI';
+import { deletePostAPI, likePostAPI } from '../actions/searchAPI';
 import { Button, Divider } from '@mui/material';
 import ReactPlayer from 'react-player';
 import { AppContext } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { fields } from '../constants/postFields';
+import { noop } from 'lodash';
 
 const fieldsToNotShow = [
     'title',
@@ -33,6 +36,7 @@ function SelectedPost({
     isMobile
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
+    const [likeFlipped, setLikeFlipped] = useState(false);
     const playerPartRef = useRef();
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
@@ -216,13 +220,47 @@ function SelectedPost({
         return field.link ? _link(value) : value;
     }
 
+    const _likeButton = () => {
+        const isLiked = likeFlipped ? !post.isLiked : post.isLiked;
+        let likes = post.likes;
+        let letter = '';
+        if (likeFlipped) {
+            likes += isLiked ? 1 : -1;
+        }
+        if (likes > 1000) {
+            likes = likes / 1000;
+            letter = 'K';
+        }
+        if (likes > 1000) {
+            likes = likes / 1000;
+            letter = 'M';
+        }
+        const className = `likeButton${currentUser ? '' : ' disabled'}`;
+        const onClick = currentUser ? () => {
+            setLikeFlipped(!likeFlipped);
+            likePostAPI(post._id);
+        } : noop;
+        return (
+            <div
+                className={className}
+                onClick={onClick}
+            >
+                {isLiked ? <ThumbUp /> : <ThumbUpOffAlt />}
+                {likes}{letter}
+            </div>
+        )
+    };
+
     const _infoSection = () => {
         return (
             <div className='infoSection' style={{ width: playerSize.width }}>
                 {!!post && (
                     <div className='infoBox'>
-                        <div className='titleText' style={{ fontSize: isMobile ? 30 : 40 }}>{post.title}</div>
-                        <div className='infoText'>{post.shortDescription}</div>
+                        <div className='titleText' style={{ fontSize: isMobile ? 30 : 25 }}>{post.title}</div>
+                        <div className='subtitleSection'>
+                            <div className='infoText'>{post.shortDescription}</div>
+                            {_likeButton()}
+                        </div>
                         {_link(post.homepage)}
                         <div className='spacer' />
                         <div className='infoText'>{post.importantNote}</div>

@@ -1,5 +1,11 @@
 import APIcall from './server';
 
+export const likePostAPI = async (postId) => {
+    const response = await APIcall({ method: 'PUT', url: `posts/${postId}/like` });
+    if (response.data?.success) return response?.data?.data;
+    return response;
+};
+
 export const deletePostAPI = async (postId) => {
     const response = await APIcall({ method: 'DELETE', url: `posts/${postId}`, withCredentials: true });
     if (response.data?.success) return { success: true };
