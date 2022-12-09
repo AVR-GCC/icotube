@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { findIndex } from 'lodash';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
@@ -97,9 +97,9 @@ function Home({
         setCategoryState({ ...categoryState, loadingPost: newLoadingPost });
     }
 
-    const setPosts = (newPosts) => {
+    const setPosts = useCallback((newPosts) => {
         setCategoryState({ ...categoryState, posts: newPosts });
-    }
+    }, [setCategoryState, categoryState])
 
     useEffect(() => {
         fetchPosts();
@@ -141,6 +141,19 @@ function Home({
             setPosts(newPosts);
         }
     }
+
+    const toggleSelectedPostLike = useCallback(() => {
+        const togglePostLike = (index) => {
+            const newPosts = [...posts];
+            newPosts[index] = {
+                ...newPosts[index],
+                isLiked: !newPosts[index].isLiked,
+                likes: newPosts[index].likes + (newPosts[index].isLiked ? -1 : 1)
+            }
+            setPosts(newPosts);
+        }
+        togglePostLike(selectedPost)
+    }, [selectedPost, setPosts, posts]);
 
     const leavePost = () => {
         setSelectedPost(-1);
@@ -237,6 +250,7 @@ function Home({
                     XClick={leavePost}
                     removePost={removePost}
                     isMobile={isMobile}
+                    flipLike={toggleSelectedPostLike}
                 />
             )}
             {_main()}

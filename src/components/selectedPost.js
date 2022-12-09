@@ -33,10 +33,10 @@ function SelectedPost({
     leftClick,
     XClick,
     removePost,
-    isMobile
+    isMobile,
+    flipLike
 }) {
     const [playerSize, setPlayerSize] = useState({ height: 360, width: 640 });
-    const [likeFlipped, setLikeFlipped] = useState(false);
     const playerPartRef = useRef();
     const appContext = useContext(AppContext);
     const currentUser = appContext?.user;
@@ -221,12 +221,9 @@ function SelectedPost({
     }
 
     const _likeButton = () => {
-        const isLiked = likeFlipped ? !post.isLiked : post.isLiked;
+        const isLiked = post.isLiked;
         let likes = post.likes;
         let letter = '';
-        if (likeFlipped) {
-            likes += isLiked ? 1 : -1;
-        }
         if (likes > 1000) {
             likes = likes / 1000;
             letter = 'K';
@@ -237,7 +234,7 @@ function SelectedPost({
         }
         const className = `likeButton${currentUser ? '' : ' disabled'}`;
         const onClick = currentUser ? () => {
-            setLikeFlipped(!likeFlipped);
+            flipLike();
             likePostAPI(post._id);
         } : noop;
         return (
