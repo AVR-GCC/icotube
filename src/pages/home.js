@@ -114,7 +114,14 @@ function Home({
                 setSelectedPost(index);
             }
         }
-    }, [postId, posts, setSelectedPost]);
+    }, [postId, posts]);
+
+    useEffect(() => {
+        if (selectedPost !== -1 && posts.length) {
+            const post = posts[selectedPost];
+            navigate(`/${curCategory}/${post._id}`);
+        }
+    }, [selectedPost, posts]);
 
     useEffect(() => {
         if (selectedPost !== -1 && posts[selectedPost]._id !== postId && !pauseNavigate.current) {
