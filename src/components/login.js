@@ -63,10 +63,10 @@ const AuthModal = ({
     }
   }
 
-  const signUpWithEmail = () => {
+  const signUpWithEmail = async () => {
     removeErrors();
     if (email && password && confirmPassword && confirmPassword === password) {
-      const res = signupAPI(email, password);
+      const res = await signupAPI(email, password);
       loginUser(res);
       return;
     }
