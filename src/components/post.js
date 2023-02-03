@@ -20,9 +20,14 @@ function Post({
         const nextFourSet = (Math.floor(loadingPost / 4) + 1) * 4;
         if (nextFourSet > loadingPost) setLoadingPost(nextFourSet);
     }, []);
+
     const _postContent = (post, index) => {
         const showPlayer = post.videoUrl && index <= loadingPost;
         const showImage = !showPlayer && !!post.logo;
+        const neither = !showPlayer && !showImage;
+        if (neither && index === loadingPost) {
+            setLoadingPost(index + 1);
+        }
 
         let content = <div style={{ height, width }} />;
 
