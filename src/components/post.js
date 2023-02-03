@@ -21,12 +21,15 @@ function Post({
         if (nextFourSet > loadingPost) setLoadingPost(nextFourSet);
     }, []);
 
+    useEffect(() => {
+        if (!post.videoUrl && index === loadingPost) {
+            setLoadingPost(index + 1);
+        };
+    }, [post, index, loadingPost, setLoadingPost]);
+
     const _postContent = (post, index) => {
         const showPlayer = post.videoUrl && index <= loadingPost;
         const showImage = !showPlayer && !!post.logo;
-        if (!showPlayer && index === loadingPost) {
-            setLoadingPost(index + 1);
-        }
 
         let content = <div style={{ height, width }} />;
 
