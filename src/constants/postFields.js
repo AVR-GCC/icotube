@@ -168,7 +168,8 @@ export const fields = {
         },
         {
             name: 'tokenType',
-            label: 'Token Type (ERC-20 / BEP-20 / etc)',
+            label: 'Token Type',
+            placeholder: 'Token Type (ERC-20 / BEP-20 / etc)',
             type: 'string'
         },
         {
