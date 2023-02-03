@@ -24,8 +24,7 @@ function Post({
     const _postContent = (post, index) => {
         const showPlayer = post.videoUrl && index <= loadingPost;
         const showImage = !showPlayer && !!post.logo;
-        const neither = !showPlayer && !showImage;
-        if (neither && index === loadingPost) {
+        if (!showPlayer && index === loadingPost) {
             setLoadingPost(index + 1);
         }
 
