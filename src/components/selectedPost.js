@@ -256,7 +256,7 @@ function SelectedPost({
                         <div className='titleText' style={{ fontSize: isMobile ? 30 : 25 }}>{post.title}</div>
                         <div className='subtitleSection'>
                             <div className='infoText'>{post.shortDescription}</div>
-                            {_likeButton()}
+                            {/* {_likeButton()} */}
                         </div>
                         {_link(post.homepage)}
                         <div className='spacer' />
