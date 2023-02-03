@@ -47,7 +47,9 @@ function Post({
                     <div style={{ marginTop: -height }}>
                         <ReactPlayer
                             onReady={() => {
-                                setLoadingPost(index + 1);
+                                if (loadingPost < index + 1) {
+                                    setLoadingPost(index + 1);
+                                }
                             }}
                             playing={hoveredPost === post._id}
                             height={height}
