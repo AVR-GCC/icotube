@@ -16,10 +16,6 @@ function Post({
     hoveredPost,
     isMobile
 }) {
-    useEffect(() => {
-        if (index === loadingPost && !post.videoUrl) setLoadingPost(index + 1);
-    }, [post, index, loadingPost, setLoadingPost]);
-
     const _postContent = (post, index) => {
         const showPlayer = post.videoUrl && index <= loadingPost;
         const showImage = !showPlayer && !!post.logo;
