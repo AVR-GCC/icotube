@@ -56,7 +56,7 @@ function Home({
         if (category === curCategory) {
             setLoading(true);
             const res = await retryUntilSuccess(() => {
-                getPostsAPI({ category: curCategory, skip: fetchedPost, limit: BATCH_SIZE })
+                return getPostsAPI({ category: curCategory, skip: fetchedPost, limit: BATCH_SIZE })
             });
             const gotPosts = res?.data?.data;
             if (gotPosts) {
