@@ -150,6 +150,7 @@ function Publish() {
             case 'string':
                 return (
                     <TextField
+                        autoComplete='off'
                         error={!!errors[field.name]}
                         key={inputId}
                         id={inputId}
@@ -168,6 +169,7 @@ function Publish() {
             case 'number':
                 return (
                     <TextField
+                        autoComplete='off'
                         error={!!errors[field.name]}
                         key={inputId}
                         id={inputId}
@@ -220,6 +222,7 @@ function Publish() {
                         <div style={{ flex: 1 }}>
                             {value === 'Other' && (
                                 <TextField
+                                    autoComplete='off'
                                     inputRef={ref => {
                                         if (!inputRefs.current[`${field.name}Other`] && ref) {
                                             setTimeout(() => ref.focus(), 100);
