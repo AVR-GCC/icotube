@@ -367,7 +367,7 @@ function Publish() {
                     <div className="paymentButton">
                         <CoinbaseCommerceButton
                             styled={true}
-                            checkoutId={'2fd410af-6ba1-42a1-91d3-bb1dc7c42bc1'}
+                            checkoutId={'c236387b-5a7f-4a33-a5e3-c784b379c3cb'}
                             // onLoad={(arg) => {
                             //     console.log('onLoad:', arg);
                             // }}
