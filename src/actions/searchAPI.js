@@ -23,7 +23,8 @@ export const getPostsAPI = async ({
     limit,
     sort = { startDate: -1 },
     filter = {},
-    category
+    category,
+    noVideo = false
 }) => {
     const today = new Date();
     let categoryFilter = { startDate: { $gt: today } };
@@ -33,7 +34,12 @@ export const getPostsAPI = async ({
     if (category === 'ended') {
         categoryFilter = { endDate: { $lt: today } };
     }
-    let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
+    let videoFilter = { videoUrl: { $ne: '' } };
+    if (noVideo) {
+        videoFilter = { videoUrl: '' };
+    }
+    let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter, ...videoFilter })}`;
+    // let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
     if (limit) {
         url += `&limit=${limit}`;
     }
