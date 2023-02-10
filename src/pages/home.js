@@ -14,9 +14,11 @@ const BATCH_SIZE = 8;
 const startCategoryState = {
     curCategory: 'upcoming',
     posts: [],
+    noVideoPosts: [],
     selectedPost: -1,
     loadingPost: 0,
     fetchedPost: 0,
+    gotLastVideoPost: false,
     gotLastPost: false
 }
 
@@ -27,8 +29,10 @@ function Home({
     const {
         curCategory,
         posts,
+        noVideoPosts,
         loadingPost,
         fetchedPost,
+        gotLastVideoPost,
         gotLastPost
     } = categoryState;
 
@@ -56,16 +60,19 @@ function Home({
         if (category === curCategory) {
             setLoading(true);
             const res = await retryUntilSuccess(() => {
-                return getPostsAPI({ category: curCategory, skip: fetchedPost, limit: BATCH_SIZE })
+                return getPostsAPI({ category: curCategory, skip: fetchedPost - (gotLastVideoPost ? posts.length : 0), limit: BATCH_SIZE, noVideo: gotLastVideoPost });
             });
             const gotPosts = res?.data?.data;
             if (gotPosts) {
-                const newPosts = [...posts, ...gotPosts];
+                const newPosts = gotLastVideoPost ? posts : [...posts, ...gotPosts];
+                const newNoVideoPosts = gotLastVideoPost ? [...noVideoPosts, ...gotPosts] : noVideoPosts;
                 setCategoryState({
                     curCategory,
                     posts: newPosts,
+                    noVideoPosts: newNoVideoPosts,
                     fetchedPost: fetchedPost + gotPosts.length,
-                    gotLastPost: gotPosts.length < BATCH_SIZE,
+                    gotLastVideoPost: gotPosts.length < BATCH_SIZE,
+                    gotLastPost: gotLastVideoPost && gotPosts.length < BATCH_SIZE,
                     loadingPost: categoryState.loadingPost + 1
                 });
                 setLoading(false);
@@ -224,6 +231,14 @@ function Home({
                     <div className="postsContainer">
                         {posts.map(_post)}
                     </div>
+                    {gotLastVideoPost && !!noVideoPosts.length && (
+                        <>
+                            <div className='topBarTitle' style={{ alignSelf: 'center', fontSize: 30 }}>Video Coming Soon:</div>
+                            <div className="postsContainer">
+                                {noVideoPosts.map(_post)}
+                            </div>
+                        </>
+                    )}
                     {loading && (
                         <div className="bottomLoaderContainer">
                             <CircularProgress size={50} />
