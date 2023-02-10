@@ -27,6 +27,12 @@ function Post({
         };
     }, [post, index, loadingPost, setLoadingPost]);
 
+    const incrementLoadingPost = () => {
+        if (loadingPost < index + 1) {
+            setLoadingPost(index + 1);
+        }
+    }
+
     const _postContent = (post, index) => {
         const showPlayer = post.videoUrl && index <= loadingPost;
         const showImage = !showPlayer && !!post.logo;
@@ -46,11 +52,8 @@ function Post({
                     />
                     <div style={{ marginTop: -height }}>
                         <ReactPlayer
-                            onReady={() => {
-                                if (loadingPost < index + 1) {
-                                    setLoadingPost(index + 1);
-                                }
-                            }}
+                            onReady={incrementLoadingPost}
+                            onError={incrementLoadingPost}
                             playing={hoveredPost === post._id}
                             height={height}
                             width={isMobile ? '100%' : width}
