@@ -66,7 +66,7 @@ function Home({
                     posts: newPosts,
                     fetchedPost: fetchedPost + gotPosts.length,
                     gotLastPost: gotPosts.length < BATCH_SIZE,
-                    loadingPost: categoryState.loadingPost
+                    loadingPost: categoryState.loadingPost + 1
                 });
                 setLoading(false);
             }
