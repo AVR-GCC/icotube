@@ -16,11 +16,6 @@ function Post({
     hoveredPost,
     isMobile
 }) {
-    useEffect(() => () => {
-        const nextFourSet = (Math.floor(loadingPost / 4) + 1) * 4;
-        if (nextFourSet > loadingPost) setLoadingPost(nextFourSet);
-    }, []);
-
     useEffect(() => {
         if (!post.videoUrl && index === loadingPost) {
             setLoadingPost(index + 1);
