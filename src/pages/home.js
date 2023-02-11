@@ -108,7 +108,20 @@ function Home({
 
     const setPosts = useCallback((newPosts) => {
         setCategoryState({ ...categoryState, posts: newPosts });
-    }, [setCategoryState, categoryState])
+    }, [setCategoryState, categoryState]);
+
+    const setNVPosts = useCallback((newPosts) => {
+        setCategoryState({ ...categoryState, noVideoPosts: newPosts });
+    }, [setCategoryState, categoryState]);
+
+    const getSelectedPost = useCallback(() => {
+        if (selectedPost === -1) return null;
+        const hasVid = selectedPost < posts.length;
+        const arr = hasVid ? posts : noVideoPosts;
+        const index = selectedPost - (hasVid ? 0 : posts.length);
+        if (arr.length <= index) return null;
+        return arr[index];
+    }, [selectedPost, posts, noVideoPosts]);
 
     useEffect(() => {
         fetchPosts();
@@ -126,28 +139,36 @@ function Home({
     }, [postId, posts]);
 
     useEffect(() => {
-        if (selectedPost !== -1 && posts.length) {
-            const post = posts[selectedPost];
+        const post = getSelectedPost();
+        if (post) {
             navigate(`/${curCategory}/${post._id}`);
         }
-    }, [selectedPost, posts]);
+    }, [selectedPost, posts, noVideoPosts]);
 
     useEffect(() => {
-        if (selectedPost !== -1 && posts[selectedPost]._id !== postId && !pauseNavigate.current) {
+        const post = getSelectedPost();
+        if (post && post._id !== postId && !pauseNavigate.current) {
             pauseNavigate.current = true;
-            navigate(`/${curCategory}/${posts[selectedPost]._id}`);
+            navigate(`/${curCategory}/${post._id}`);
         }
-    }, [selectedPost, posts, navigate, curCategory]);
+    }, [selectedPost, posts, noVideoPosts, curCategory]);
 
     const removePost = (id) => {
-        const removePostIndex = findIndex(posts, post => post._id === id);
+        let removePostIndex = findIndex(posts, post => post._id === id);
+        let arr = posts;
+        let func = setPosts;
+        if (removePostIndex === -1) {
+            removePostIndex = findIndex(noVideoPosts, post => post._id === id);
+            arr = noVideoPosts;
+            func = setNVPosts;
+        }
         if (removePostIndex !== -1) {
-            const newPosts = [...posts];
+            const newPosts = [...arr];
             newPosts.splice(removePostIndex, 1);
-            if (removePostIndex === selectedPost) {
+            if (removePostIndex === selectedPost || removePostIndex === selectedPost - posts.length) {
                 leavePost();
             }
-            setPosts(newPosts);
+            func(newPosts);
         }
     }
 
@@ -235,7 +256,7 @@ function Home({
                         <>
                             <div className='topBarTitle' style={{ alignSelf: 'center', fontSize: 30 }}>Video Coming Soon:</div>
                             <div className="postsContainer">
-                                {noVideoPosts.map(_post)}
+                                {noVideoPosts.map((post, index) => _post(post, index + posts.length))}
                             </div>
                         </>
                     )}
@@ -261,8 +282,8 @@ function Home({
         <React.Fragment>
             {selectedPost !== -1 && (
                 <SelectedPost
-                    post={posts[selectedPost]}
-                    rightClick={selectedPost >= posts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
+                    post={getSelectedPost()}
+                    rightClick={selectedPost >= posts.length + noVideoPosts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
                     leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
                     XClick={leavePost}
                     removePost={removePost}
