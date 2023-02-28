@@ -127,6 +127,8 @@ function Publish() {
                 setNotificationText(`Error: ${res?.data?.error?.message}`);
             }
         } else {
+            setRouteError(true);
+            setNotificationText(`Error: one or more of the requirments are missing`);
             setErrors(errorsObj);
         }
     }
