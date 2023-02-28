@@ -79,7 +79,7 @@ function Publish() {
         const sizeRatio = ntWidth / (pmcWidth ? pmcWidth : 1);
         const srCompliment = 1 - sizeRatio;
         const leftPercentRaw = 100 * srCompliment / 2;
-        const leftPercent = leftPercentRaw * (pmcWidth / (pmcWidth + 240));
+        const leftPercent = leftPercentRaw * (pmcWidth / (pmcWidth + 241 * 2));
         if (leftPercent !== notificationTextleftPercent) {
             setNotificationTextleftPercent(leftPercent);
         }
@@ -426,12 +426,12 @@ function Publish() {
             ref={publishMainContainerRef}
             onScroll={(event) => {
                 const st = event.target.scrollTop;
-                if (st > 50) {
+                if (st > 20) {
                     if (notificationTextTopPx > 5) {
                         setNotificationTextTopPx(5);
                     }
                 } else {
-                    setNotificationTextTopPx(55 - st);
+                    setNotificationTextTopPx(25 - st);
                 }
             }}
         >
