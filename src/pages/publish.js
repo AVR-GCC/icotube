@@ -138,6 +138,7 @@ function Publish() {
     }
 
     const getHandleChange = (fieldName, transformer = identity) => rawVal => {
+        if (postSubmitted) setPostSubmitted(false);
         const val = transformer(rawVal);
         if (val !== post[fieldName]) {
             setPost({ ...post, [fieldName]: val });
