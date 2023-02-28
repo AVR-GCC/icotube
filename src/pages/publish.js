@@ -29,7 +29,7 @@ import { HighlightOff } from '@mui/icons-material';
 
 import { defined } from '../utils';
 import ImageUpload from '../components/imageUpload';
-import { identity } from 'lodash';
+import { identity, isEmpty } from 'lodash';
 
 function Publish() {
     // const [loading, setLoading] = useState(false);
@@ -102,6 +102,12 @@ function Publish() {
                 errorsObj[field.name] = 'This field is required to submit';
                 shouldSubmit = false;
             }
+        }
+        if (shouldSubmit && isEmpty(post.logo) && isEmpty(post.videoUrl)) {
+            const str = 'Either a logo or a video url is required to submit'
+            errorsObj.logo = str;
+            errorsObj.videoUrl = str;
+            shouldSubmit = false;
         }
         if (shouldSubmit) {
             setLoading(true);
@@ -400,6 +406,9 @@ function Publish() {
             </div>
             <div className='infoText'>
                 *   Email field is mandatory, the person registered with this email will be the one who can edit this post.
+            </div>
+            <div className='infoText'>
+                *   Either the video url or the logo url is mandatory, video is the best but at least have a logo that we can show.
             </div>
             <div className='infoText'>
                 *   Please provide as much information as possible about your crypto project.
