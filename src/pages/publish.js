@@ -288,15 +288,18 @@ function Publish() {
                 );
             case 'image':
                 return (
-                    <div className='imageUploadContainer'>
-                        <div className='sectionTitleText'>{showText}</div>
-                        <ImageUpload
-                            height={200}
-                            width={200}
-                            value={value}
-                            onChange={getHandleChange(field.name)}
-                        />
-                    </div>
+                    <>
+                        <div className='imageUploadContainer' style={{ border: `1px solid ${!!errors[field.name] ? '#d32f2f' : 'transparent'}`}}>
+                            <div className='sectionTitleText'>{showText}</div>
+                            <ImageUpload
+                                height={200}
+                                width={200}
+                                value={value}
+                                onChange={getHandleChange(field.name)}
+                            />
+                        </div>
+                        {!!errors[field.name] && <div className='errorText'>{errors[field.name]}</div>}
+                    </>
                 );
             case 'boolean':
                 return (
