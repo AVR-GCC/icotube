@@ -19,13 +19,6 @@
     display: none;
 }
 
-.title {
-    color: #1565c0;
-    font-weight: bold;
-    font-family: Montserrat;
-    align-items: center;
-}
-
 .button {
     background-color: #212121;
     padding: 15px;

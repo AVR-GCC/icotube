@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
-import { TextField, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import {
   loginAPI,
   signupAPI,
@@ -109,69 +109,59 @@ const AuthModal = ({
 
   const submit = signUp ? signUpWithEmail : loginWithEmail;
 
-  const height = 300
-    + (emailError ? 20 : 0)
-    + (passwordError ? 20 : 0)
-    + (confirmPasswordError ? 20 : 0)
-    + (signUp ? 80 : 0)
-    + (loginError ? 20 : 0);
+  const height = 360
+    + (signUp ? 80 : 0);
 
   const _title = () => (
-    <div className='title' style={{ marginTop: 35 }}>
+    <div className='title'>
       {signUp ? "Signup to ICO tube" : "Login to ICO tube"}
     </div>
   );
 
   const _inputs = () => (
     <React.Fragment>
-      <TextField
-        error={!!emailError}
+      <input
+        style={!emailError ? { marginBottom: 33 } : {}}
+        type="text"
         key="email-input"
         id="email-input"
-        label="Email"
-        required
-        variant='outlined'
-        margin='normal'
-        fullWidth
+        className='myInput'
+        placeholder='Email *'
         value={email}
         onChange={(event) => {
             setEmail(event.target.value);
         }}
-        helperText={emailError}
       />
-      <TextField
+      {!!emailError && <div className='errorText'>{emailError}</div>}
+      <input
+        style={!passwordError ? { marginBottom: 33 } : {}}
         type="password"
-        error={!!passwordError}
         key="password-input"
         id="password-input"
-        label="Password"
-        required
-        variant='outlined'
-        margin='normal'
-        fullWidth
+        className='myInput'
+        placeholder='Password *'
         value={password}
         onChange={(event) => {
-            setPassword(event.target.value);
+          setPassword(event.target.value);
         }}
-        helperText={passwordError}
       />
+      {!!passwordError && <div className='errorText'>{passwordError}</div>}
       {signUp ? (
-        <TextField
-          type="password"
-          error={!!confirmPasswordError}
-          key="confirm-password-input"
-          id="confirm-password-input"
-          label="Confirm Password"
-          required
-          variant='outlined'
-          margin='normal'
-          fullWidth
-          value={confirmPassword}
-          onChange={(event) => {
+        <>
+          <input
+            style={!confirmPasswordError ? { marginBottom: 33 } : {}}
+            type="password"
+            key="confirm-password-input"
+            id="confirm-password-input"
+            className='myInput'
+            placeholder='Confirm Password *'
+            value={confirmPassword}
+            onChange={(event) => {
               setConfirmPassword(event.target.value);
-          }}
-          helperText={confirmPasswordError}
-        />
+            }}
+          />
+          {!!confirmPasswordError && <div className='errorText'>{confirmPasswordError}</div>}
+        </>
       ) : null}
     </React.Fragment>
   );
@@ -181,13 +171,13 @@ const AuthModal = ({
       <Button
         id="submit-button"
         variant="outlined"
-        style={{ marginTop: 20, width: '100%' }}
+        style={{ marginTop: 20, width: '100%', marginBottom: loginError ? 0 : 23 }}
         onClick={submit}
       >
         <span style={{ fontSize: 14 }}>{signUp ? "Signup with Email" : "Login with Email"}</span>
       </Button>
       {loginError ? (
-        <div className='error'>{loginError}</div>
+        <div className='errorText'>{loginError}</div>
       ) : null}
     </React.Fragment>
   );
