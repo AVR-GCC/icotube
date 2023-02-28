@@ -408,6 +408,9 @@ function Publish() {
                 Notes for publishers:
             </div>
             <div className='infoText'>
+                *   Name field is mandatory.
+            </div>
+            <div className='infoText'>
                 *   Email field is mandatory, the person registered with this email will be the one who can edit this post.
             </div>
             <div className='infoText'>

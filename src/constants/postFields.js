@@ -9,7 +9,8 @@ export const fields = {
         {
             name: 'title',
             label: 'Project Name',
-            type: 'string'
+            type: 'string',
+            required: true
         },
         {
             name: 'importantNote',
