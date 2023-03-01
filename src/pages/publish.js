@@ -275,7 +275,7 @@ function Publish() {
                                     position: 'relative',
                                     top: 46,
                                     zIndex: 2,
-                                    marginTop: -46
+                                    marginTop: -50
                                 }}
                             >
                                 {showText}
