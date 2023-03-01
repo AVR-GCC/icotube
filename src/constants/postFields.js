@@ -71,6 +71,7 @@ export const fields = {
             label: 'Short Description',
             type: 'string',
             multiline: true,
+            required: true,
             default: ''
         },
         {
