@@ -271,7 +271,7 @@ function SelectedPost({
                                         overflow: 'hidden',
                                         minWidth: 'fit-content',
                                         textDecoration: 'underline',
-                                        marginBottom: 10
+                                        marginBottom: 5
                                     }}
                                 >
                                     {field.label}:
