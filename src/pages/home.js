@@ -134,6 +134,12 @@ function Home({
     }, [curCategory]);
 
     useEffect(() => {
+        if (nvMode && posts.length < BATCH_SIZE && nvPosts.length === 0) {
+            fetchPosts();
+        }
+    }, [nvMode]);
+
+    useEffect(() => {
         if (postId && posts.length) {
             let index = findIndex(posts, post => post._id === postId);
             if (index === -1) {
