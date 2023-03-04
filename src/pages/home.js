@@ -14,11 +14,11 @@ const BATCH_SIZE = 8;
 const startCategoryState = {
     curCategory: 'upcoming',
     posts: [],
-    noVideoPosts: [],
+    nvPosts: [],
     selectedPost: -1,
     loadingPost: 0,
     fetchedPost: 0,
-    gotLastVideoPost: false,
+    nvMode: false,
     gotLastPost: false
 }
 
@@ -29,10 +29,10 @@ function Home({
     const {
         curCategory,
         posts,
-        noVideoPosts,
+        nvPosts,
         loadingPost,
         fetchedPost,
-        gotLastVideoPost,
+        nvMode,
         gotLastPost
     } = categoryState;
 
@@ -60,19 +60,20 @@ function Home({
         if (category === curCategory) {
             setLoading(true);
             const res = await retryUntilSuccess(() => {
-                return getPostsAPI({ category: curCategory, skip: fetchedPost - (gotLastVideoPost ? posts.length : 0), limit: BATCH_SIZE, noVideo: gotLastVideoPost });
+                return getPostsAPI({ category: curCategory, skip: fetchedPost - (nvMode ? posts.length : 0), limit: BATCH_SIZE, noVideo: nvMode });
             });
             const gotPosts = res?.data?.data;
             if (gotPosts) {
-                const newPosts = gotLastVideoPost ? posts : [...posts, ...gotPosts];
-                const newNoVideoPosts = gotLastVideoPost ? [...noVideoPosts, ...gotPosts] : noVideoPosts;
+                const newPosts = nvMode ? posts : [...posts, ...gotPosts];
+                const newNvPosts = nvMode ? [...nvPosts, ...gotPosts] : nvPosts;
+                const newNvMode = gotPosts.length < BATCH_SIZE;
                 setCategoryState({
                     curCategory,
                     posts: newPosts,
-                    noVideoPosts: newNoVideoPosts,
+                    nvPosts: newNvPosts,
                     fetchedPost: fetchedPost + gotPosts.length,
-                    gotLastVideoPost: gotPosts.length < BATCH_SIZE,
-                    gotLastPost: gotLastVideoPost && gotPosts.length < BATCH_SIZE,
+                    nvMode: newNvMode,
+                    gotLastPost: nvMode && gotPosts.length < BATCH_SIZE,
                     loadingPost: categoryState.loadingPost + 1
                 });
                 setLoading(false);
@@ -111,17 +112,17 @@ function Home({
     }, [setCategoryState, categoryState]);
 
     const setNVPosts = useCallback((newPosts) => {
-        setCategoryState({ ...categoryState, noVideoPosts: newPosts });
+        setCategoryState({ ...categoryState, nvPosts: newPosts });
     }, [setCategoryState, categoryState]);
 
     const getSelectedPost = useCallback(() => {
         if (selectedPost === -1) return null;
         const hasVid = selectedPost < posts.length;
-        const arr = hasVid ? posts : noVideoPosts;
+        const arr = hasVid ? posts : nvPosts;
         const index = selectedPost - (hasVid ? 0 : posts.length);
         if (arr.length <= index) return null;
         return arr[index];
-    }, [selectedPost, posts, noVideoPosts]);
+    }, [selectedPost, posts, nvPosts]);
 
     useEffect(() => {
         fetchPosts();
@@ -143,7 +144,7 @@ function Home({
         if (post) {
             navigate(`/${curCategory}/${post._id}`);
         }
-    }, [selectedPost, posts, noVideoPosts]);
+    }, [selectedPost, posts, nvPosts]);
 
     useEffect(() => {
         const post = getSelectedPost();
@@ -151,15 +152,15 @@ function Home({
             pauseNavigate.current = true;
             navigate(`/${curCategory}/${post._id}`);
         }
-    }, [selectedPost, posts, noVideoPosts, curCategory]);
+    }, [selectedPost, posts, nvPosts, curCategory]);
 
     const removePost = (id) => {
         let removePostIndex = findIndex(posts, post => post._id === id);
         let arr = posts;
         let func = setPosts;
         if (removePostIndex === -1) {
-            removePostIndex = findIndex(noVideoPosts, post => post._id === id);
-            arr = noVideoPosts;
+            removePostIndex = findIndex(nvPosts, post => post._id === id);
+            arr = nvPosts;
             func = setNVPosts;
         }
         if (removePostIndex !== -1) {
@@ -252,11 +253,11 @@ function Home({
                     <div className="postsContainer">
                         {posts.map(_post)}
                     </div>
-                    {gotLastVideoPost && !!noVideoPosts.length && (
+                    {nvMode && !!nvPosts.length && (
                         <>
                             <div className='topBarTitle' style={{ alignSelf: 'center', fontSize: 30 }}>Video Coming Soon:</div>
                             <div className="postsContainer">
-                                {noVideoPosts.map((post, index) => _post(post, index + posts.length))}
+                                {nvPosts.map((post, index) => _post(post, index + posts.length))}
                             </div>
                         </>
                     )}
@@ -283,7 +284,7 @@ function Home({
             {selectedPost !== -1 && (
                 <SelectedPost
                     post={getSelectedPost()}
-                    rightClick={selectedPost >= posts.length + noVideoPosts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
+                    rightClick={selectedPost >= posts.length + nvPosts.length - 1 ? null : () => setSelectedPost(selectedPost + 1)}
                     leftClick={selectedPost <= 0 ? null : () => setSelectedPost(selectedPost - 1)}
                     XClick={leavePost}
                     removePost={removePost}
