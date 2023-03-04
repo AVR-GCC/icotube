@@ -38,7 +38,10 @@ export const getPostsAPI = async ({
     if (noVideo) {
         videoFilter = { $or: [{ videoUrl: '' }, { videoUrl: { $exists: false } }] };
     }
-    let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter, ...videoFilter })}`;
+    const allFilters = { $and: [] };
+    allFilters.$and.push(categoryFilter);
+    allFilters.$and.push(videoFilter);
+    let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...allFilters })}`;
     // let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;
     if (limit) {
         url += `&limit=${limit}`;
