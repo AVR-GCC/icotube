@@ -60,7 +60,12 @@ function Home({
         if (category === curCategory) {
             setLoading(true);
             const res = await retryUntilSuccess(() => {
-                return getPostsAPI({ category: curCategory, skip: fetchedPost - (nvMode ? posts.length : 0), limit: BATCH_SIZE, noVideo: nvMode });
+                return getPostsAPI({
+                    category: curCategory,
+                    skip: fetchedPost - (nvMode ? posts.length : 0),
+                    limit: BATCH_SIZE,
+                    noVideo: nvMode
+                });
             });
             const gotPosts = res?.data?.data;
             if (gotPosts) {
