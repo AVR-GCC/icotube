@@ -13,9 +13,7 @@ export const deletePostAPI = async (postId) => {
 };
 
 export const getPostAPI = async (postId) => {
-    const response = await APIcall({ method: 'GET', url: `posts/${postId}` });
-    if (response.data?.success) return response?.data?.data;
-    return response;
+    return await APIcall({ method: 'GET', url: `posts/${postId}` });
 };
 
 export const getPostsAPI = async ({

@@ -3,7 +3,7 @@ import { findIndex } from 'lodash';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import  '../styles/home.css';
-import { getPostsAPI } from '../actions/searchAPI';
+import { getPostsAPI, getPostAPI } from '../actions/searchAPI';
 import SelectedPost from '../components/selectedPost';
 import Post from '../components/post';
 import Loader from '../components/loader';
@@ -88,7 +88,7 @@ function Home({
 
     const fetchPostsToId = async (id) => {
         pauseNavigate.current = true;
-        const singleRes = await retryUntilSuccess(() => getPostsAPI({ filter: { _id: id } }));
+        const singleRes = await retryUntilSuccess(() => getPostAPI(id));
         const gotSelectedPost = (singleRes?.data?.data || []);
         setCategoryState({
             ...categoryState,
