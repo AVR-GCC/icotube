@@ -17,7 +17,7 @@ const ImageUpload = ({ onChange = noop, width = 30, height = 30, enableFileUploa
         if (selectedFile === undefined) return;
         if (isString(selectedFile) && selectedFile.startsWith('data:image')) return;
         onChange(selectedFile);
-    }, [selectedFile, onChange]);
+    }, [selectedFile]);
 
     useEffect(() => {
         if (value) {
