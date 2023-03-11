@@ -149,8 +149,7 @@ export const fields = {
                 'NFT',
                 'Web3',
                 'Other'
-            ],
-            default: 'Platform'
+            ]
         },
         {
             name: 'tokenRole',
