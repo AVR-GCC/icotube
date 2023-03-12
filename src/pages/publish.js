@@ -131,11 +131,11 @@ function Publish() {
             setNotificationText(`Error: one or more of the requirments are missing`);
             setErrors(errorsObj);
         }
-    }
+    };
 
     const handleChangeType = (_, arg2) => {
         if (arg2) setPostType(arg2);
-    }
+    };
 
     const getHandleChange = (fieldName, transformer = identity) => rawVal => {
         if (postSubmitted) setPostSubmitted(false);
@@ -148,7 +148,7 @@ function Publish() {
                 setErrors(newErrors);
             }
         }
-    }
+    };
 
     const _field = (field) => {
         const inputId = `${field.name}_input`;
@@ -320,7 +320,7 @@ function Publish() {
             default:
                 return null;
         }
-    }
+    };
 
     const _typeToggle = () => (
         <div className='toggleTypeContainer'>
@@ -335,9 +335,7 @@ function Publish() {
                 <ToggleButton disabled value="NFT">NFT</ToggleButton>
             </ToggleButtonGroup>
         </div>
-    )
-
-    console.log('postSubmitted', postSubmitted);
+    );
 
     const _main = () => {
         return (
