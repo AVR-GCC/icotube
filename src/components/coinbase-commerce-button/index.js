@@ -70,6 +70,7 @@ class CoinbaseCommerceButton extends React.Component<Props, State>{
 
   render(){
     const {showModal} = this.state;
+    console.log('showModal', showModal);
     const {onLoad, onChargeSuccess, onChargeFailure, checkoutId, chargeId, customMetadata, onPaymentDetected, disableCaching, wrapperStyle} = this.props;
     const iFrameProps = {onLoad, onChargeSuccess, onChargeFailure, checkoutId, chargeId, onPaymentDetected, disableCaching};
     const buttonProps = getButtonProps(this.props);

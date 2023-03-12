@@ -36,6 +36,7 @@ export default class IFrame extends React.Component<Props, State> {
   hostName: string;
 
   constructor(props: Props) {
+    console.log('IFrame constructor 1');
     super(props);
 
     this.origin = 'https://commerce.coinbase.com';
