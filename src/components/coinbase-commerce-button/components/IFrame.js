@@ -40,6 +40,7 @@ export default class IFrame extends React.Component<Props, State> {
 
     this.origin = 'https://commerce.coinbase.com';
     this.uuid = generateUUID();
+    console.log('IFrame constructor', this.uuid);
 
     this.state = {
       loading: true,
@@ -51,6 +52,7 @@ export default class IFrame extends React.Component<Props, State> {
     // Add event listeners for the iframe
     window.addEventListener('message', this.handleMessage);
     const hostName = `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}/`;
+    console.log('IFrame componentDidMount', hostName);
     this.setState({ src: this.buildSrc(hostName) });
   }
 
@@ -126,6 +128,7 @@ export default class IFrame extends React.Component<Props, State> {
     }
 
     const {onChargeSuccess, onChargeFailure, onModalClose, onError, onPaymentDetected} = this.props;
+    console.log('IFrame handleMessage', msg);
 
     switch (msg.data.event) {
       case 'charge_confirmed':
@@ -150,6 +153,7 @@ export default class IFrame extends React.Component<Props, State> {
   };
 
   handleIFrameLoaded = () => {
+    console.log('IFrame handleIFrameLoaded');
     this.setState({loading: false});
     this.props.onLoad && this.props.onLoad();
   };

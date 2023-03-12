@@ -65,7 +65,6 @@ class CoinbaseCommerceButton extends React.Component<Props, State>{
    * log it as an error to the console and close the modal.
    */
   handleError = (msg: MessageData) => {
-    console.error('I am the err!!', msg);
     this.setState({showModal: false});
   };
 
