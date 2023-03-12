@@ -337,6 +337,8 @@ function Publish() {
         </div>
     )
 
+    console.log('postSubmitted', postSubmitted);
+
     const _main = () => {
         return (
             <div className='publishInputContainer'>
@@ -380,9 +382,9 @@ function Publish() {
                         <CoinbaseCommerceButton
                             styled={true}
                             checkoutId={'c236387b-5a7f-4a33-a5e3-c784b379c3cb'}
-                            // onLoad={(arg) => {
-                            //     console.log('onLoad:', arg);
-                            // }}
+                            onLoad={(arg) => {
+                                console.log('onLoad:', arg);
+                            }}
                             // onChargeSuccess={(arg) => {
                             //     console.log('onChargeSuccess:', arg);
                             // }}
