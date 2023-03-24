@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SideBar from './components/sideBar';
 import TopBar from './components/topBar';
-import { getConfigAPI } from './actions/searchAPI';
+import { getConfigAPI, loginSuccessAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
@@ -34,12 +34,12 @@ function App() {
     });
   }, []);
 
-  // useEffect(() => { for google passport
-  //   loginSuccessAPI().then(result => {
-  //     console.log('login success reply', result);
-  //     setUser(result?.data?.user);
-  //   });
-  // }, []);
+  useEffect(() => {// for google passport
+    loginSuccessAPI().then(result => {
+      console.log('login success reply', result);
+      setUser(result?.data?.user);
+    });
+  }, []);
 
   const signOut = () => {
     setUser(null);

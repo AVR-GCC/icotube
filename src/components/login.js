@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, Divider } from '@mui/material';
+import googleLogo from '../assets/google-logo-png-open-2000.png';
 import {
   loginAPI,
   signupAPI,
@@ -84,10 +85,18 @@ const AuthModal = ({
     }
   };
 
-  // const loginWithGoogle = () => {
-  //   removeErrors();
-  //   window.open(`${baseURL}/auth/google`, '_self');
-  // };
+  const loginWithGoogle = () => {
+    removeErrors();
+    window.open(`${baseURL}/auth/google`, '_self');
+  };
+
+  const onGoogleSuccess = (...args) => {
+    console.log('onGoogleSuccess', args);
+  }
+
+  const onGoogleFailure = (...args) => {
+    console.log('onGoogleFailure', args);
+  }
 
   const loginWithEmail = async () => {
     removeErrors();
@@ -110,7 +119,8 @@ const AuthModal = ({
   const submit = signUp ? signUpWithEmail : loginWithEmail;
 
   const height = 360
-    + (signUp ? 80 : 0);
+    + (signUp ? 80 : 0)
+    + 80; // google login
 
   const _title = () => (
     <div className='title'>
@@ -182,22 +192,19 @@ const AuthModal = ({
     </React.Fragment>
   );
 
-  // const _divider = () => <div style={{ width: '100%', margin: 10 }}><Divider>or</Divider></div>;
+  const _divider = () => <div style={{ width: '100%', margin: 10 }}><Divider>or</Divider></div>;
 
-  // const _googleLogin = () => (
-  //   <div
-  //     className='googleLogin'
-  //     style={{ marginTop: '100px' }}
-  //     onClick={loginWithGoogle}
-  //     // buttonText={signUp ? "Signup with Google" : "Login with Google"}
-  //     // onSuccess={onGoogleSuccess}
-  //     // onFailure={onFailure}
-  //     // cookiePolicy={'single_host_origin'}
-  //     // isSignedIn={true}
-  //   >
-  //     {signUp ? "Signup with Google" : "Login with Google"}
-  //   </div>
-  // );
+  const _googleLogin = () => (
+    <div
+      className='googleLogin'
+      onClick={loginWithGoogle}
+      cookiePolicy={'single_host_origin'}
+      // isSignedIn={true}
+    >
+      <img className='googleIcon' alt="google-logo" src={googleLogo} />
+      {signUp ? "Signup with Google" : "Login with Google"}
+    </div>
+  );
 
   const _signInLogin = () => (
     <div className='moveToSignup'>
@@ -226,8 +233,8 @@ const AuthModal = ({
         {_title()}
         {_inputs()}
         {_loginButton()}
-        {/* {_divider()} */}
-        {/* {_googleLogin()} */}
+        {_divider()}
+        {_googleLogin()}
         {_signInLogin()}
       </div>
     </Modal>
