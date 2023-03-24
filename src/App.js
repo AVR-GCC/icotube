@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useRef } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SideBar from './components/sideBar';
 import TopBar from './components/topBar';
 import { getConfigAPI } from './actions/searchAPI';
@@ -49,6 +49,9 @@ function App() {
     setTogglenModal(!toggleModal);
   }
 
+  const homeComponent = <Home openLogin={openLogin} isMobile={isMobile.current} />;
+  const publishComponent = user ? <Publish /> : <Navigate to={'/'} />;
+
   return (
     <AppContext.Provider value={{ user, config }}>
       <div className="App">
@@ -76,11 +79,11 @@ function App() {
                   openLogin={openLogin}
               />
               <Routes>
-                <Route path="/" element={<Home openLogin={openLogin} isMobile={isMobile.current} />} />
-                <Route path="/:category" element={<Home openLogin={openLogin} isMobile={isMobile.current} />} />
-                <Route path="/:category/:postId" element={<Home openLogin={openLogin} isMobile={isMobile.current} />} />
-                <Route path="/publish" element={<Publish />} />
-                <Route path="/publish/:postId" element={<Publish />} />
+                <Route path="/" element={homeComponent} />
+                <Route path="/:category" element={homeComponent} />
+                <Route path="/:category/:postId" element={homeComponent} />
+                <Route path="/publish" element={publishComponent} />
+                <Route path="/publish/:postId" element={publishComponent} />
                 <Route path="/alert" element={<Alert />} />
               </Routes>
             </div>
