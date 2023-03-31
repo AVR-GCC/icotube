@@ -34,9 +34,8 @@ function App() {
     });
   }, []);
 
-  useEffect(() => {// for google passport
+  useEffect(() => { // check cookie to see if user connected
     loginSuccessAPI().then(result => {
-      console.log('login success reply', result);
       setUser(result?.data?.user);
     });
   }, []);

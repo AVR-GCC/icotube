@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { getToken } from '../utils'
 
 const verbose = false;
 export const baseURL = process.env.NODE_ENV === 'production' ? 'https://icotube-server.herokuapp.com' : 'http://localhost:5000';
@@ -23,8 +22,7 @@ const APIcall = async ({
     url,
     method,
     body,
-    withCredentials = true,
-    token = getToken()
+    withCredentials = true
 }) => {
     print('----- API Call -----');
     print('url:', url);
@@ -32,10 +30,6 @@ const APIcall = async ({
     print('body:', body);
     let res = null;
     const headers = { "Content-Type": "application/json" };
-    if (withCredentials) {
-        print('withCredentials');
-        headers.Authorization = token;
-    }
     const fullUrl = `${baseURL}/${url}`;
     const options = {
         withCredentials,

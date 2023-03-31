@@ -7,12 +7,10 @@ import {
   loginAPI,
   signupAPI,
   // testAuthAPI,
-  getMeAPI
+  // getMeAPI
 } from '../actions/searchAPI';
 import { baseURL } from '../actions/server';
 import Modal from './modal';
-// refresh token
-import { getToken, setToken } from '../utils';
 import { AppContext } from '../App';
 
 const AuthModal = ({
@@ -54,8 +52,6 @@ const AuthModal = ({
       if (res.data.error) {
         setLoginError(res.data.error.message);
       } else {
-        console.log('loginUser token', res.data.token);
-        setToken(res.data.token);
         onSignIn({ ...res.data.user, isGoogle });
         closeModal();
       }
@@ -198,7 +194,7 @@ const AuthModal = ({
     <div
       className='googleLogin'
       onClick={loginWithGoogle}
-      cookiePolicy={'single_host_origin'}
+      // cookiePolicy={'single_host_origin'}
       // isSignedIn={true}
     >
       <img className='googleIcon' alt="google-logo" src={googleLogo} />
@@ -265,27 +261,11 @@ const Login = ({
   }, [toggleModal]);
 
   useEffect(() => {
-    const token = getToken();
-    const getMe = async () => {
-      const result = await getMeAPI(token);
-      if (result?.data?.success) {
-        onSignIn({ ...result.data.user });
-      } else {
-        setToken(null);
-      }
-    }
-    if (!currentUser && token) {
-      getMe();
-    }
-  }, [currentUser, onSignIn]);
-
-  useEffect(() => {
     mounted.current = true;
     return () => mounted.current = false;
   }, []);
 
   const logout = () => {
-    setToken(null);
     window.open(`${baseURL}/auth/logout`, '_self');
   };
 

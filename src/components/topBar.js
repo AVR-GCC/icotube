@@ -19,9 +19,6 @@ function TopBar(props) {
         navigate('/');
     }
 
-    // const navigateToPublish = () => {
-    //     navigate('/publish');
-    // }
     const page = window?.location?.pathname?.slice(1) || 'upcoming';
     const logoStyle = isMobile ? { transform: 'scale(0.5)', transformOrigin: 0, width: 70 } : {};
     const titleStyle = isMobile ? { fontSize: 14 } : {};
@@ -30,9 +27,7 @@ function TopBar(props) {
         <div className={'topBar'}>
             <div
                 className={'logo'}
-                onClick={() => {
-                    navigateToMain();
-                }}
+                onClick={navigateToMain}
                 style={logoStyle}
             >
                 <img style={{ height: 30, width: 70 }} src={logoPNG} alt="logo" />
