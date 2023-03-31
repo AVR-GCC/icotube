@@ -6,6 +6,7 @@ import googleLogo from '../assets/google-logo-png-open-2000.png';
 import {
   loginAPI,
   signupAPI,
+  logoutAPI,
   // testAuthAPI,
   // getMeAPI
 } from '../actions/searchAPI';
@@ -265,8 +266,9 @@ const Login = ({
     return () => mounted.current = false;
   }, []);
 
-  const logout = () => {
-    window.open(`${baseURL}/auth/logout`, '_self');
+  const logout = async () => {
+    await logoutAPI();
+    onSignOut();
   };
 
   const onFailure = (res) => {
