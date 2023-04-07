@@ -25,10 +25,6 @@ function App() {
   const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
 
   useEffect(() => {
-    console.log('user', user);
-  }, [user])
-
-  useEffect(() => {
     retryUntilSuccess(async () => {
       const res = await getConfigAPI();
       if (res.data) {
