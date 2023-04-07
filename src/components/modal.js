@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import '../styles/modal.css';
 
 const Modal = ({
@@ -6,6 +7,16 @@ const Modal = ({
     height = 500,
     width = 500
 }) => {
+    const [renders, setRenders] = useState(0);
+
+    useEffect(() => {
+        const forceUpdate = () => {
+            setRenders(renders + 1);
+        };
+        window.addEventListener('resize', forceUpdate);
+        return () => window.removeEventListener('resize', forceUpdate);
+    }, [renders]);
+
     const padding = 60;
     const top = window.innerHeight / 2 - height / 2 - padding / 2;
     const left = window.innerWidth / 2 - width / 2 - padding / 2;
