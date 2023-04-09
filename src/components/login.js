@@ -87,14 +87,6 @@ const AuthModal = ({
     window.open(`${baseURL}/auth/google`, '_self');
   };
 
-  const onGoogleSuccess = (...args) => {
-    console.log('onGoogleSuccess', args);
-  }
-
-  const onGoogleFailure = (...args) => {
-    console.log('onGoogleFailure', args);
-  }
-
   const loginWithEmail = async () => {
     removeErrors();
     if (email && password) {
