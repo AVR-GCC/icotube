@@ -84,7 +84,7 @@ const AuthModal = ({
 
   const loginWithGoogle = () => {
     removeErrors();
-    window.open(`${baseURL}/auth/google`, '_blank', 'width=500, height=600');
+    window.open(`${baseURL}/auth/google`, '_self');
   };
 
   const onGoogleSuccess = (...args) => {
