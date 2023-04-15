@@ -9,7 +9,6 @@
   width: 60px;
   height: 40px;
   font-size: 14px;
-  font-family: Avenir Next, sans-serif;
   font-weight: 500;
   user-select: none;
   -webkit-user-drag: none;
@@ -70,7 +69,6 @@
 
 .error {
   color: #d32f2f;
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 1.66;
@@ -106,7 +104,6 @@
 }
 
 .errorText {
-  font-family: "Roboto","Helvetica","Arial",sans-serif;
   font-weight: 400;
   font-size: 0.75rem;
   line-height: 1.66;
