@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const verbose = false;
-export const baseURL = process.env.NODE_ENV === 'production' ? process.env.SERVER_URL : 'http://localhost:5000';
+export const baseURL = process.env.NODE_ENV === 'production' ? 'https://server.icotube.co' : 'http://localhost:5000';
 
 const functions = {
     GET: axios.get,
@@ -24,7 +24,6 @@ const APIcall = async ({
     body,
     withCredentials = true
 }) => {
-    console.log('baseURL', baseURL);
     print('----- API Call -----');
     print('url:', url);
     print('method:', method);
