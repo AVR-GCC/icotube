@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const verbose = true;
+const verbose = false;
 export const baseURL = process.env.NODE_ENV === 'production' ? process.env.SERVER_URL : 'http://localhost:5000';
 
 const functions = {
@@ -24,6 +24,7 @@ const APIcall = async ({
     body,
     withCredentials = true
 }) => {
+    console.log('baseURL', baseURL);
     print('----- API Call -----');
     print('url:', url);
     print('method:', method);
