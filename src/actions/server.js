@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const verbose = false;
-export const baseURL = process.env.SERVER_URL;
+export const baseURL = process.env.NODE_ENV === 'production' ? process.env.SERVER_URL : 'http://localhost:5000';
 
 const functions = {
     GET: axios.get,
