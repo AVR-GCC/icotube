@@ -3,6 +3,7 @@ import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { Button, Divider } from '@mui/material';
 import googleLogo from '../assets/google-logo-png-open-2000.png';
+import linkedinLogo from '../assets/linkedin-logo-png-open-2000.png';
 import {
   loginAPI,
   signupAPI,
@@ -87,6 +88,11 @@ const AuthModal = ({
     window.open(`${baseURL}/auth/google`, '_self');
   };
 
+  const loginWithLinkedIn = () => {
+    removeErrors();
+    window.open(`${baseURL}/auth/linkedin`, '_self');
+  };
+
   const loginWithEmail = async () => {
     removeErrors();
     if (email && password) {
@@ -109,7 +115,8 @@ const AuthModal = ({
 
   const height = 360
     + (signUp ? 80 : 0)
-    + 80; // google login
+    + 80 // google login
+    + 80; // linkedin login
 
   const _title = () => (
     <div className='title'>
@@ -195,6 +202,18 @@ const AuthModal = ({
     </div>
   );
 
+  const _linkedInLogin = () => (
+    <div
+      className='googleLogin'
+      onClick={loginWithLinkedIn}
+      // cookiePolicy={'single_host_origin'}
+      // isSignedIn={true}
+    >
+      <img className='googleIcon' alt="linkedin-logo" src={linkedinLogo} />
+      {signUp ? "Signup with LinkedIn" : "Login with LinkedIn"}
+    </div>
+  );
+
   const _signInLogin = () => (
     <div className='moveToSignup'>
       {signUp ? "Already have an account?" : "Don't have an account?"}
@@ -224,6 +243,7 @@ const AuthModal = ({
         {_loginButton()}
         {_divider()}
         {_googleLogin()}
+        {_linkedInLogin()}
         {_signInLogin()}
       </div>
     </Modal>
