@@ -8,6 +8,7 @@ import {
   loginAPI,
   signupAPI,
   logoutAPI,
+  resendConfirmationAPI,
   // testAuthAPI,
   // getMeAPI
 } from '../actions/searchAPI';
@@ -22,6 +23,7 @@ const AuthModal = ({
   // window.addEventListener("message", ({ data }) => {
   //   console.log('message data', data);
   // });
+  const [showResend, setResendConfirmation] = useState(false);
   const [signUp, setSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -47,14 +49,21 @@ const AuthModal = ({
     if (passwordError) setPasswordError('');
     if (confirmPasswordError) setConfirmPasswordError('');
     if (loginError) setLoginError('');
+    if (showResend) setResendConfirmation(false);
   };
 
-  const loginUser = (res, isGoogle) => {
+  const confirmationEmailSent = () => {
+    alert('Confirmation email sent');
+    closeModal();
+  }
+
+  const loginUser = (res) => {
     if (res.data) {
       if (res.data.error) {
         setLoginError(res.data.error.message);
+        setResendConfirmation(res.data.showResend);
       } else {
-        onSignIn({ ...res.data.user, isGoogle });
+        onSignIn({ ...res.data.user });
         closeModal();
       }
     } else {
@@ -66,7 +75,9 @@ const AuthModal = ({
     removeErrors();
     if (email && password && confirmPassword && confirmPassword === password) {
       const res = await signupAPI(email, password);
-      loginUser(res);
+      if (res.data?.success) {
+        confirmationEmailSent()
+      }
       return;
     }
     if (!email) {
@@ -185,6 +196,19 @@ const AuthModal = ({
       {loginError ? (
         <div className='errorText'>{loginError}</div>
       ) : null}
+      {showResend ? (
+        <div
+          className='linkText'
+          onClick={async () => {
+            const res = await resendConfirmationAPI(email);
+            if (res?.success) {
+              confirmationEmailSent();
+            }
+          }}
+        >
+          resend
+        </div>
+      ) : null}
     </React.Fragment>
   );
 
@@ -194,8 +218,6 @@ const AuthModal = ({
     <div
       className='googleLogin'
       onClick={loginWithGoogle}
-      // cookiePolicy={'single_host_origin'}
-      // isSignedIn={true}
     >
       <img className='googleIcon' alt="google-logo" src={googleLogo} />
       {signUp ? "Signup with Google" : "Login with Google"}
@@ -206,8 +228,6 @@ const AuthModal = ({
     <div
       className='googleLogin'
       onClick={loginWithLinkedIn}
-      // cookiePolicy={'single_host_origin'}
-      // isSignedIn={true}
     >
       <img className='googleIcon' alt="linkedin-logo" src={linkedinLogo} />
       {signUp ? "Signup with LinkedIn" : "Login with LinkedIn"}
@@ -233,7 +253,7 @@ const AuthModal = ({
 
   return (
     <Modal
-      clickOutside={() => closeModal()}
+      clickOutside={closeModal}
       height={height}
       width={300}
     >

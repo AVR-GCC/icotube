@@ -12,6 +12,12 @@ export const deletePostAPI = async (postId) => {
     return response;
 };
 
+export const resendConfirmationAPI = async (email) => {
+    const response = await APIcall({ method: 'GET', url: `auth/resend-confirmation?email=${email}` });
+    if (response.data?.success) return { success: true };
+    return response;
+}
+
 export const getPostAPI = async (postId) => {
     return await APIcall({ method: 'GET', url: `posts/${postId}` });
 };
