@@ -1,6 +1,10 @@
+export const wait = (timeout) => new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+});
+
 export const defined = (thing) => {
     return thing !== undefined && thing !== null;
-}
+};
 
 export const retryUntilSuccess = (func, intervalTime = 10000) => {
     return new Promise((resolve) => {

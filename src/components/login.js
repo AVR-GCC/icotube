@@ -32,6 +32,7 @@ const AuthModal = ({
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [loginError, setLoginError] = useState('');
+  const { setNotification } = useContext(AppContext);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -53,7 +54,7 @@ const AuthModal = ({
   };
 
   const confirmationEmailSent = () => {
-    alert('Confirmation email sent');
+    setNotification({ text: 'Confirmation email was sent', type: 'positive' });
     closeModal();
   }
 
@@ -62,6 +63,7 @@ const AuthModal = ({
       if (res.data.error) {
         setLoginError(res.data.error.message);
         setResendConfirmation(res.data.showResend);
+        setNotification({ text: res.data.error.message, type: 'negative' });
       } else {
         onSignIn({ ...res.data.user });
         closeModal();
@@ -76,7 +78,9 @@ const AuthModal = ({
     if (email && password && confirmPassword && confirmPassword === password) {
       const res = await signupAPI(email, password);
       if (res.data?.success) {
-        confirmationEmailSent()
+        confirmationEmailSent();
+      } else if (res.data?.error?.message) {
+        setNotification({ text: res.data?.error?.message, type: 'negative' });
       }
       return;
     }

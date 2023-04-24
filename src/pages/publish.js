@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import  '../styles/publish.css';
 import { useNavigate } from 'react-router-dom';
 import CoinbaseCommerceButton from '../components/coinbase-commerce-button';
 import { useParams } from 'react-router-dom';
+import { AppContext } from '../App';
 // import 'react-coinbase-commerce/dist/coinbase-commerce-button.css';
 import { submitPostAPI, getPostAPI } from '../actions/searchAPI';
 import { fields } from '../constants/postFields';
@@ -34,17 +35,13 @@ import { identity, isEmpty } from 'lodash';
 function Publish() {
     // const [loading, setLoading] = useState(false);
     const [postSubmitted, setPostSubmitted] = useState(false);
-    const [notificationText, setNotificationText] = useState('');
     const [post, setPost] = useState({});
     const [postType, setPostType] = useState('ICO');
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-    const [routeError, setRouteError] = useState(false);
+    const { setNotification } = useContext(AppContext);
 
-    const [notificationTextTopPx, setNotificationTextTopPx] = useState(55);
-    const [notificationTextleftPercent, setNotificationTextleftPercent] = useState(0);
     const mounted = useRef(false);
-    const notificationTextRef = useRef(null);
     const publishMainContainerRef = useRef(null);
     const inputRefs = useRef({});
     const navigate = useNavigate();
@@ -74,18 +71,6 @@ function Publish() {
     }, [postId]);
 
     useEffect(() => {
-        const pmcWidth = publishMainContainerRef?.current?.clientWidth;
-        const ntWidth = notificationTextRef?.current?.clientWidth;
-        const sizeRatio = ntWidth / (pmcWidth ? pmcWidth : 1);
-        const srCompliment = 1 - sizeRatio;
-        const leftPercentRaw = 100 * srCompliment / 2;
-        const leftPercent = leftPercentRaw * (pmcWidth / (pmcWidth + 241 * 2));
-        if (leftPercent !== notificationTextleftPercent) {
-            setNotificationTextleftPercent(leftPercent);
-        }
-    }, [notificationText]);
-
-    useEffect(() => {
         mounted.current = true;
         return () => mounted.current = false;
     }, []);
@@ -111,24 +96,21 @@ function Publish() {
         }
         if (shouldSubmit) {
             setLoading(true);
-            setRouteError(false);
-            setNotificationText('Submitting post...');
+            setNotification({ text: 'Submitting post...', type: 'info' });
             const res = await submitPostAPI({ ...post });
             setLoading(false);
             const autoPublish = res?.data?.autoPublish;
             if (autoPublish) {
-                setNotificationText(`Post: ${post.title} - published!`);
+                setNotification({ text: `Post: ${post.title} - published!`, type: 'positive' });
                 navigateToPost(res?.data?.post?._id);
             } else if (res?.data?.success) {
-                setNotificationText(`Post: ${post.title} - submitted. to activate please make a payment using the button bellow`);
+                setNotification({ text: `Post: ${post.title} - submitted. to activate please make a payment using the button bellow`, type: 'positive' });
                 setPostSubmitted(true);
             } else if (!res?.data?.success) {
-                setRouteError(true);
-                setNotificationText(`Error: ${res?.data?.error?.message}`);
+                setNotification({ text: `Error: ${res?.data?.error?.message}`, type: 'negative' });
             }
         } else {
-            setRouteError(true);
-            setNotificationText(`Error: one or more of the requirments are missing`);
+            setNotification({ text: 'Error: one or more of the requirments are missing', type: 'negative' });
             setErrors(errorsObj);
         }
     };
@@ -391,7 +373,7 @@ function Publish() {
                             // }}
                             // customMetadata={'custom-metadata-1248'}
                             onPaymentDetected={(arg) => {
-                                setNotificationText(`Payment made! The post will appear when the payment is confirmed`);
+                                setNotification({ text: 'Payment made! The post will appear when the payment is confirmed', type: 'positive' });
                                 setTimeout(navigateToPost, 3000);
                             }}
                             disabled={!postSubmitted}
@@ -421,41 +403,19 @@ function Publish() {
             </div>
         </div>
     )
-;
-    let noteColor = 'green';
-    if (routeError) noteColor = 'red';
-    if (loading) noteColor = '#afaf33';
 
     return (
         <div
             className='publishMainContainer'
             ref={publishMainContainerRef}
-            onScroll={(event) => {
-                const st = event.target.scrollTop;
-                if (st > 20) {
-                    if (notificationTextTopPx > 5) {
-                        setNotificationTextTopPx(5);
-                    }
-                } else {
-                    setNotificationTextTopPx(25 - st);
-                }
-            }}
         >
             <div className='typeToggle'>
                 {_typeToggle()}
             </div>
             <div
                 className='notificationText'
-                style={{
-                    maxWidth: (publishMainContainerRef?.current?.clientWidth || 0) / 2,
-                    top: notificationTextTopPx,
-                    left: `calc(240px + ${notificationTextleftPercent}%)`,
-                    color: noteColor
-                }}
-                ref={notificationTextRef}
             >
                 {loading && <div className='loadingIndicator'><CircularProgress size={20} /></div>}
-                {notificationText}
             </div>
             {_publisherNotes()}
             {_main()}

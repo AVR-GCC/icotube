@@ -8,6 +8,8 @@ import Home from './pages/home';
 import Publish from './pages/publish';
 import Alert from './pages/alert';
 import { retryUntilSuccess } from './utils';
+import { noop } from 'lodash';
+import Notifications from './components/notifications';
 export const AppContext = createContext();
 
 function App() {
@@ -23,6 +25,7 @@ function App() {
   const [config, setConfig] = useState(null);
   const [toggleModal, setTogglenModal] = useState(false);
   const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
+  const setNotification = useRef(noop);
 
   useEffect(() => {
     retryUntilSuccess(async () => {
@@ -52,7 +55,7 @@ function App() {
   const publishComponent = user ? <Publish /> : <Navigate to={'/'} />;
 
   return (
-    <AppContext.Provider value={{ user, config }}>
+    <AppContext.Provider value={{ user, config, setNotification: setNotification.current }}>
       <div className="App">
         <link
           rel="stylesheet"
@@ -64,6 +67,11 @@ function App() {
         />
         <div>
           <BrowserRouter>
+            <Notifications
+              getUpdate={(func) => {
+                setNotification.current = func;
+              }}
+            />
             <TopBar
               isMobile={isMobile.current}
               currentUser={user}
