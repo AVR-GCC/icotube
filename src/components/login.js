@@ -403,7 +403,7 @@ const Login = ({
     console.log(`${currentUser ? 'Login' : 'Logout'} failed: res::`, res);
   };
 
-  const _logoutButtons = () => (
+  const _userButtons = () => (
     <div>
       {currentUser?.imageUrl ? (
         <img
@@ -439,7 +439,7 @@ const Login = ({
       >
         Test Auth
       </div> */}
-      {currentUser ? _logoutButtons() : _loginButton()}
+      {currentUser ? _userButtons() : _loginButton()}
     </div>
   );
 }
