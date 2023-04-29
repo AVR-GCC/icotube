@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/login.css';
 import { LogoutRounded, Person } from '@mui/icons-material';
 import { Button, Divider } from '@mui/material';
@@ -364,6 +365,9 @@ const Login = ({
   onSignOut
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const appContext = useContext(AppContext);
   const currentUser = appContext?.user;
 
@@ -374,6 +378,16 @@ const Login = ({
       setModalOpen(!modalOpen);
     }
   }, [toggleModal]);
+
+  useEffect(() => {
+    const login = new URLSearchParams(location.search).get('login');
+    if (!mounted.current && !!login) {
+      navigate(".", { replace: true, search: "" });
+      if (!currentUser) {
+        setModalOpen(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     mounted.current = true;
