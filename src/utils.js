@@ -20,4 +20,4 @@ export const retryUntilSuccess = (func, intervalTime = 10000) => {
     });
 };
 
-export const validateEmail = str => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(str);
+export const validateEmail = str => /^\w+([\.+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(str);

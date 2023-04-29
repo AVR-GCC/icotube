@@ -48,3 +48,10 @@
     width: 20px;
     margin-right: 10px;
 }
+
+.forgotPasswordText {
+    color: rgb(255, 255, 255);
+    margin: 10px;
+    font-weight: 100;
+    cursor: default;
+}

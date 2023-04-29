@@ -9,12 +9,14 @@ import {
   signupAPI,
   logoutAPI,
   resendConfirmationAPI,
+  resetPasswordAPI,
   // testAuthAPI,
   // getMeAPI
 } from '../actions/searchAPI';
 import { baseURL } from '../actions/server';
 import Modal from './modal';
 import { AppContext } from '../App';
+import { validateEmail } from '../utils';
 
 const AuthModal = ({
   onSignIn,
@@ -25,6 +27,7 @@ const AuthModal = ({
   // });
   const [showResend, setResendConfirmation] = useState(false);
   const [signUp, setSignUp] = useState(false);
+  const [forgotPassword, setForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
@@ -63,7 +66,7 @@ const AuthModal = ({
       if (res.data.error) {
         setLoginError(res.data.error.message);
         setResendConfirmation(res.data.showResend);
-        setNotification({ text: res.data.error.message, type: 'negative' });
+        setNotification({ text: res.data?.error?.message || 'Incorrect email or password', type: 'negative' });
       } else {
         onSignIn({ ...res.data.user });
         closeModal();
@@ -75,7 +78,7 @@ const AuthModal = ({
 
   const signUpWithEmail = async () => {
     removeErrors();
-    if (email && password && confirmPassword && confirmPassword === password) {
+    if (email && validateEmail(email) && password && confirmPassword && confirmPassword === password) {
       const res = await signupAPI(email, password);
       if (res.data?.success) {
         confirmationEmailSent();
@@ -84,8 +87,8 @@ const AuthModal = ({
       }
       return;
     }
-    if (!email) {
-      setEmailError('Please enter your email');
+    if (!email || !validateEmail(email)) {
+      setEmailError('Please enter a valid email');
     }
     if (!password) {
       setPasswordError('Please enter your password');
@@ -131,11 +134,18 @@ const AuthModal = ({
   const height = 360
     + (signUp ? 80 : 0)
     + 80 // google login
-    + 80; // linkedin login
+    + 80 // linkedin login
+    + 20; // forgot password
 
   const _title = () => (
     <div className='title'>
       {signUp ? "Signup to ICO tube" : "Login to ICO tube"}
+    </div>
+  );
+
+  const _forgotPasswordTitle = () => (
+    <div className='title'>
+      Forget your password?
     </div>
   );
 
@@ -148,7 +158,7 @@ const AuthModal = ({
         id="email-input"
         className='myInput'
         placeholder='Email *'
-        value={email}
+        value={forgotPassword ? '' : email}
         onChange={(event) => {
             setEmail(event.target.value);
         }}
@@ -238,6 +248,22 @@ const AuthModal = ({
     </div>
   );
 
+  const _forgotPassword = () => (
+    <div className='forgotPassword'>
+      <div
+        className='linkText'
+        style={{ marginLeft: 15 }}
+        onClick={() => {
+          setForgotPassword(!forgotPassword);
+          setSignUp(false);
+          removeErrors();
+        }}
+      >
+        Forget password?
+      </div>
+    </div>
+  );
+
   const _signInLogin = () => (
     <div className='moveToSignup'>
       {signUp ? "Already have an account?" : "Don't have an account?"}
@@ -255,21 +281,73 @@ const AuthModal = ({
     </div>
   );
 
-  return (
+  const _renderForgotPasswordModal = () => (
     <Modal
-      clickOutside={closeModal}
-      height={height}
+      clickOutside={() => {
+        setForgotPassword(false);
+        removeErrors();
+      }}
+      height={250}
       width={300}
     >
+      {_forgotPasswordTitle()}
+      <div className='forgotPasswordText'>
+        Input the email address you signed up with, click submit, and a new password will be sent to your email address
+      </div>
+      <input
+        style={!emailError ? { marginBottom: 33 } : {}}
+        type="text"
+        key="email-input"
+        id="email-input"
+        className='myInput'
+        placeholder='Email *'
+        value={email}
+        onChange={(event) => {
+            setEmail(event.target.value);
+        }}
+      />
+      {!!emailError && <div className='errorText'>{emailError}</div>}
+      <Button
+        id="submit-button"
+        variant="outlined"
+        style={{ width: '100%' }}
+        onClick={() => {
+          if (email && validateEmail(email)) {
+            resetPasswordAPI(email);
+          } else {
+            setEmailError('Invalid email address');
+          }
+        }}
+      >
+        <span style={{ fontSize: 14 }}>Submit</span>
+      </Button>
+    </Modal>
+  );
+
+  const _renderModal = () => (
       <div className='loginModal'>
         {_title()}
         {_inputs()}
+        {_forgotPassword()}
         {_loginButton()}
         {_divider()}
         {_googleLogin()}
         {_linkedInLogin()}
         {_signInLogin()}
       </div>
+  );
+
+  return (
+    <Modal
+      clickOutside={() => {
+        if (forgotPassword) setForgotPassword(false);
+        else closeModal();
+      }}
+      height={height}
+      width={300}
+    >
+      {forgotPassword && _renderForgotPasswordModal()}
+      {_renderModal()}
     </Modal>
   );
 }

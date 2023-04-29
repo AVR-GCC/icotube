@@ -1,5 +1,16 @@
 import APIcall from './server';
 
+export const resetPasswordAPI = async (email) => {
+    const body = { email };
+    const response = await APIcall({
+        method: 'PUT',
+        url: 'auth/reset-password',
+        body,
+        withCredentials: true
+    });
+    return response;
+};
+
 export const likePostAPI = async (postId) => {
     const response = await APIcall({ method: 'PUT', url: `posts/${postId}/like` });
     if (response.data?.success) return response?.data?.data;
@@ -13,7 +24,7 @@ export const deletePostAPI = async (postId) => {
 };
 
 export const resendConfirmationAPI = async (email) => {
-    const response = await APIcall({ method: 'GET', url: `auth/resend-confirmation?email=${email}` });
+    const response = await APIcall({ method: 'PUT', body: { email }, url: `auth/resend-confirmation` });
     if (response.data?.success) return { success: true };
     return response;
 }
