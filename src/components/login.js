@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../styles/login.css';
-import { LogoutRounded, Person } from '@mui/icons-material';
+import { LogoutRounded, Person, AccountBox } from '@mui/icons-material';
 import { Button, Divider } from '@mui/material';
 import googleLogo from '../assets/google-logo-png-open-2000.png';
 import linkedinLogo from '../assets/linkedin-logo-png-open-2000.png';
@@ -369,7 +369,10 @@ const Login = ({
   const location = useLocation();
 
   const appContext = useContext(AppContext);
-  const currentUser = appContext?.user;
+  const {
+    user,
+    openMenu
+  } = appContext;
 
   const mounted = useRef(false);
 
@@ -383,7 +386,7 @@ const Login = ({
     const login = new URLSearchParams(location.search).get('login');
     if (!mounted.current && !!login) {
       navigate(".", { replace: true, search: "" });
-      if (!currentUser) {
+      if (!user) {
         setModalOpen(true);
       }
     }
@@ -400,24 +403,43 @@ const Login = ({
   };
 
   const onFailure = (res) => {
-    console.log(`${currentUser ? 'Login' : 'Logout'} failed: res::`, res);
+    console.log(`${user ? 'Login' : 'Logout'} failed: res::`, res);
   };
+
+  const handleMenu = (e) => {
+    openMenu(e, [
+      {
+        key: 1,
+        icon: <LogoutRounded style={{ margin: 5 }} />,
+        text: 'Logout',
+        onClick: logout
+      },
+      {
+        key: 2,
+        icon: <AccountBox style={{ margin: 5 }} />,
+        text: 'Change Avatar',
+        onClick: () => {
+          console.log('Change Avatar');
+        }
+      }
+    ]);
+  }
 
   const _userButtons = () => (
     <div>
-      {currentUser?.imageUrl ? (
+      {user?.imageUrl ? (
         <img
+          onClick={handleMenu}
           className='avatar'
-          src={currentUser?.imageUrl}
+          src={user?.imageUrl}
           alt='user'
         />
       ) : (
-        <Person className='logoutButton' />
+        <Person
+          onClick={handleMenu}
+          className='logoutButton'
+        />
       )}
-      <LogoutRounded
-        onClick={logout}
-        className='logoutButton'
-      />
     </div>
   );
 
@@ -439,7 +461,7 @@ const Login = ({
       >
         Test Auth
       </div> */}
-      {currentUser ? _userButtons() : _loginButton()}
+      {user ? _userButtons() : _loginButton()}
     </div>
   );
 }

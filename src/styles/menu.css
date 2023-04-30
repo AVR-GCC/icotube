@@ -1,0 +1,22 @@
+.menuContainer {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: rgb(33, 33, 33);
+  padding: 5px;
+  border: solid 1px rgb(255, 255, 255, 0.1);
+  border-radius: 5px;
+  z-index: 10;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #fff;
+  padding: 5px;
+}
+
+.menuItem:hover {
+  background: #333333;
+}

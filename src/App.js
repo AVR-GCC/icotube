@@ -10,6 +10,7 @@ import Alert from './pages/alert';
 import { retryUntilSuccess } from './utils';
 import { noop } from 'lodash';
 import Notifications from './components/notifications';
+import Menu from './components/menu';
 export const AppContext = createContext();
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
   const [toggleModal, setTogglenModal] = useState(false);
   const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
   const setNotification = useRef(noop);
+  const setMenu = useRef(noop);
 
   useEffect(() => {
     retryUntilSuccess(async () => {
@@ -51,11 +53,18 @@ function App() {
     setTogglenModal(!toggleModal);
   }
 
+  const openMenu = (e, items) => {
+    if (setMenu.current) {
+      const { top, left, width, height } = e.target.getBoundingClientRect();
+      setMenu.current({ top: top + height, left: left + width, items });
+    }
+  }
+
   const homeComponent = <Home openLogin={openLogin} isMobile={isMobile.current} />;
   const publishComponent = user ? <Publish /> : <Navigate to={'/'} />;
 
   return (
-    <AppContext.Provider value={{ user, config, setNotification: setNotification.current }}>
+    <AppContext.Provider value={{ user, config, setNotification: setNotification.current, openMenu }}>
       <div className="App">
         <link
           rel="stylesheet"
@@ -67,6 +76,11 @@ function App() {
         />
         <div>
           <BrowserRouter>
+            <Menu
+              getSetter={(func) => {
+                setMenu.current = func;
+              }}
+            />
             <Notifications
               getUpdate={(func) => {
                 setNotification.current = func;

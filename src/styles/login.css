@@ -55,3 +55,8 @@
     font-weight: 100;
     cursor: default;
 }
+
+.avatar {
+    margin-right: 15px;
+    cursor: pointer;
+}
