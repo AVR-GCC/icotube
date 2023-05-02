@@ -11,6 +11,7 @@ import {
   logoutAPI,
   resendConfirmationAPI,
   resetPasswordAPI,
+  changeAvatarAPI
   // testAuthAPI,
   // getMeAPI
 } from '../actions/searchAPI';
@@ -18,6 +19,36 @@ import { baseURL } from '../actions/server';
 import Modal from './modal';
 import { AppContext } from '../App';
 import { validateEmail } from '../utils';
+import ImageUpload from './imageUpload';
+
+const AvatarModal = ({ closeModal, user, callback }) => {
+  const [value, setValue] = useState(user.imageUrl);
+  return (
+    <Modal
+      clickOutside={closeModal}
+      height={300}
+      width={450}
+    >
+      <div className='title' style={{ marginTop: 0 }}>New Avatar</div>
+      <ImageUpload
+        height={200}
+        width={200}
+        onChange={setValue}
+        value={value}
+      />
+      <Button
+        variant="outlined"
+        style={{ marginTop: 20, width: '100%' }}
+        onClick={async () => {
+          const res = await changeAvatarAPI(value);
+          callback(value, res);
+        }}
+      >
+        Confirm
+      </Button>
+    </Modal>
+  );
+};
 
 const AuthModal = ({
   onSignIn,
@@ -365,13 +396,15 @@ const Login = ({
   onSignOut
 }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [avatarModalOpen, setAvatarModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const appContext = useContext(AppContext);
   const {
     user,
-    openMenu
+    openMenu,
+    setNotification
   } = appContext;
 
   const mounted = useRef(false);
@@ -419,7 +452,7 @@ const Login = ({
         icon: <AccountBox style={{ margin: 5 }} />,
         text: 'Change Avatar',
         onClick: () => {
-          console.log('Change Avatar');
+          setAvatarModalOpen(true)
         }
       }
     ]);
@@ -449,6 +482,20 @@ const Login = ({
 
   return (
     <div>
+      {avatarModalOpen ? (
+        <AvatarModal
+          user={user}
+          closeModal={() => setAvatarModalOpen(false)}
+          callback={(imageUrl, res) => {
+            if (res.success) {
+              onSignIn({ ...user, imageUrl });
+              setAvatarModalOpen(false);
+            } else {
+              setNotification({ text: res?.data?.error, type: 'negative' });
+            }
+          }}
+        />
+      ) : null}
       {modalOpen ? (
         <AuthModal
           onSignIn={onSignIn}

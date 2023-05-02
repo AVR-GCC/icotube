@@ -11,6 +11,12 @@ export const resetPasswordAPI = async (email) => {
     return response;
 };
 
+export const changeAvatarAPI = async (avatarUrl) => {
+    const response = await APIcall({ method: 'PUT', url: 'auth/change-avatar', body: { avatarUrl } });
+    if (response.data?.success) return { success: true };
+    return response;
+};
+
 export const likePostAPI = async (postId) => {
     const response = await APIcall({ method: 'PUT', url: `posts/${postId}/like` });
     if (response.data?.success) return response?.data?.data;
