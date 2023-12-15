@@ -9,7 +9,8 @@ const pageNames = {
     running: 'Running ICOs',
     ended: 'Ended ICOs',
     alert: 'Register for Alerts',
-    publish: 'Publish Crypto Project'
+    publish: 'Publish Crypto Project',
+    airdrop: 'Publish an Airdrop'
 }
 
 function TopBar(props) {

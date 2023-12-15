@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
-import { Upcoming, History, NewReleases, AlarmAdd } from '@mui/icons-material';
+import { Upcoming, History, NewReleases, AlarmAdd, LocalAirport } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import '../styles/sideBar.css';
 
@@ -71,6 +71,19 @@ function SideBar({
         </React.Fragment>
     );
 
+    const _airdropPage = () => (
+        <div
+            className={isMobile ? 'bottomSection' : 'section'}
+            style={getStyle('airdrop')}
+            onClick={() => {
+                navigate('/airdrop');
+            }}
+        >
+            <div className="icon"><LocalAirport /></div>
+            Airdrop
+        </div>
+    );
+
     const _alertPage = () => (
         <div
             className={isMobile ? 'bottomSection' : 'section'}
@@ -109,6 +122,7 @@ function SideBar({
             {_icoCategories()}
             {!isMobile && _divider()}
             {_alertPage()}
+            {_airdropPage()}
             {!isMobile && _publishButton()}
         </div>
     );
