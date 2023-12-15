@@ -29,14 +29,12 @@ const Airdrop = ({ setSigner = noop }) => {
                 const signer = await provider.getSigner();
                 setSigner(signer);
                 console.log('signer', signer);
-                const address = await signer.getAddress();
-                const bal = await provider.getBalance(address)
+                const bal = await provider.getBalance(signer.address)
                 console.log('bal', bal);
                 setNotification({ text: `Connected to MetaMask: ${signer.address}`, type: 'positive' });
                 setConnection({
                     connected: true,
                     provider,
-                    address,
                     signer
                 });
             } catch (e) {
@@ -60,7 +58,7 @@ const Airdrop = ({ setSigner = noop }) => {
         <div className="mainContainer">
             {connection.connected ? (
                 <div className='infoText'>
-                    Connected with address {connection.address}
+                    Connected with address {connection.signer.address}
                 </div>
             ) : (
                 <div className='pageContainer'>
