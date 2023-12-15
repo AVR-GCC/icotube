@@ -7,6 +7,7 @@ import './styles/app.css';
 import Home from './pages/home';
 import Publish from './pages/publish';
 import Alert from './pages/alert';
+import Airdrop from './pages/airdrop';
 import { retryUntilSuccess } from './utils';
 import { noop } from 'lodash';
 import Notifications from './components/notifications';
@@ -62,6 +63,7 @@ function App() {
 
   const homeComponent = <Home openLogin={openLogin} isMobile={isMobile.current} />;
   const publishComponent = user ? <Publish /> : <Navigate to={'/'} />;
+  const airdropComponent = user ? <Airdrop  /> : <Navigate to={'/'} />;
 
   return (
     <AppContext.Provider value={{ user, config, setNotification: setNotification.current, openMenu }}>
@@ -106,6 +108,7 @@ function App() {
                 <Route path="/publish" element={publishComponent} />
                 <Route path="/publish/:postId" element={publishComponent} />
                 <Route path="/alert" element={<Alert />} />
+                <Route path="/airdrop" element={airdropComponent} />
               </Routes>
             </div>
           </BrowserRouter>
