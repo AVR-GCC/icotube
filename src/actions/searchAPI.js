@@ -149,3 +149,11 @@ export const removeAlertAPI = async (email) => {
         url: `alert/${email}`
     });
 };
+
+export const getTokenContractAPI = async (name, symbol) => {
+    return await APIcall({
+        body: { name, symbol },
+        method: 'POST',
+        url: 'contracts/token'
+    });
+};
