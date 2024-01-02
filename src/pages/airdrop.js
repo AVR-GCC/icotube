@@ -171,7 +171,7 @@ const Airdrop = ({ setSigner = noop }) => {
                         </div>
                     ) : (
                         <div className='infoText' style={{ flexDirection: 'row' }}>
-                            Please install <a className='linkText' href="https://metamask.io/download/" target="_blank">MetaMask</a>
+                            Please install <a rel='noreferrer' className='linkText' href="https://metamask.io/download/" target="_blank">MetaMask</a>
                         </div>
                     )}
                     {loading && <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>}
