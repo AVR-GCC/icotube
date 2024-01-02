@@ -132,6 +132,19 @@ const Airdrop = ({ setSigner = noop }) => {
                         } else {
                             setNotification({ text: 'Compiled successfully', type: 'positive' });
                         }
+                        const { signer } = connection;
+                        const relevantContract = res.data.output.contracts[`${values.tokenName}.sol`][values.tokenName]; 
+                        const abi = relevantContract.abi;
+                        const bytecode = relevantContract.evm.bytecode.object;
+
+                        const factory = new ethers.ContractFactory(abi, bytecode, signer)
+                        try {
+                            const contract = await factory.deploy();
+                            setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
+                        } catch (e) {
+                            console.log(e);
+                            setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                        }
                     } else {
                         setNotification({ text: res.data.error, type: 'negative' });
                     }
