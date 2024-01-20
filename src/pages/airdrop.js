@@ -10,7 +10,7 @@ import {
     ToggleButtonGroup,
     CircularProgress
 } from '@mui/material';
-import { getTokenContractAPI } from '../actions/searchAPI';
+import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
 
 const Airdrop = ({ setSigner = noop }) => {
@@ -84,7 +84,7 @@ const Airdrop = ({ setSigner = noop }) => {
                 onChange={handleChangeType}
             >
                 <ToggleButton value="Token">Token</ToggleButton>
-                {/* <ToggleButton value="Airdrop">Airdrop</ToggleButton> */}
+                <ToggleButton value="Airdrop">Airdrop</ToggleButton>
             </ToggleButtonGroup>
         </div>
     );
@@ -156,6 +156,79 @@ const Airdrop = ({ setSigner = noop }) => {
         </div>
     );
 
+    const _airdropSection = () => (
+        <div>
+            <TextField
+                autoComplete='off'
+                error={!!errors.airdropName}
+                key="airdropName_input"
+                id="airdropName_input"
+                label="Airdrop Name"
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                value={values.airdropName}
+                InputLabelProps={{ shrink: !!values.airdropName }}
+                onChange={getHandleChangeValue('airdropName')}
+                helperText={errors.airdropName}
+            />
+            <TextField
+                autoComplete='off'
+                error={!!errors.tokenAddress}
+                key="tokenAddress_input"
+                id="tokenAddress_input"
+                label="Token Address"
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                value={values.tokenAddress}
+                InputLabelProps={{ shrink: !!values.tokenAddress }}
+                onChange={getHandleChangeValue('tokenAddress')}
+                helperText={errors.tokenAddress}
+            />
+            <Button
+                variant='outlined'
+                style={{ marginTop: 20 }}
+                onClick={async () => {
+                    const res = await getAirdropContractAPI(values.tokenAddress);
+                    if (res.data.success) {
+                        if (res.data.warning) {
+                            setNotification({ text: res.data.warning, type: 'info' });
+                        } else {
+                            setNotification({ text: 'Compiled successfully', type: 'positive' });
+                        }
+                        const { signer } = connection;
+                        const relevantContract = res.data.output.contracts['Airdrop.sol']['Airdrop']; 
+                        const abi = relevantContract.abi;
+                        const bytecode = relevantContract.evm.bytecode.object;
+
+                        const factory = new ethers.ContractFactory(abi, bytecode, signer)
+                        try {
+                            const contract = await factory.deploy();
+                            storeAirdropContract(contract.target, values.airdropName, values.tokenAddress);
+                            setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
+                        } catch (e) {
+                            console.log(e);
+                            setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                        }
+                    } else {
+                        setNotification({ text: res.data.error, type: 'negative' });
+                    }
+                }}
+                disabled={!connection.connected || loading || !values.tokenAddress || !values.airdropName}
+            >
+                <span style={{ fontSize: 14 }}>Submit</span>
+            </Button>
+        </div>
+    );
+
+    const _inputsSection= () => {
+        if (postType === 'Airdrop') return _airdropSection();
+        return _tokenSection()
+    }
+
     return (
         <div className="mainContainer">
             {connection.connected ? (
@@ -164,7 +237,7 @@ const Airdrop = ({ setSigner = noop }) => {
                         Connected with address {connection.signer.address}
                     </div>
                     {_typeToggle()}
-                    {_tokenSection()}
+                    {_inputsSection()}
                 </div>
             ) : (
                 <div className='pageContainer'>
