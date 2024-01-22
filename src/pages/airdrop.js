@@ -250,6 +250,16 @@ const Airdrop = ({ setSigner = noop }) => {
                 <div className='airdropTitle'>
                     {airdrop.name}
                 </div>
+                <div className='addressesPortion'>
+                    <div className='addressesPortionPart'>
+                        <div className='addressLabel'>Airdrop Address:</div>
+                        <div className='address'>{airdrop.address}</div>
+                    </div>
+                    <div className='addressesPortionPart'>
+                        <div className='addressLabel'>Token Address:</div>
+                        <div className='address'>{airdrop.tokenAddress}</div>
+                    </div>
+                </div>
                 {_recipientInfo()}
             </div>
             <div className='label'>Recipients:</div>

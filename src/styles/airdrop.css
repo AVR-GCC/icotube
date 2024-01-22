@@ -88,3 +88,17 @@
     color: rgb(53, 100, 161);
 }
 
+.addressesPortion {
+    font-size: 10px;
+    color: rgb(255, 255, 255, 0.5);
+}
+
+.addressesPortionPart {
+    display: flex;
+    margin: 2px;
+}
+
+.addressLabel {
+    cursor: default;
+}
+
