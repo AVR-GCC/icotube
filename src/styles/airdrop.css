@@ -36,6 +36,7 @@
     justify-content: center;
     margin: 8px;
     margin-bottom: 15px;
+    cursor: default;
 }
 /* width */
 .airdropContainer .MuiTextField-root::-webkit-scrollbar {
@@ -69,6 +70,7 @@
     color: rgb(255, 255, 255, 0.5);
     margin-left: 8px;
     width: 100%;
+    cursor: default;
 }
 
 .topRow {
