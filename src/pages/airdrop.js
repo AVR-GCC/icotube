@@ -229,54 +229,58 @@ const Airdrop = ({ setSigner = noop }) => {
         </div>
     );
 
+    const _recipientInfo = () => (
+        <div>
+            <div data-tooltip-id='info-tip' className='infoIcon'><InfoOutlined /></div>
+            <Tooltip
+                id="info-tip"
+                place="right"
+                variant="info"
+                content={<div>Input a list of the recipients of the airdrop,<br />
+                each line should have one address and the amount<br />
+                that address is to receive separated by a comma.<br />
+                </div>}
+            />
+        </div>
+    );
+
+    const _airdropBlock = (airdrop) => (
+        <div key={airdrop.address} className='airdropContainer'>
+            <div className='topRow'>
+                <div className='airdropTitle'>
+                    {airdrop.name}
+                </div>
+                {_recipientInfo()}
+            </div>
+            <div className='label'>Recipients:</div>
+            <TextField
+                autoComplete='off'
+                error={!!errors[`${airdrop.name}Recipients`]}
+                key={`${airdrop.name}_input`}
+                id={`${airdrop.name}_input`}
+                label={values[`${airdrop.name}Recipients`] ? '' :
+                    <div>0x1234123412341234123123412341234123412341,100<br />
+                    0x5678567856785678567856785678567856785678,200<br />
+                    0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />.....</div>}
+                multiline
+                variant='outlined'
+                margin='normal'
+                type='text'
+                onWheel={event => event.target.blur()}
+                fullWidth
+                value={values[`${airdrop.name}Recipients`]}
+                InputLabelProps={{ shrink: false }}
+                onChange={getHandleChangeValue(`${airdrop.name}Recipients`)}
+                helperText={errors[`${airdrop.name}Recipients`]}
+                sx={{ overflowY: 'auto', height: '150px' }}
+            />
+        </div>
+    );
+
     const _airdropSection = () => (
         <div>
             <div className='existingAirdropsContainer'>
-                {airdrops.map(airdrop => (
-                    <div key={airdrop.address} className='airdropContainer'>
-                        <div className='topRow'>
-                            <div className='airdropTitle'>
-                                {airdrop.name}
-                            </div>
-                            <div data-tooltip-id='info-tip' className='infoIcon'><InfoOutlined /></div>
-                            <Tooltip
-                                id="info-tip"
-                                place="right"
-                                variant="info"
-                                content={<div>Input a list of the recipients of the airdrop,<br />
-                                each line should have one address and the amount<br />
-                                that address is to receive separated by a comma.<br /><br />
-                                For example:<br />
-                                0x1234123412341234123123412341234123412341,100<br />
-                                0x5678567856785678567856785678567856785678,200<br />
-                                0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />
-                                </div>}
-                            />
-                        </div>
-                        <div className='label'>Recipients:</div>
-                        <TextField
-                            autoComplete='off'
-                            error={!!errors[`${airdrop.name}Recipients`]}
-                            key={`${airdrop.name}_input`}
-                            id={`${airdrop.name}_input`}
-                            label={values[`${airdrop.name}Recipients`] ? '' :
-                                <div>0x1234123412341234123123412341234123412341,100<br />
-                                0x5678567856785678567856785678567856785678,200<br />
-                                0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />.....</div>}
-                            multiline
-                            variant='outlined'
-                            margin='normal'
-                            type='text'
-                            onWheel={event => event.target.blur()}
-                            fullWidth
-                            value={values[`${airdrop.name}Recipients`]}
-                            InputLabelProps={{ shrink: false }}
-                            onChange={getHandleChangeValue(`${airdrop.name}Recipients`)}
-                            helperText={errors[`${airdrop.name}Recipients`]}
-                            sx={{ overflowY: 'auto', height: '150px' }}
-                        />
-                    </div>
-                ))}
+                {airdrops.map(_airdropBlock)}
             </div>
             {_newAirdropSection()}
         </div>
