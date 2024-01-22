@@ -244,24 +244,27 @@ const Airdrop = ({ setSigner = noop }) => {
         </div>
     );
 
-    const _airdropBlock = (airdrop) => (
-        <div key={airdrop.address} className='airdropContainer'>
-            <div className='topRow'>
-                <div className='airdropTitle'>
-                    {airdrop.name}
-                </div>
-                <div className='addressesPortion'>
-                    <div className='addressesPortionPart'>
-                        <div className='addressLabel'>Airdrop Address:</div>
-                        <div className='address'>{airdrop.address}</div>
-                    </div>
-                    <div className='addressesPortionPart'>
-                        <div className='addressLabel'>Token Address:</div>
-                        <div className='address'>{airdrop.tokenAddress}</div>
-                    </div>
-                </div>
-                {_recipientInfo()}
+    const _airdropBlockTopRow = (airdrop) => (
+        <div className='topRow'>
+            <div className='airdropTitle'>
+                {airdrop.name}
             </div>
+            <div className='addressesPortion'>
+                <div className='addressesPortionPart'>
+                    <div className='addressLabel'>Airdrop Address:</div>
+                    <div className='address'>{airdrop.address}</div>
+                </div>
+                <div className='addressesPortionPart'>
+                    <div className='addressLabel'>Token Address:</div>
+                    <div className='address'>{airdrop.tokenAddress}</div>
+                </div>
+            </div>
+            {_recipientInfo()}
+        </div>
+    );
+
+    const _airdropBlockInputSection = (airdrop) => (
+        <>
             <div className='label'>Recipients:</div>
             <TextField
                 autoComplete='off'
@@ -284,6 +287,13 @@ const Airdrop = ({ setSigner = noop }) => {
                 helperText={errors[`${airdrop.name}Recipients`]}
                 sx={{ overflowY: 'auto', height: '150px' }}
             />
+        </>
+    );
+
+    const _airdropBlock = (airdrop) => (
+        <div key={airdrop.address} className='airdropContainer'>
+            {_airdropBlockTopRow(airdrop)}
+            {_airdropBlockInputSection(airdrop)}
         </div>
     );
 
