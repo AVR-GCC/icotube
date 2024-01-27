@@ -40,20 +40,9 @@ const Airdrop = ({ setSigner = noop }) => {
         if (window.ethereum) {
             setLoading(true);
             try {
-                // Connect to the MetaMask EIP-1193 object. This is a standard
-                // protocol that allows Ethers access to make all read-only
-                // requests through MetaMask.
                 const provider = new ethers.BrowserProvider(window.ethereum)
-
-                // It also provides an opportunity to request access to write
-                // operations, which will be performed by the private key
-                // that MetaMask manages for the user.
-                console.log('provider', provider);
                 const signer = await provider.getSigner();
                 setSigner(signer);
-                console.log('signer', signer);
-                const bal = await provider.getBalance(signer.address)
-                console.log('bal', bal);
                 setNotification({ text: `Connected to MetaMask: ${signer.address}`, type: 'positive' });
                 setConnection({
                     connected: true,
