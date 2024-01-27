@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import  '../styles/airdrop.css';
 import  '../styles/publish.css';
-import { noop, slice } from 'lodash';
+import { noop } from 'lodash';
 import { ethers } from 'ethers';
 import { Tooltip } from 'react-tooltip';
 import {
