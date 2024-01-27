@@ -64,8 +64,7 @@ const Airdrop = ({ setSigner = noop }) => {
                 }
             });
         }
-    }, []);
-
+    });
 
     const parseRecipientsString = (recipientsString) => {
         const addresses = [];
