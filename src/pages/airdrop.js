@@ -22,7 +22,7 @@ const Airdrop = ({ setSigner = noop }) => {
     const [postType, setPostType] = useState('Token');
     const [errors, setErrors] = useState({});
     const [values, setValues] = useState({});
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState({});
     const { setNotification, user } = useContext(AppContext);
     const airdrops = user && user.contracts && user.contracts.filter(contract => contract.type === 'standard');
     console.log('user', user);
@@ -38,7 +38,7 @@ const Airdrop = ({ setSigner = noop }) => {
 
     const handleConnect = async () => {
         if (window.ethereum) {
-            setLoading(true);
+            setLoading({ ...loading, main: true });
             try {
                 const provider = new ethers.BrowserProvider(window.ethereum)
                 const signer = await provider.getSigner();
@@ -52,7 +52,7 @@ const Airdrop = ({ setSigner = noop }) => {
             } catch (e) {
                 setNotification({ text: `Error Connecting to MetaMask: ${e.reason}`, type: 'negative' });
             }
-            setLoading(false);
+            setLoading({ ...loading, main: false });
         }
     };
 
@@ -175,7 +175,7 @@ const Airdrop = ({ setSigner = noop }) => {
                         setNotification({ text: res.data.error, type: 'negative' });
                     }
                 }}
-                disabled={!connection.connected || loading || !values.tokenName || !values.tokenSymbol}
+                disabled={!connection.connected || loading.main || !values.tokenName || !values.tokenSymbol}
             >
                 <span style={{ fontSize: 14 }}>Submit</span>
             </Button>
@@ -327,7 +327,7 @@ const Airdrop = ({ setSigner = noop }) => {
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }
                 }}
-                disabled={!connection.connected || loading || !values[`${airdrop.name}Recipients`]}
+                disabled={!connection.connected || loading.main || !values[`${airdrop.name}Recipients`]}
             >
                 <span style={{ fontSize: 14 }}>Submit</span>
             </Button>
@@ -387,7 +387,7 @@ const Airdrop = ({ setSigner = noop }) => {
                             Please install <a rel='noreferrer' className='linkText' href="https://metamask.io/download/" target="_blank">MetaMask</a>
                         </div>
                     )}
-                    {loading && <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>}
+                    {loading.main && <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>}
                 </div>
             )}
         </div>
