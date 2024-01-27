@@ -21,3 +21,14 @@ export const retryUntilSuccess = (func, intervalTime = 10000) => {
 };
 
 export const validateEmail = str => /^\w+([\.+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(str);
+
+export const roundToTwoSubstantialDigits = (num) => {
+    if (num === 0) return 0;
+    let digits = 1;
+    let curNum = num;
+    while (Math.abs(curNum) < 1) {
+        curNum *= 10;
+        digits /= 10;
+    }
+    return Math.round(curNum * 10) / 10 * digits;
+}

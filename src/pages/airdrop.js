@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import  '../styles/airdrop.css';
 import  '../styles/publish.css';
-import { noop } from 'lodash';
-import { ethers, utils } from 'ethers';
+import { noop, slice } from 'lodash';
+import { ethers } from 'ethers';
 import { Tooltip } from 'react-tooltip';
 import {
     Button,
@@ -15,6 +15,7 @@ import { InfoOutlined } from '@mui/icons-material';
 import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
 import { airdropABI } from '../constants/abis';
+import { roundToTwoSubstantialDigits } from '../utils';
 
 const Airdrop = ({ setSigner = noop }) => {
     const [connection, setConnection] = useState({ connected: false });
@@ -75,6 +76,37 @@ const Airdrop = ({ setSigner = noop }) => {
             });
         }
     }, []);
+
+
+    const parseRecipientsString = (recipientsString) => {
+        const addresses = [];
+        const amounts = [];
+        recipientsString.split('\n').forEach(recipient => {
+            const [address, amount] = recipient.split(',');
+            addresses.push(address);
+            amounts.push(amount);
+        });
+        return { addresses, amounts };
+    }
+
+    const evaluateAirdropFunctionCost = async (airdrop, func, args) => {
+        const { provider, signer } = connection;
+        const airdropContract = new ethers.Contract(airdrop.address, airdropABI, provider);
+        const tx = {
+            to: airdrop.address,
+            from: signer.address,
+            data: airdropContract.interface.encodeFunctionData(func, args)
+        };
+
+        const estimate = await provider.estimateGas(tx);
+        const estimatedCost = await provider.getFeeData();
+        const totalCostInWei = estimatedCost.maxFeePerGas * estimate;
+        const totalCostInEther = ethers.formatEther(totalCostInWei);
+        const rounded = roundToTwoSubstantialDigits(parseFloat(totalCostInEther));
+        const roundedString = rounded.toString();
+        const sliced = roundedString[5] === '0' ? roundedString.slice(0, 5) : roundedString.slice(0, 6);
+        return sliced;
+    }
 
     const handleChangeType = (_, arg2) => {
         if (arg2) setPostType(arg2);
@@ -297,32 +329,10 @@ const Airdrop = ({ setSigner = noop }) => {
                 variant='outlined'
                 style={{ marginTop: 20 }}
                 onClick={async () => {
-                    const { signer, provider } = connection;
-                    const airdropContract = new ethers.Contract(airdrop.address, airdropABI, provider);
-                    const addresses = [];
-                    const amounts = [];
-                    values[`${airdrop.name}Recipients`].split('\n').forEach(recipient => {
-                        const [address, amount] = recipient.split(',');
-                        addresses.push(address);
-                        amounts.push(amount);
-                    });
+                    const { addresses, amounts } = parseRecipientsString(values[`${airdrop.name}Recipients`]);
                     console.log('recipients', addresses, amounts);
                     try {
-                        const tx = {
-                            to: airdrop.address,
-                            from: signer.address,
-                            data: airdropContract.interface.encodeFunctionData('dropTokens', [addresses, amounts])
-                        };
-
-                        const estimate = await provider.estimateGas(tx);
-                        console.log(`Estimated Gas: ${estimate.toString()}`);
-                        const gasPrice = await provider.getGasPrice();
-                        const estimatedCost = estimate.mul(gasPrice);
-                        console.log(`Estimated Cost in Wei: ${estimatedCost.toString()}`);
-                        console.log(`Estimated Cost in Ether: ${ethers.formatEther(estimatedCost)}`);
-                        // const tx = await airdropContract.dropEther(recipients);
-                        // console.log('tx', tx);
-                        // setNotification({ text: `Airdrop successful! Tx Hash: ${tx.hash}`, type: 'positive' });
+                        console.log(await evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]));
                     } catch (e) {
                         console.log(e);
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
