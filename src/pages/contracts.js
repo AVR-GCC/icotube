@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import  '../styles/airdrop.css';
+import  '../styles/contracts.css';
 import  '../styles/publish.css';
 import { noop } from 'lodash';
 import { ethers } from 'ethers';
@@ -17,7 +17,7 @@ import { AppContext } from '../App';
 import { airdropABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
 
-const Airdrop = ({ setSigner = noop }) => {
+const Contracts = ({ setSigner = noop }) => {
     const [connection, setConnection] = useState({ connected: false });
     const [postType, setPostType] = useState('Token');
     const [errors, setErrors] = useState({});
@@ -393,4 +393,4 @@ const Airdrop = ({ setSigner = noop }) => {
     );
 }
 
-export default Airdrop;
+export default Contracts;
