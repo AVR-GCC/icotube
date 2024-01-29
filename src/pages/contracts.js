@@ -3,7 +3,6 @@ import  '../styles/contracts.css';
 import  '../styles/publish.css';
 import { noop } from 'lodash';
 import { ethers } from 'ethers';
-import { Tooltip } from 'react-tooltip';
 import {
     Button,
     TextField,
@@ -11,11 +10,9 @@ import {
     ToggleButtonGroup,
     CircularProgress
 } from '@mui/material';
-import { InfoOutlined } from '@mui/icons-material';
 import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
-import { airdropABI } from '../constants/abis';
-import { roundToTwoSubstantialDigits } from '../utils';
+import Airdrop from '../components/airdrop';
 
 const Contracts = ({ setSigner = noop }) => {
     const [connection, setConnection] = useState({ connected: false });
@@ -25,7 +22,7 @@ const Contracts = ({ setSigner = noop }) => {
     const [loading, setLoading] = useState(false);
     const { setNotification, user } = useContext(AppContext);
     const airdrops = user && user.contracts && user.contracts.filter(contract => contract.type === 'standard');
-    console.log('user', user);
+    // console.log('user', user);
 
     const getHandleChangeValue = valueName => (e) => {
         if (values[valueName] === '' && !!errors[valueName]) {
@@ -65,36 +62,6 @@ const Contracts = ({ setSigner = noop }) => {
             });
         }
     }, []);
-
-    const parseRecipientsString = (recipientsString) => {
-        const addresses = [];
-        const amounts = [];
-        recipientsString.split('\n').forEach(recipient => {
-            const [address, amount] = recipient.split(',');
-            addresses.push(address);
-            amounts.push(amount);
-        });
-        return { addresses, amounts };
-    }
-
-    const evaluateAirdropFunctionCost = async (airdrop, func, args) => {
-        const { provider, signer } = connection;
-        const airdropContract = new ethers.Contract(airdrop.address, airdropABI, provider);
-        const tx = {
-            to: airdrop.address,
-            from: signer.address,
-            data: airdropContract.interface.encodeFunctionData(func, args)
-        };
-
-        const estimate = await provider.estimateGas(tx);
-        const estimatedCost = await provider.getFeeData();
-        const totalCostInWei = estimatedCost.maxFeePerGas * estimate;
-        const totalCostInEther = ethers.formatEther(totalCostInWei);
-        const rounded = roundToTwoSubstantialDigits(parseFloat(totalCostInEther));
-        const roundedString = rounded.toString();
-        const sliced = roundedString[5] === '0' ? roundedString.slice(0, 5) : roundedString.slice(0, 6);
-        return sliced;
-    }
 
     const handleChangeType = (_, arg2) => {
         if (arg2) setPostType(arg2);
@@ -250,96 +217,7 @@ const Contracts = ({ setSigner = noop }) => {
         </div>
     );
 
-    const _recipientInfo = () => (
-        <div>
-            <div data-tooltip-id='info-tip' className='infoIcon'><InfoOutlined /></div>
-            <Tooltip
-                id="info-tip"
-                place="right"
-                variant="info"
-                content={<div>Input a list of the recipients of the airdrop,<br />
-                each line should have one address and the amount<br />
-                that address is to receive separated by a comma.<br />
-                </div>}
-            />
-        </div>
-    );
-
-    const _airdropBlockTopRow = (airdrop) => (
-        <div className='topRow'>
-            <div className='airdropTitle'>
-                {airdrop.name}
-            </div>
-            <div className='addressesPortion'>
-                <div className='addressesPortionPart'>
-                    <div className='addressLabel'>Airdrop Address:</div>
-                    <div className='address'>{airdrop.address}</div>
-                </div>
-                <div className='addressesPortionPart'>
-                    <div className='addressLabel'>Token Address:</div>
-                    <div className='address'>{airdrop.tokenAddress}</div>
-                </div>
-            </div>
-            {_recipientInfo()}
-        </div>
-    );
-
-    const _airdropBlockInputSection = (airdrop) => (
-        <>
-            <div className='label'>Recipients:</div>
-            <TextField
-                autoComplete='off'
-                error={!!errors[`${airdrop.name}Recipients`]}
-                key={`${airdrop.name}_input`}
-                id={`${airdrop.name}_input`}
-                label={values[`${airdrop.name}Recipients`] ? '' :
-                    <div>0x1234123412341234123123412341234123412341,100<br />
-                    0x5678567856785678567856785678567856785678,200<br />
-                    0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />.....</div>}
-                multiline
-                variant='outlined'
-                margin='normal'
-                type='text'
-                onWheel={event => event.target.blur()}
-                fullWidth
-                value={values[`${airdrop.name}Recipients`]}
-                InputLabelProps={{ shrink: false }}
-                onChange={getHandleChangeValue(`${airdrop.name}Recipients`)}
-                helperText={errors[`${airdrop.name}Recipients`]}
-                sx={{ overflowY: 'auto', height: '150px' }}
-            />
-        </>
-    );
-
-    const _airdropBlockButtonSection = (airdrop) => (
-        <div className='buttonSection'>
-            <Button
-                variant='outlined'
-                style={{ marginTop: 20 }}
-                onClick={async () => {
-                    const { addresses, amounts } = parseRecipientsString(values[`${airdrop.name}Recipients`]);
-                    console.log('recipients', addresses, amounts);
-                    try {
-                        console.log(await evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]));
-                    } catch (e) {
-                        console.log(e);
-                        setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
-                    }
-                }}
-                disabled={!connection.connected || loading || !values[`${airdrop.name}Recipients`]}
-            >
-                <span style={{ fontSize: 14 }}>Submit</span>
-            </Button>
-        </div>
-    );
-
-    const _airdropBlock = (airdrop) => (
-        <div key={airdrop.address} className='airdropContainer'>
-            {_airdropBlockTopRow(airdrop)}
-            {_airdropBlockInputSection(airdrop)}
-            {_airdropBlockButtonSection(airdrop)}
-        </div>
-    );
+    const _airdropBlock = (airdrop) => <Airdrop airdrop={airdrop} connection={connection} />;
 
     const _airdropSection = () => (
         <div>
