@@ -64,7 +64,7 @@ const Contracts = ({ setSigner = noop }) => {
                 }
             });
         }
-    });
+    }, []);
 
     const parseRecipientsString = (recipientsString) => {
         const addresses = [];
