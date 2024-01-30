@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import  '../styles/contracts.css';
 import  '../styles/publish.css';
-import { ethers } from 'ethers';
+import { ethers, getAddress, parseEther } from 'ethers';
 import { Tooltip } from 'react-tooltip';
 import {
     Button,
@@ -44,11 +44,31 @@ function Airdrop({ airdrop, connection }) {
                 return {
                     addresses: [],
                     amounts: [],
-                    error: 'Invalid recipients string'
+                    error: 'Invalid recipients string at line ' + (i + 1)
                 };
             }
-            addresses.push(address);
-            amounts.push(amount);
+
+            try {
+                const gottenAddress = getAddress(address);
+                addresses.push(gottenAddress);
+            } catch (e) {
+                return {
+                    addresses: [],
+                    amounts: [],
+                    error: 'Invalid address at line ' + (i + 1)
+                };
+            }
+
+            try {
+                const gottenAmount = parseEther(amount);
+                amounts.push(gottenAmount);
+            } catch (e) {
+                return {
+                    addresses: [],
+                    amounts: [],
+                    error: 'Invalid amount at line ' + (i + 1)
+                };
+            }
         }
         return { addresses, amounts };
     }
