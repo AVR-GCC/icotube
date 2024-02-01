@@ -22,14 +22,28 @@ function Airdrop({ airdrop, connection }) {
         valid: false
     });
 
-    const [errors, setErrors] = useState({});
+    const [sendTokensObj, setSendTokensObj] = useState({
+        str: '',
+        error: '',
+        valid: false,
+        number: 0
+    });
 
     const { setNotification } = useContext(AppContext);
+
+    const handleChangeTokenAmount = (event) => {
+        const { value } = event.target;
+        const number = parseFloat(value);
+        if (isNaN(number)) {
+            setSendTokensObj({ str: value, valid: false, error: value !== '' && 'Invalid amount', number });
+        } else {
+            setSendTokensObj({ str: value, valid: true, error: '', number });
+        }
+    }
 
     const handleChangeRecipientString = (event) => {
         const { value } = event.target;
         const { addresses, amounts, error } = parseRecipientsString(value);
-        setErrors({ ...errors, recipients: error });
         setRecipientsObj({ addresses, amounts, str: value, valid: !error, error });
     }
 
@@ -124,7 +138,29 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockButtonSection = () => (
+    const _airdropBlockSendTokensButtonSection = () => (
+        <div className='buttonSection'>
+            <Button
+                variant='outlined'
+                style={{ marginTop: 20 }}
+                onClick={async () => {
+                    const { number } = sendTokensObj;
+                    console.log('sendTokens', number);
+                    try {
+                        console.log(await evaluateAirdropFunctionCost(airdrop, 'sendTokens', [number]));
+                    } catch (e) {
+                        console.log(e);
+                        setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                    }
+                }}
+                disabled={!connection.connected || !sendTokensObj.valid}
+            >
+                <span style={{ fontSize: 14 }}>Submit</span>
+            </Button>
+        </div>
+    );
+
+    const _airdropBlockDoDropButtonSection = () => (
         <div className='buttonSection'>
             <Button
                 variant='outlined'
@@ -146,8 +182,33 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockInputSection = () => (
-        <>
+    const _airdropBlockSendTokensSection = () => (
+        <div className='sectionContainer'>
+            <div className='sectionTitle'>
+                <div className='label'>
+                    Send Tokens:
+                </div>
+            </div>
+            <TextField
+                autoComplete='off'
+                error={!!sendTokensObj.error}
+                key={`${airdrop.name}_amount_input`}
+                id={`${airdrop.name}_amount_input`}
+                label={sendTokensObj.str ? '' : 'Amount'}
+                variant='outlined'
+                margin='normal'
+                type='text'
+                fullWidth
+                InputLabelProps={{ shrink: false }}
+                onChange={handleChangeTokenAmount}
+                helperText={sendTokensObj.error}
+            />
+            {_airdropBlockSendTokensButtonSection(airdrop)}
+        </div>
+    );
+
+    const _airdropBlockDoDropSection = () => (
+        <div className='sectionContainer recipients'>
             <div className='sectionTitle'>
                 <div className='label'>
                     Recipients:
@@ -156,7 +217,7 @@ function Airdrop({ airdrop, connection }) {
             </div>
             <TextField
                 autoComplete='off'
-                error={!!errors.recipients}
+                error={!!recipientsObj.error}
                 key={`${airdrop.name}_input`}
                 id={`${airdrop.name}_input`}
                 label={recipientsObj.str ? '' :
@@ -172,17 +233,20 @@ function Airdrop({ airdrop, connection }) {
                 value={recipientsObj.str}
                 InputLabelProps={{ shrink: false }}
                 onChange={handleChangeRecipientString}
-                helperText={errors.recipients}
+                helperText={recipientsObj.error}
                 sx={{ overflowY: 'auto', height: '150px' }}
             />
-            {_airdropBlockButtonSection(airdrop)}
-        </>
+            {_airdropBlockDoDropButtonSection(airdrop)}
+        </div>
     );
 
     const _airdropBlock = () => (
         <div key={airdrop.address} className='airdropContainer'>
             {_airdropBlockTopRow(airdrop)}
-            {_airdropBlockInputSection(airdrop)}
+            <div className='sections'>
+                {_airdropBlockSendTokensSection(airdrop)}
+                {_airdropBlockDoDropSection(airdrop)}
+            </div>
         </div>
     );
 

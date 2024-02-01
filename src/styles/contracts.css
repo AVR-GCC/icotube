@@ -43,7 +43,7 @@
     width: 6px;
 }
 
-.airdropContainer .MuiInputBase-input {
+.airdropContainer .recipients .MuiInputBase-input {
     min-height: 115px;
 }
 
@@ -61,6 +61,16 @@
 /* Handle on hover */
 .airdropContainer .MuiTextField-root::-webkit-scrollbar-thumb:hover {
     background: #ffffff80;
+}
+
+.sections {
+    display: flex;
+    width: 100%;
+}
+
+.sectionContainer {
+    margin: 10px;
+    padding: 15px;
 }
 
 .sectionTitle {
