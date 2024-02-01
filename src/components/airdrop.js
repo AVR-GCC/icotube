@@ -124,6 +124,28 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
+    const _airdropBlockButtonSection = () => (
+        <div className='buttonSection'>
+            <Button
+                variant='outlined'
+                style={{ marginTop: 20 }}
+                onClick={async () => {
+                    const { addresses, amounts } = recipientsObj;
+                    console.log('recipients', addresses, amounts);
+                    try {
+                        console.log(await evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]));
+                    } catch (e) {
+                        console.log(e);
+                        setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                    }
+                }}
+                disabled={!connection.connected || !recipientsObj.valid}
+            >
+                <span style={{ fontSize: 14 }}>Submit</span>
+            </Button>
+        </div>
+    );
+
     const _airdropBlockInputSection = () => (
         <>
             <div className='sectionTitle'>
@@ -155,28 +177,6 @@ function Airdrop({ airdrop, connection }) {
             />
             {_airdropBlockButtonSection(airdrop)}
         </>
-    );
-
-    const _airdropBlockButtonSection = () => (
-        <div className='buttonSection'>
-            <Button
-                variant='outlined'
-                style={{ marginTop: 20 }}
-                onClick={async () => {
-                    const { addresses, amounts } = recipientsObj;
-                    console.log('recipients', addresses, amounts);
-                    try {
-                        console.log(await evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]));
-                    } catch (e) {
-                        console.log(e);
-                        setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
-                    }
-                }}
-                disabled={!connection.connected || !recipientsObj.valid}
-            >
-                <span style={{ fontSize: 14 }}>Submit</span>
-            </Button>
-        </div>
     );
 
     const _airdropBlock = () => (
