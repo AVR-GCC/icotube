@@ -217,7 +217,7 @@ const Contracts = ({ setSigner = noop }) => {
         </div>
     );
 
-    const _airdropBlock = (airdrop) => <Airdrop airdrop={airdrop} connection={connection} />;
+    const _airdropBlock = (airdrop) => <div key={airdrop.name}><Airdrop airdrop={airdrop} connection={connection} /></div>;
 
     const _airdropSection = () => (
         <div>
