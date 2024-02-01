@@ -63,6 +63,13 @@
     background: #ffffff80;
 }
 
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: -webkit-fill-available;
+}
+
 .label {
     float: left;
     font-size: 14px;
@@ -82,6 +89,7 @@
 }
 
 .infoIcon {
+    margin-top: 3px;
     color: rgb(170, 185, 209);
     cursor: pointer;
 }

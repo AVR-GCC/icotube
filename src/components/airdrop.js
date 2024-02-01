@@ -121,13 +121,17 @@ function Airdrop({ airdrop, connection }) {
                     <div className='address'>{airdrop.tokenAddress}</div>
                 </div>
             </div>
-            {_recipientInfo()}
         </div>
     );
 
     const _airdropBlockInputSection = () => (
         <>
-            <div className='label'>Recipients:</div>
+            <div className='sectionTitle'>
+                <div className='label'>
+                    Recipients:
+                </div>
+                {_recipientInfo()}
+            </div>
             <TextField
                 autoComplete='off'
                 error={!!errors.recipients}
@@ -149,6 +153,7 @@ function Airdrop({ airdrop, connection }) {
                 helperText={errors.recipients}
                 sx={{ overflowY: 'auto', height: '150px' }}
             />
+            {_airdropBlockButtonSection(airdrop)}
         </>
     );
 
@@ -178,7 +183,6 @@ function Airdrop({ airdrop, connection }) {
         <div key={airdrop.address} className='airdropContainer'>
             {_airdropBlockTopRow(airdrop)}
             {_airdropBlockInputSection(airdrop)}
-            {_airdropBlockButtonSection(airdrop)}
         </div>
     );
 
