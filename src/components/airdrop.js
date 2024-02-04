@@ -19,7 +19,8 @@ function Airdrop({ airdrop, connection }) {
         amounts: [],
         str: '',
         error: '',
-        valid: false
+        valid: false,
+        total: 0n
     });
 
     const [sendTokensObj, setSendTokensObj] = useState({
@@ -43,8 +44,8 @@ function Airdrop({ airdrop, connection }) {
 
     const handleChangeRecipientString = (event) => {
         const { value } = event.target;
-        const { addresses, amounts, error } = parseRecipientsString(value);
-        setRecipientsObj({ addresses, amounts, str: value, valid: !error, error });
+        const { addresses, amounts, error, total } = parseRecipientsString(value);
+        setRecipientsObj({ addresses, amounts, str: value, valid: !error, error, total });
     }
 
     const parseRecipientsString = (recipientsString) => {
@@ -84,7 +85,7 @@ function Airdrop({ airdrop, connection }) {
                 };
             }
         }
-        return { addresses, amounts };
+        return { addresses, amounts, total: amounts.reduce((a, b) => a + b, 0n), error: '' };
     }
 
     const evaluateAirdropFunctionCost = async (airdrop, func, args) => {
