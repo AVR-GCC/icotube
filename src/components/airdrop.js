@@ -236,6 +236,7 @@ function Airdrop({ airdrop, connection }) {
                 onChange={handleChangeRecipientString}
                 helperText={recipientsObj.error}
             />
+            {!recipientsObj.error && <div style={{ height: 23 }} />}
             {_airdropBlockDoDropButtonSection(airdrop)}
         </div>
     );
