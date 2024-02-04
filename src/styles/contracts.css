@@ -38,30 +38,19 @@
     margin-bottom: 15px;
     cursor: default;
 }
-/* width */
-.airdropContainer .MuiTextField-root::-webkit-scrollbar {
-    width: 6px;
-}
 
-.airdropContainer .recipients .MuiInputBase-input {
-    min-height: 115px;
-}
-
-/* Track */
-.airdropContainer .MuiTextField-root::-webkit-scrollbar-track {
+/* .airdropContainer .MuiInputBase-inputMultiline::-webkit-scrollbar-track {
     background: rgb(37, 37, 37);
 }
 
-/* Handle */
-.airdropContainer .MuiTextField-root::-webkit-scrollbar-thumb {
+.MuiInputBase-inputMultiline::-webkit-scrollbar-thumb {
     background: #424242;
     border-radius: 5px;
 }
 
-/* Handle on hover */
-.airdropContainer .MuiTextField-root::-webkit-scrollbar-thumb:hover {
+.MuiInputBase-inputMultiline::-webkit-scrollbar-thumb:hover {
     background: #ffffff80;
-}
+} */
 
 .sections {
     display: flex;

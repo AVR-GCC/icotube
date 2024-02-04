@@ -225,6 +225,7 @@ function Airdrop({ airdrop, connection }) {
                     0x5678567856785678567856785678567856785678,200<br />
                     0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />.....</div>}
                 multiline
+                rows={4}
                 variant='outlined'
                 margin='normal'
                 type='text'
@@ -234,7 +235,6 @@ function Airdrop({ airdrop, connection }) {
                 InputLabelProps={{ shrink: false }}
                 onChange={handleChangeRecipientString}
                 helperText={recipientsObj.error}
-                sx={{ overflowY: 'auto', height: '150px' }}
             />
             {_airdropBlockDoDropButtonSection(airdrop)}
         </div>
