@@ -10,7 +10,7 @@ import {
     CircularProgress,
     TextField
 } from '@mui/material';
-import { InfoOutlined } from '@mui/icons-material';
+import { InfoOutlined, UndoOutlined } from '@mui/icons-material';
 import { AppContext } from '../App';
 import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
@@ -30,17 +30,21 @@ function Airdrop({ airdrop, connection }) {
         str: '',
         error: '',
         valid: false,
-        number: 0,
-        x: 'tokens',
+        number: 0
+    });
+
+    const [balancesObject, setBalancesObject] = useState({
         loading: true,
         userBalances: {},
         airdropBalances: {}
     });
 
+    const [isEtherMode, setIsEtherMode] = useState(false);
+
     const { setNotification } = useContext(AppContext);
 
     const getBalances = async () => {
-        setTransferXObj({ ...transferXObj, loading: true });
+        setBalancesObject({ ...balancesObject, loading: true });
         const { provider, signer } = connection;
         const tokenContract = new ethers.Contract(airdrop.tokenAddress, tokenABI, provider);
         const userBalances = {
@@ -51,7 +55,7 @@ function Airdrop({ airdrop, connection }) {
             tokens: await tokenContract.balanceOf(airdrop.address),
             ethers: await provider.getBalance(airdrop.address)
         };
-        setTransferXObj({ ...transferXObj, userBalances, airdropBalances, loading: false });
+        setBalancesObject({ userBalances, airdropBalances, loading: false });
     }
 
     useEffect(() => {
@@ -171,11 +175,11 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockTransferXButtonSection = () => (
+    const _airdropBlockTransferXButtonSection = (left) => (
         <div className='buttonSection'>
             <Button
                 variant='outlined'
-                style={{ marginTop: 20 }}
+                style={{ height: 100, width: 40 }}
                 onClick={async () => {
                     const { number } = transferXObj;
                     console.log('sendTokens', number);
@@ -188,7 +192,7 @@ function Airdrop({ airdrop, connection }) {
                 }}
                 disabled={!connection.connected || !transferXObj.valid}
             >
-                <span style={{ fontSize: 14 }}>Submit</span>
+                <div style={{ transform: `rotate(${left ? 262 : 82}deg) scale(3, 2.2)`, [left ? 'marginLeft' : 'marginRight']: 15 }}><UndoOutlined /></div>
             </Button>
         </div>
     );
@@ -223,9 +227,9 @@ function Airdrop({ airdrop, connection }) {
                     <div className='toggleTypeContainerSmall' style={{ marginTop: 0 }}>
                         <ToggleButtonGroup
                             color="primary"
-                            value={transferXObj.x}
+                            value={isEtherMode ? 'ethers' : 'tokens'}
                             exclusive
-                            onChange={event => setTransferXObj({ ...transferXObj, x: event.target.value })}
+                            onChange={event => setIsEtherMode(event.target.value === 'ethers')}
                         >
                             <ToggleButton value="tokens">tokens</ToggleButton>
                             <ToggleButton value="ethers">ethers</ToggleButton>
@@ -238,15 +242,17 @@ function Airdrop({ airdrop, connection }) {
     const _airdropBlockTransferXSection = () => {
         let topLabel = <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>;
         let bottomLabel = <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>;
-        if (!transferXObj.loading) {
+        if (!balancesObject.loading) {
+            const { userBalances, airdropBalances } = balancesObject;
+            const useMode = isEtherMode ? 'ethers' : 'tokens';
             topLabel = (
                 <div className='balanceLabel'>
-                    {weiToDisplay(transferXObj.userBalances[transferXObj.x])}
+                    {weiToDisplay(userBalances[useMode])}
                 </div>
             );
             bottomLabel = (
                 <div className='balanceLabel'>
-                    {weiToDisplay(transferXObj.airdropBalances[transferXObj.x])}
+                    {weiToDisplay(airdropBalances[useMode])}
                 </div>
             );
         }
@@ -255,11 +261,11 @@ function Airdrop({ airdrop, connection }) {
                 {_airdropBlockTransferXSectionTitle()}
                 <div className='spacer' />
                 <div className='spacer' />
-                <div style={{ display: 'flex' }}>
-                    {_airdropBlockTransferXButtonSection(airdrop)}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {_airdropBlockTransferXButtonSection(true)}
                     <div className='tranferSectionMiddle'>
                         <div className='label'>
-                            Contract ({airdrop.address}) amount
+                            Airdrop (<div style={{ cursor: 'text' }}>{airdrop.address}</div>) amount
                         </div>
                         <div className='spacer' />
                         <div className='spacer' />
@@ -282,10 +288,10 @@ function Airdrop({ airdrop, connection }) {
                         <div className='spacer' />
                         <div className='spacer' />
                         <div className='label'>
-                            Wallet ({connection.signer.address}) amount
+                            Wallet (<div style={{ cursor: 'text' }}>{connection.signer.address}</div>) amount
                         </div>
                     </div>
-                    {_airdropBlockTransferXButtonSection(airdrop)}
+                    {_airdropBlockTransferXButtonSection(false)}
                 </div>
             </div>
         );
@@ -309,7 +315,7 @@ function Airdrop({ airdrop, connection }) {
                     0x5678567856785678567856785678567856785678,200<br />
                     0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />.....</div>}
                 multiline
-                rows={4}
+                rows={7}
                 variant='outlined'
                 margin='normal'
                 type='text'
