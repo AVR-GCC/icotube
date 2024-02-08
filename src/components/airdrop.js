@@ -8,6 +8,11 @@ import {
     ToggleButton,
     ToggleButtonGroup,
     CircularProgress,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    ListItemText,
     TextField
 } from '@mui/material';
 import { InfoOutlined, UndoOutlined } from '@mui/icons-material';
@@ -159,11 +164,38 @@ function Airdrop({ airdrops, connection }) {
         </div>
     );
 
+    const _title = () => airdrops.length === 1 ? <div className='airdropTitle'>{airdrop.name}</div> : (
+        <div className='airdropSelectHolder'>
+            <FormControl
+                variant='outlined'
+                margin='normal'
+                fullWidth
+            >
+                <InputLabel id='airdrop-select-label'>Airdrop Select</InputLabel>
+                <Select
+                    labelId='airdrop-select-label'
+                    id='airdrop-select'
+                    value={airdrop.name}
+                    label='Airdrop Select'
+                    onChange={arg => {
+                        const newAirdrop = airdrops.find(op => op.name === arg.target.value);
+                        setAirdrop(newAirdrop);
+                    }}
+                >
+                    {airdrops.map((op) =>
+                        <MenuItem key={`${op.name}_option`} value={op.name}>
+                            <ListItemText primary={op.name} />
+                        </MenuItem>
+                    )}
+                </Select>
+                {/* <FormHelperText>Disabled</FormHelperText> */}
+            </FormControl>
+        </div>
+    );
+
     const _airdropBlockTopRow = () => (
         <div className='topRow'>
-            <div className='airdropTitle'>
-                {airdrop.name}
-            </div>
+            {_title()}
             <div className='addressesPortion'>
                 <div className='addressesPortionPart'>
                     <div className='addressLabel'>Airdrop Address:</div>

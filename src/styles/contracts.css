@@ -47,6 +47,15 @@
     cursor: default;
 }
 
+.airdropSelectHolder {
+    margin-bottom: 15px;
+    width: 200px;
+}
+
+.airdropSelectHolder .MuiSelect-select {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
 /* .airdropContainer .MuiInputBase-inputMultiline::-webkit-scrollbar-track {
     background: rgb(37, 37, 37);
 }
