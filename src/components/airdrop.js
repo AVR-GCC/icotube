@@ -280,12 +280,12 @@ function Airdrop({ airdrops, connection }) {
         if (!balancesObject.loading) {
             const { userBalances, airdropBalances } = balancesObject;
             const useMode = isEtherMode ? 'ethers' : 'tokens';
-            topLabel = (
+            bottomLabel = (
                 <div className='balanceLabel'>
                     {weiToDisplay(userBalances[useMode])}
                 </div>
             );
-            bottomLabel = (
+            topLabel = (
                 <div className='balanceLabel'>
                     {weiToDisplay(airdropBalances[useMode])}
                 </div>
