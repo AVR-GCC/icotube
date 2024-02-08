@@ -110,10 +110,6 @@ function Airdrop({ airdrop, connection }) {
         return sliced;
     }
 
-    const handleChangeXForTransfer = (_, arg2) => {
-        if (arg2) setTransferXObj(arg2);
-    };
-
     const _recipientInfo = () => (
         <div>
             <div data-tooltip-id='info-tip' className='infoIcon'><InfoOutlined /></div>
