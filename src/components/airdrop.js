@@ -5,6 +5,8 @@ import { ethers, getAddress, parseEther } from 'ethers';
 import { Tooltip } from 'react-tooltip';
 import {
     Button,
+    ToggleButton,
+    ToggleButtonGroup,
     TextField
 } from '@mui/material';
 import { InfoOutlined } from '@mui/icons-material';
@@ -107,6 +109,11 @@ function Airdrop({ airdrop, connection }) {
         const sliced = roundedString[5] === '0' ? roundedString.slice(0, 5) : roundedString.slice(0, 6);
         return sliced;
     }
+
+    const handleChangeXForTransfer = (_, arg2) => {
+        if (arg2) setTransferXObj(arg2);
+    };
+
     const _recipientInfo = () => (
         <div>
             <div data-tooltip-id='info-tip' className='infoIcon'><InfoOutlined /></div>
@@ -188,7 +195,19 @@ function Airdrop({ airdrop, connection }) {
         <div className='sectionContainer'>
             <div className='sectionTitle'>
                 <div className='label'>
-                    Send Tokens:
+                    Transfer
+                    <div className='spacer' />
+                    <div className='toggleTypeContainerSmall' style={{ marginTop: 0 }}>
+                        <ToggleButtonGroup
+                            color="primary"
+                            value={transferXObj.x}
+                            exclusive
+                            onChange={event => setTransferXObj({ ...transferXObj, x: event.target.value })}
+                        >
+                            <ToggleButton value="tokens">tokens</ToggleButton>
+                            <ToggleButton value="ethers">ethers</ToggleButton>
+                        </ToggleButtonGroup>
+                    </div>:
                 </div>
             </div>
             <TextField

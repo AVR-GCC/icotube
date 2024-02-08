@@ -79,6 +79,8 @@
 }
 
 .label {
+    display: flex;
+    align-items: center;
     float: left;
     font-size: 14px;
     font-weight: 400;
@@ -119,4 +121,15 @@
 .addressLabel {
     cursor: default;
 }
+
+.toggleTypeContainerSmall {
+    background: #252525;
+    border-radius: 5px;
+}
+
+.toggleTypeContainerSmall .MuiButtonBase-root {
+    padding: 3px 5px;
+    text-transform: none;
+}
+
 
