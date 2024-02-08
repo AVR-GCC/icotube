@@ -139,7 +139,7 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockSendTokensButtonSection = () => (
+    const _airdropBlockTransferTokensButtonSection = () => (
         <div className='buttonSection'>
             <Button
                 variant='outlined'
@@ -204,7 +204,7 @@ function Airdrop({ airdrop, connection }) {
                 onChange={handleChangeTokenAmount}
                 helperText={sendTokensObj.error}
             />
-            {_airdropBlockSendTokensButtonSection(airdrop)}
+            {_airdropBlockTransferTokensButtonSection(airdrop)}
         </div>
     );
 
