@@ -333,10 +333,10 @@ function Airdrop({ airdrop, connection }) {
 
     const _airdropBlock = () => (
         <div key={airdrop.address} className='airdropContainer'>
-            {_airdropBlockTopRow(airdrop)}
+            {_airdropBlockTopRow()}
             <div className='sections'>
-                {_airdropBlockTransferXSection(airdrop)}
-                {_airdropBlockDoDropSection(airdrop)}
+                {_airdropBlockTransferXSection()}
+                {_airdropBlockDoDropSection()}
             </div>
         </div>
     );
