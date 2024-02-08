@@ -217,13 +217,10 @@ const Contracts = ({ setSigner = noop }) => {
         </div>
     );
 
-    const _airdropBlock = (airdrop) => <div key={airdrop.name}><Airdrop airdrop={airdrop} connection={connection} /></div>;
 
     const _airdropSection = () => (
         <div className='airdropsSectionContainer'>
-            <div className='existingAirdropsContainer'>
-                {airdrops.map(_airdropBlock)}
-            </div>
+            {airdrops.length ? <Airdrop airdrops={airdrops} connection={connection} /> : null}
             {_newAirdropSection()}
         </div>
     );

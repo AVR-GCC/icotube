@@ -16,7 +16,9 @@ import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
 
 
-function Airdrop({ airdrop, connection }) {
+function Airdrop({ airdrops, connection }) {
+    const [airdrop, setAirdrop] = useState(airdrops[0]);
+
     const [recipientsObj, setRecipientsObj] = useState({
         addresses: [],
         amounts: [],
