@@ -23,11 +23,12 @@ function Airdrop({ airdrop, connection }) {
         total: 0n
     });
 
-    const [sendTokensObj, setSendTokensObj] = useState({
+    const [transferXObj, setTransferXObj] = useState({
         str: '',
         error: '',
         valid: false,
-        number: 0
+        number: 0,
+        x: 'tokens'
     });
 
     const { setNotification } = useContext(AppContext);
@@ -36,9 +37,9 @@ function Airdrop({ airdrop, connection }) {
         const { value } = event.target;
         const number = parseFloat(value);
         if (isNaN(number)) {
-            setSendTokensObj({ str: value, valid: false, error: value !== '' && 'Invalid amount', number });
+            setTransferXObj({ str: value, valid: false, error: value !== '' && 'Invalid amount', number });
         } else {
-            setSendTokensObj({ str: value, valid: true, error: '', number });
+            setTransferXObj({ str: value, valid: true, error: '', number });
         }
     }
 
@@ -139,13 +140,13 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockTransferTokensButtonSection = () => (
+    const _airdropBlockTransferXButtonSection = () => (
         <div className='buttonSection'>
             <Button
                 variant='outlined'
                 style={{ marginTop: 20 }}
                 onClick={async () => {
-                    const { number } = sendTokensObj;
+                    const { number } = transferXObj;
                     console.log('sendTokens', number);
                     try {
                         console.log(await evaluateAirdropFunctionCost(airdrop, 'sendTokens', [number]));
@@ -154,7 +155,7 @@ function Airdrop({ airdrop, connection }) {
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }
                 }}
-                disabled={!connection.connected || !sendTokensObj.valid}
+                disabled={!connection.connected || !transferXObj.valid}
             >
                 <span style={{ fontSize: 14 }}>Submit</span>
             </Button>
@@ -183,7 +184,7 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockTransferTokensSection = () => (
+    const _airdropBlockTransferXSection = () => (
         <div className='sectionContainer'>
             <div className='sectionTitle'>
                 <div className='label'>
@@ -192,19 +193,19 @@ function Airdrop({ airdrop, connection }) {
             </div>
             <TextField
                 autoComplete='off'
-                error={!!sendTokensObj.error}
+                error={!!transferXObj.error}
                 key={`${airdrop.name}_amount_input`}
                 id={`${airdrop.name}_amount_input`}
-                label={sendTokensObj.str ? '' : 'Amount'}
+                label={transferXObj.str ? '' : 'Amount'}
                 variant='outlined'
                 margin='normal'
                 type='text'
                 fullWidth
                 InputLabelProps={{ shrink: false }}
                 onChange={handleChangeTokenAmount}
-                helperText={sendTokensObj.error}
+                helperText={transferXObj.error}
             />
-            {_airdropBlockTransferTokensButtonSection(airdrop)}
+            {_airdropBlockTransferXButtonSection(airdrop)}
         </div>
     );
 
@@ -246,7 +247,7 @@ function Airdrop({ airdrop, connection }) {
         <div key={airdrop.address} className='airdropContainer'>
             {_airdropBlockTopRow(airdrop)}
             <div className='sections'>
-                {_airdropBlockTransferTokensSection(airdrop)}
+                {_airdropBlockTransferXSection(airdrop)}
                 {_airdropBlockDoDropSection(airdrop)}
             </div>
         </div>
