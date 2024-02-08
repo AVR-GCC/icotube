@@ -260,6 +260,7 @@ function SelectedPost({
                         </div>
                         {_link(post.homepage)}
                         <div className='spacer' />
+                        <div className='spacer' />
                         <div className='infoText'>{post.importantNote}</div>
                         <Divider style={{ marginBottom: 20, background: '#ffffff50' }} />
                         {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (

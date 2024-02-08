@@ -130,11 +130,6 @@
   margin-bottom: 20px;
 }
 
-.spacer {
-  height: 20px;
-  width: 20px;
-}
-
 .likeButton {
   display: flex;
   align-items: center;

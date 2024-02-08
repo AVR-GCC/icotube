@@ -310,6 +310,7 @@ const AuthModal = ({
         {signUp ? "Login" : "Join"}
       </div>
       <div className='spacer' />
+      <div className='spacer' />
     </div>
   );
 
