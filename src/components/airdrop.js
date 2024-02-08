@@ -183,7 +183,7 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockSendTokensSection = () => (
+    const _airdropBlockTransferTokensSection = () => (
         <div className='sectionContainer'>
             <div className='sectionTitle'>
                 <div className='label'>
@@ -246,7 +246,7 @@ function Airdrop({ airdrop, connection }) {
         <div key={airdrop.address} className='airdropContainer'>
             {_airdropBlockTopRow(airdrop)}
             <div className='sections'>
-                {_airdropBlockSendTokensSection(airdrop)}
+                {_airdropBlockTransferTokensSection(airdrop)}
                 {_airdropBlockDoDropSection(airdrop)}
             </div>
         </div>
