@@ -68,7 +68,7 @@ const Contracts = ({ setSigner = noop }) => {
     };
 
     const _typeToggle = () => (
-        <div style={{ width: '100%' }}>
+        <div className='toggleTypeContainer'>
             <ToggleButtonGroup
                 color="primary"
                 value={postType}
@@ -220,7 +220,7 @@ const Contracts = ({ setSigner = noop }) => {
     const _airdropBlock = (airdrop) => <div key={airdrop.name}><Airdrop airdrop={airdrop} connection={connection} /></div>;
 
     const _airdropSection = () => (
-        <div>
+        <div className='airdropsSectionContainer'>
             <div className='existingAirdropsContainer'>
                 {airdrops.map(_airdropBlock)}
             </div>
@@ -236,7 +236,7 @@ const Contracts = ({ setSigner = noop }) => {
     return (
         <div className="mainContainer">
             {connection.connected ? (
-                <div>
+                <div className='pageContainer'>
                     <div className='infoText'>
                         Connected with address {connection.signer.address}
                     </div>
