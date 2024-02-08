@@ -7,6 +7,7 @@ import {
     Button,
     ToggleButton,
     ToggleButtonGroup,
+    CircularProgress,
     TextField
 } from '@mui/material';
 import { InfoOutlined } from '@mui/icons-material';
@@ -56,6 +57,15 @@ function Airdrop({ airdrop, connection }) {
     useEffect(() => {
         getBalances();
     }, []);
+
+    const weiToDisplay = (wei) => {
+        const bigIntEther = ethers.formatEther(wei);
+        const floatEther = parseFloat(bigIntEther);
+        const rounded = roundToTwoSubstantialDigits(floatEther);
+        const roundedString = rounded.toString();
+        const sliced = roundedString[5] === '0' ? roundedString.slice(0, 5) : roundedString.slice(0, 6);
+        return sliced;
+    }
 
     const handleChangeTokenAmount = (event) => {
         const { value } = event.target;
@@ -125,11 +135,7 @@ function Airdrop({ airdrop, connection }) {
         const estimate = await provider.estimateGas(tx);
         const estimatedCost = await provider.getFeeData();
         const totalCostInWei = estimatedCost.maxFeePerGas * estimate;
-        const totalCostInEther = ethers.formatEther(totalCostInWei);
-        const rounded = roundToTwoSubstantialDigits(parseFloat(totalCostInEther));
-        const roundedString = rounded.toString();
-        const sliced = roundedString[5] === '0' ? roundedString.slice(0, 5) : roundedString.slice(0, 6);
-        return sliced;
+        return weiToDisplay(totalCostInWei);
     }
 
     const _recipientInfo = () => (
@@ -229,43 +235,61 @@ function Airdrop({ airdrop, connection }) {
             </div>
     );
 
-    const _airdropBlockTransferXSection = () => (
-        <div className='sectionContainer'>
-            {_airdropBlockTransferXSectionTitle()}
-            <div className='spacer' />
-            <div className='spacer' />
-            <div style={{ display: 'flex' }}>
-                {_airdropBlockTransferXButtonSection(airdrop)}
-                <div className='tranferSectionMiddle'>
-                    <div className='label'>
-                        Contract ({airdrop.address}) amount
-                    </div>
-                    <div className='spacer' />
-                    <div className='spacer' />
-                    <TextField
-                        autoComplete='off'
-                        error={!!transferXObj.error}
-                        key={`${airdrop.name}_amount_input`}
-                        id={`${airdrop.name}_amount_input`}
-                        label={transferXObj.str ? '' : 'Amount'}
-                        variant='outlined'
-                        margin='normal'
-                        type='text'
-                        fullWidth
-                        InputLabelProps={{ shrink: false }}
-                        onChange={handleChangeTokenAmount}
-                        helperText={transferXObj.error}
-                    />
-                    <div className='spacer' />
-                    <div className='spacer' />
-                    <div className='label' style={{ marginTop: 1 }}>
-                        Wallet ({connection.signer.address}) amount
-                    </div>
+    const _airdropBlockTransferXSection = () => {
+        let topLabel = <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>;
+        let bottomLabel = <div className='loadingIndicator' style={{ margin: 20 }}><CircularProgress size={20} /></div>;
+        if (!transferXObj.loading) {
+            topLabel = (
+                <div className='balanceLabel'>
+                    {weiToDisplay(transferXObj.userBalances[transferXObj.x])}
                 </div>
-                {_airdropBlockTransferXButtonSection(airdrop)}
+            );
+            bottomLabel = (
+                <div className='balanceLabel'>
+                    {weiToDisplay(transferXObj.airdropBalances[transferXObj.x])}
+                </div>
+            );
+        }
+        return (
+            <div className='sectionContainer'>
+                {_airdropBlockTransferXSectionTitle()}
+                <div className='spacer' />
+                <div className='spacer' />
+                <div style={{ display: 'flex' }}>
+                    {_airdropBlockTransferXButtonSection(airdrop)}
+                    <div className='tranferSectionMiddle'>
+                        <div className='label'>
+                            Contract ({airdrop.address}) amount
+                        </div>
+                        <div className='spacer' />
+                        <div className='spacer' />
+                        <div className='balanceLabelHolder'>{topLabel}</div>
+                        <TextField
+                            autoComplete='off'
+                            error={!!transferXObj.error}
+                            key={`${airdrop.name}_amount_input`}
+                            id={`${airdrop.name}_amount_input`}
+                            label={transferXObj.str ? '' : 'Amount'}
+                            variant='outlined'
+                            margin='normal'
+                            type='text'
+                            fullWidth
+                            InputLabelProps={{ shrink: false }}
+                            onChange={handleChangeTokenAmount}
+                            helperText={transferXObj.error}
+                        />
+                        <div className='balanceLabelHolder'>{bottomLabel}</div>
+                        <div className='spacer' />
+                        <div className='spacer' />
+                        <div className='label'>
+                            Wallet ({connection.signer.address}) amount
+                        </div>
+                    </div>
+                    {_airdropBlockTransferXButtonSection(airdrop)}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 
     const _airdropBlockDoDropSection = () => (
         <div className='sectionContainer recipients'>
