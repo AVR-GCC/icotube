@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import  '../styles/contracts.css';
 import  '../styles/publish.css';
 import { ethers, getAddress, parseEther } from 'ethers';
@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { InfoOutlined } from '@mui/icons-material';
 import { AppContext } from '../App';
-import { airdropABI } from '../constants/abis';
+import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
 
 
@@ -30,10 +30,32 @@ function Airdrop({ airdrop, connection }) {
         error: '',
         valid: false,
         number: 0,
-        x: 'tokens'
+        x: 'tokens',
+        loading: true,
+        userBalances: {},
+        airdropBalances: {}
     });
 
     const { setNotification } = useContext(AppContext);
+
+    const getBalances = async () => {
+        setTransferXObj({ ...transferXObj, loading: true });
+        const { provider, signer } = connection;
+        const tokenContract = new ethers.Contract(airdrop.tokenAddress, tokenABI, provider);
+        const userBalances = {
+            tokens: await tokenContract.balanceOf(signer.address),
+            ethers: await provider.getBalance(signer.address)
+        };
+        const airdropBalances = {
+            tokens: await tokenContract.balanceOf(airdrop.address),
+            ethers: await provider.getBalance(airdrop.address)
+        };
+        setTransferXObj({ ...transferXObj, userBalances, airdropBalances, loading: false });
+    }
+
+    useEffect(() => {
+        getBalances();
+    }, []);
 
     const handleChangeTokenAmount = (event) => {
         const { value } = event.target;
