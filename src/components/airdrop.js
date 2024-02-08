@@ -187,8 +187,7 @@ function Airdrop({ airdrop, connection }) {
         </div>
     );
 
-    const _airdropBlockTransferXSection = () => (
-        <div className='sectionContainer'>
+    const _airdropBlockTransferXSectionTitle = () => (
             <div className='sectionTitle'>
                 <div className='label'>
                     Transfer
@@ -206,6 +205,11 @@ function Airdrop({ airdrop, connection }) {
                     </div>:
                 </div>
             </div>
+    );
+
+    const _airdropBlockTransferXSection = () => (
+        <div className='sectionContainer'>
+            {_airdropBlockTransferXSectionTitle()}
             <TextField
                 autoComplete='off'
                 error={!!transferXObj.error}
