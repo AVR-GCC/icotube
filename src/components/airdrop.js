@@ -210,21 +210,38 @@ function Airdrop({ airdrop, connection }) {
     const _airdropBlockTransferXSection = () => (
         <div className='sectionContainer'>
             {_airdropBlockTransferXSectionTitle()}
-            <TextField
-                autoComplete='off'
-                error={!!transferXObj.error}
-                key={`${airdrop.name}_amount_input`}
-                id={`${airdrop.name}_amount_input`}
-                label={transferXObj.str ? '' : 'Amount'}
-                variant='outlined'
-                margin='normal'
-                type='text'
-                fullWidth
-                InputLabelProps={{ shrink: false }}
-                onChange={handleChangeTokenAmount}
-                helperText={transferXObj.error}
-            />
-            {_airdropBlockTransferXButtonSection(airdrop)}
+            <div className='spacer' />
+            <div className='spacer' />
+            <div style={{ display: 'flex' }}>
+                {_airdropBlockTransferXButtonSection(airdrop)}
+                <div className='tranferSectionMiddle'>
+                    <div className='label'>
+                        Contract ({airdrop.address}) amount
+                    </div>
+                    <div className='spacer' />
+                    <div className='spacer' />
+                    <TextField
+                        autoComplete='off'
+                        error={!!transferXObj.error}
+                        key={`${airdrop.name}_amount_input`}
+                        id={`${airdrop.name}_amount_input`}
+                        label={transferXObj.str ? '' : 'Amount'}
+                        variant='outlined'
+                        margin='normal'
+                        type='text'
+                        fullWidth
+                        InputLabelProps={{ shrink: false }}
+                        onChange={handleChangeTokenAmount}
+                        helperText={transferXObj.error}
+                    />
+                    <div className='spacer' />
+                    <div className='spacer' />
+                    <div className='label' style={{ marginTop: 1 }}>
+                        Wallet ({connection.signer.address}) amount
+                    </div>
+                </div>
+                {_airdropBlockTransferXButtonSection(airdrop)}
+            </div>
         </div>
     );
 
