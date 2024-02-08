@@ -223,6 +223,7 @@ function Airdrop({ airdrops, connection }) {
 
     const _airdropBlockTransferXSectionTitle = () => (
             <div className='sectionTitle'>
+                <div style={{ width: 100 }}/>
                 <div className='label'>
                     Transfer
                     <div className='spacer' />
