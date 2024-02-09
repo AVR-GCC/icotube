@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import  '../styles/contracts.css';
 import  '../styles/publish.css';
-import { ethers, getAddress, parseEther } from 'ethers';
+import { getAddress, parseEther, formatEther, Contract } from 'ethers';
 import { Tooltip } from 'react-tooltip';
 import {
     Button,
@@ -89,7 +89,7 @@ function Airdrop({ airdrops, connection }) {
     const getBalances = async () => {
         setBalancesObject({ ...balancesObject, loading: true });
         const { provider, signer } = connection;
-        const tokenContract = new ethers.Contract(airdrop.tokenAddress, tokenABI, provider);
+        const tokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
         const userBalances = {
             tokens: await tokenContract.balanceOf(signer.address),
             ethers: await provider.getBalance(signer.address)
@@ -107,7 +107,7 @@ function Airdrop({ airdrops, connection }) {
     }, [airdrop]);
 
     const weiToDisplay = (wei) => {
-        const bigIntEther = ethers.formatEther(wei);
+        const bigIntEther = formatEther(wei);
         const floatEther = parseFloat(bigIntEther);
         const rounded = roundToTwoSubstantialDigits(floatEther);
         const roundedString = rounded.toString();
@@ -171,7 +171,7 @@ function Airdrop({ airdrops, connection }) {
 
     const evaluateAirdropFunctionCost = async (airdrop, func, args) => {
         const { provider, signer } = connection;
-        const airdropContract = new ethers.Contract(airdrop.address, airdropABI, provider);
+        const airdropContract = new Contract(airdrop.address, airdropABI, provider);
         const tx = {
             to: airdrop.address,
             from: signer.address,
@@ -252,15 +252,15 @@ function Airdrop({ airdrops, connection }) {
                 onClick={async () => {
                     const { provider, signer } = connection;
                     if (left) {
-                        const disconnectedAirdropContract = new ethers.Contract(airdrop.address, airdropABI, provider);
+                        const disconnectedAirdropContract = new Contract(airdrop.address, airdropABI, provider);
                         const airdropContract = disconnectedAirdropContract.connect(signer);
                         await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
                     } else {
-                        const value = ethers.parseEther(transferXObj.str);
+                        const value = parseEther(transferXObj.str);
                         if (isEtherMode) {
                             await signer.sendTransaction({ to: airdrop.address, value });
                         } else {
-                            const disconnectedTokenContract = new ethers.Contract(airdrop.tokenAddress, tokenABI, provider);
+                            const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
                             const tokenContract = disconnectedTokenContract.connect(signer);
                             await tokenContract.transfer(airdrop.address, value);
                         }
