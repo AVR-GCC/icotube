@@ -305,7 +305,7 @@ function Airdrop({ airdrops, connection }) {
                 }}
                 disabled={!connection.connected || !recipientsObj.valid}
             >
-                <span style={{ fontSize: 14 }}>Submit</span>
+                <span style={{ fontSize: 14 }}>Drop</span>
             </Button>
         </div>
     );
