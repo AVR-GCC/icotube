@@ -163,4 +163,7 @@
     width: 100%;
 }
 
+.tooltip {
+    z-index: 1;
+}
 

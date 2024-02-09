@@ -178,20 +178,43 @@ function Airdrop({ airdrops, connection }) {
         return weiToDisplay(totalCostInWei);
     }
 
-    const _recipientInfo = () => (
+    const _infoIcon = (id, content) => (
         <div>
-            <div data-tooltip-id='info-tip' className='infoIcon'><InfoOutlined /></div>
+            <div data-tooltip-id={id} className='infoIcon'><InfoOutlined /></div>
             <Tooltip
-                id="info-tip"
-                place="right"
+                className='tooltip'
+                id={id}
+                place="left"
                 variant="info"
-                content={<div>Input a list of the recipients of the airdrop,<br />
-                each line should have one address and the amount<br />
-                that address is to receive separated by a comma.<br />
-                </div>}
+                content={content}
             />
         </div>
     );
+
+    const _recipientInfo = () => _infoIcon('recepient-info-tip', <div>
+        Input a list of the recipients of the airdrop,<br />
+        each line should have one address and the amount<br />
+        that address is to receive separated by a comma.<br />
+    </div>);
+
+    const _transferInfo = () => _infoIcon('transfer-info-tip', <div>
+        Before doing any airdrop, input the recipients list in the input box on the right,<br />
+        Solve any errors and see the total drop amount.<br />
+        <br />
+        Tokens:<br />
+        To airdrop tokens confirm the "tokens" toggle is selected,<br />
+        send the tokens to be droped to the contract: input the token amount<br />
+        and press the arrow on the right to send the tokens to the contract.
+        Once the contract has more than the total drop amount clock "Drop"<br />
+        <br />
+        Ethereum:<br />
+        To airdrop Ethereum confirm the "ethers" toggle is selected and click "Drop"<br />
+        the Ethereum will be sent in the drop transaction itself.<br />
+        <br />
+        To withdraw Ethereum or tokens from the contract input the recipient address,<br />
+        or leave empty to send to yourself, and press the arrow on the left<br />
+        to send all the Ethereum or tokens from the contract to the recipient address.
+    </div>);
 
     const _title = () => airdrops.length === 1 ? <div className='airdropTitle'>{airdrop.name}</div> : (
         <div className='airdropSelectHolder'>
@@ -305,6 +328,7 @@ function Airdrop({ airdrops, connection }) {
                         </ToggleButtonGroup>
                     </div>:
                 </div>
+                {_transferInfo()}
             </div>
     );
 
