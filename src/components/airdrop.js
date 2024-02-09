@@ -104,7 +104,7 @@ function Airdrop({ airdrops, connection }) {
 
     useEffect(() => {
         getBalances();
-    }, []);
+    }, [airdrop]);
 
     const weiToDisplay = (wei) => {
         const bigIntEther = ethers.formatEther(wei);
