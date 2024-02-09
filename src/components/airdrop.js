@@ -36,7 +36,6 @@ function Airdrop({ airdrops, connection }) {
     const [transferXObj, setTransferXObj] = useState({
         str: '',
         error: '',
-        valid: false,
         number: 0
     });
 
@@ -46,9 +45,46 @@ function Airdrop({ airdrops, connection }) {
         airdropBalances: {}
     });
 
+    const [arrowsValid, setArrowsValid] = useState({
+        leftValid: {
+            tokens: false,
+            ethers: false
+        },
+        rightValid: {
+            tokens: false,
+            ethers: false
+        }
+    });
+
     const [isEtherMode, setIsEtherMode] = useState(false);
 
     const { setNotification } = useContext(AppContext);
+
+    const setValidArrows = (number, userBalances, airdropBalances) => {
+        if (!number || isNaN(number)) {
+            setArrowsValid({
+                leftValid: {
+                    tokens: false,
+                    ethers: false
+                },
+                rightValid: {
+                    tokens: false,
+                    ethers: false
+                }
+            });
+            return;
+        }
+        const wei = ethers.parseEther(number.toString());
+        const rightValid = {
+            tokens: wei <= userBalances.tokens,
+            ethers: wei <= userBalances.ethers
+        };
+        const leftValid = {
+            tokens: wei <= airdropBalances.tokens,
+            ethers: wei <= airdropBalances.ethers
+        };
+        setArrowsValid({ leftValid, rightValid });
+    }
 
     const getBalances = async () => {
         setBalancesObject({ ...balancesObject, loading: true });
@@ -63,6 +99,7 @@ function Airdrop({ airdrops, connection }) {
             ethers: await provider.getBalance(airdrop.address)
         };
         setBalancesObject({ userBalances, airdropBalances, loading: false });
+        setValidArrows(transferXObj.number, userBalances, airdropBalances);
     }
 
     useEffect(() => {
@@ -81,11 +118,9 @@ function Airdrop({ airdrops, connection }) {
     const handleChangeTokenAmount = (event) => {
         const { value } = event.target;
         const number = parseFloat(value);
-        if (isNaN(number)) {
-            setTransferXObj({ str: value, valid: false, error: value !== '' && 'Invalid amount', number });
-        } else {
-            setTransferXObj({ str: value, valid: true, error: '', number });
-        }
+        const error = isNaN(number) ? 'Invalid amount' : '';
+        setTransferXObj({ str: value, error, number });
+        setValidArrows(number, balancesObject.userBalances, balancesObject.airdropBalances);
     }
 
     const handleChangeRecipientString = (event) => {
@@ -224,7 +259,7 @@ function Airdrop({ airdrops, connection }) {
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }
                 }}
-                disabled={!connection.connected || !transferXObj.valid}
+                disabled={!connection.connected || !arrowsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
             >
                 <div style={{ transform: `rotate(${left ? 262 : 82}deg) scale(3, 2.2)`, [left ? 'marginLeft' : 'marginRight']: 15 }}><UndoOutlined /></div>
             </Button>
