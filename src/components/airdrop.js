@@ -250,13 +250,20 @@ function Airdrop({ airdrops, connection }) {
                 variant='outlined'
                 style={{ height: 100, width: 40 }}
                 onClick={async () => {
-                    const { number } = transferXObj;
-                    console.log('sendTokens', number);
-                    try {
-                        console.log(await evaluateAirdropFunctionCost(airdrop, 'sendTokens', [number]));
-                    } catch (e) {
-                        console.log(e);
-                        setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                    const { provider, signer } = connection;
+                    if (left) {
+                        const disconnectedAirdropContract = new ethers.Contract(airdrop.address, airdropABI, provider);
+                        const airdropContract = disconnectedAirdropContract.connect(signer);
+                        await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
+                    } else {
+                        const value = ethers.parseEther(transferXObj.str);
+                        if (isEtherMode) {
+                            await signer.sendTransaction({ to: airdrop.address, value });
+                        } else {
+                            const disconnectedTokenContract = new ethers.Contract(airdrop.tokenAddress, tokenABI, provider);
+                            const tokenContract = disconnectedTokenContract.connect(signer);
+                            await tokenContract.transfer(airdrop.address, value);
+                        }
                     }
                 }}
                 disabled={!connection.connected || !arrowsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
