@@ -50,10 +50,7 @@ function Airdrop({ airdrops, connection }) {
             tokens: false,
             ethers: false
         },
-        rightValid: {
-            tokens: false,
-            ethers: false
-        }
+        rightValid: { tokens: false }
     });
 
     const [isEtherMode, setIsEtherMode] = useState(false);
@@ -61,28 +58,25 @@ function Airdrop({ airdrops, connection }) {
     const { setNotification } = useContext(AppContext);
 
     const setValidArrows = (numberStr, userBalances, airdropBalances) => {
-        if (!numberStr || isNaN(parseFloat(numberStr))) {
-            setArrowsValid({
-                leftValid: {
-                    tokens: false,
-                    ethers: false
-                },
-                rightValid: {
-                    tokens: false,
-                    ethers: false
-                }
-            });
+        const rightValid = { tokens: false };
+        const leftValid = { tokens: false, ethers: false };
+        if (!numberStr) {
+            leftValid.tokens = 0 < airdropBalances.tokens;
+            leftValid.ethers = 0 <= airdropBalances.ethers;
+            setArrowsValid({ leftValid, rightValid });
             return;
         }
-        const wei = ethers.parseEther(numberStr);
-        const rightValid = {
-            tokens: wei <= userBalances.tokens,
-            ethers: wei <= userBalances.ethers
-        };
-        const leftValid = {
-            tokens: wei <= airdropBalances.tokens,
-            ethers: wei <= airdropBalances.ethers
-        };
+        try {
+            getAddress(numberStr);
+            leftValid.tokens = 0 <= airdropBalances.tokens;
+            leftValid.ethers = 0 <= airdropBalances.ethers;
+            setArrowsValid({ leftValid, rightValid });
+            return;
+        } catch (e) {}
+        if (isNaN(parseFloat(numberStr))) {
+            const wei = parseEther(numberStr);
+            rightValid.tokens = wei <= userBalances.tokens;
+        }
         setArrowsValid({ leftValid, rightValid });
     }
 
