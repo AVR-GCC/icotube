@@ -15,7 +15,7 @@ import {
     ListItemText,
     TextField
 } from '@mui/material';
-import { InfoOutlined, UndoOutlined } from '@mui/icons-material';
+import { InfoOutlined, UndoOutlined, Download } from '@mui/icons-material';
 import { AppContext } from '../App';
 import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
@@ -268,7 +268,9 @@ function Airdrop({ airdrops, connection }) {
                 }}
                 disabled={!connection.connected || !arrowsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
             >
-                <div style={{ transform: `rotate(${left ? 262 : 82}deg) scale(3, 2.2)`, [left ? 'marginLeft' : 'marginRight']: 15 }}><UndoOutlined /></div>
+                {left ?
+                    <div style={{ transform: 'scale(1.7, 3.5)', marginTop: 22 }}><Download /></div>
+                    : <div style={{ transform: 'rotate(82deg) scale(3, 2.2)', marginRight: 15 }}><UndoOutlined /></div>}
             </Button>
         </div>
     );
