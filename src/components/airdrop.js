@@ -249,15 +249,11 @@ function Airdrop({ airdrops, connection }) {
                         const disconnectedAirdropContract = new Contract(airdrop.address, airdropABI, provider);
                         const airdropContract = disconnectedAirdropContract.connect(signer);
                         await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
-                    } else {
+                    } else if (!isEtherMode) {
                         const value = parseEther(transferXObj.str);
-                        if (isEtherMode) {
-                            await signer.sendTransaction({ to: airdrop.address, value });
-                        } else {
-                            const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
-                            const tokenContract = disconnectedTokenContract.connect(signer);
-                            await tokenContract.transfer(airdrop.address, value);
-                        }
+                        const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
+                        const tokenContract = disconnectedTokenContract.connect(signer);
+                        await tokenContract.transfer(airdrop.address, value);
                     }
                 }}
                 disabled={!connection.connected || !arrowsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
