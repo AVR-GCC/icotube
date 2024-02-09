@@ -60,8 +60,8 @@ function Airdrop({ airdrops, connection }) {
 
     const { setNotification } = useContext(AppContext);
 
-    const setValidArrows = (number, userBalances, airdropBalances) => {
-        if (!number || isNaN(number)) {
+    const setValidArrows = (numberStr, userBalances, airdropBalances) => {
+        if (!numberStr || isNaN(parseFloat(numberStr))) {
             setArrowsValid({
                 leftValid: {
                     tokens: false,
@@ -74,7 +74,7 @@ function Airdrop({ airdrops, connection }) {
             });
             return;
         }
-        const wei = ethers.parseEther(number.toString());
+        const wei = ethers.parseEther(numberStr);
         const rightValid = {
             tokens: wei <= userBalances.tokens,
             ethers: wei <= userBalances.ethers
@@ -99,7 +99,7 @@ function Airdrop({ airdrops, connection }) {
             ethers: await provider.getBalance(airdrop.address)
         };
         setBalancesObject({ userBalances, airdropBalances, loading: false });
-        setValidArrows(transferXObj.number, userBalances, airdropBalances);
+        setValidArrows(transferXObj.str, userBalances, airdropBalances);
     }
 
     useEffect(() => {
@@ -120,7 +120,7 @@ function Airdrop({ airdrops, connection }) {
         const number = parseFloat(value);
         const error = isNaN(number) ? 'Invalid amount' : '';
         setTransferXObj({ str: value, error, number });
-        setValidArrows(number, balancesObject.userBalances, balancesObject.airdropBalances);
+        setValidArrows(value, balancesObject.userBalances, balancesObject.airdropBalances);
     }
 
     const handleChangeRecipientString = (event) => {
