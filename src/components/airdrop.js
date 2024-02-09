@@ -73,7 +73,7 @@ function Airdrop({ airdrops, connection }) {
             setArrowsValid({ leftValid, rightValid });
             return;
         } catch (e) {}
-        if (isNaN(parseFloat(numberStr))) {
+        if (!isNaN(parseFloat(numberStr))) {
             const wei = parseEther(numberStr);
             rightValid.tokens = wei <= userBalances.tokens;
         }
