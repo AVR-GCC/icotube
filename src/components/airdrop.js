@@ -368,7 +368,7 @@ function Airdrop({ airdrops, connection }) {
                             error={!!transferXObj.error}
                             key={`${airdrop.name}_amount_input`}
                             id={`${airdrop.name}_amount_input`}
-                            label={transferXObj.str ? '' : 'Amount'}
+                            label={transferXObj.str ? '' : 'Amount / Address'}
                             variant='outlined'
                             margin='normal'
                             type='text'
