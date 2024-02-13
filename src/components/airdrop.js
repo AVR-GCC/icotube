@@ -64,7 +64,7 @@ function Airdrop({ airdrops, connection }) {
         const leftValid = { tokens: false, ethers: false };
         if (!numberStr) {
             leftValid.tokens = 0 < airdropBalances.tokens;
-            leftValid.ethers = 0 <= airdropBalances.ethers;
+            leftValid.ethers = 0 < airdropBalances.ethers;
             setButtonsValid({ ...buttonsValid, leftValid, rightValid });
             return;
         }
