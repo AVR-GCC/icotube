@@ -418,7 +418,7 @@ function Airdrop({ airdrops, connection }) {
             total = parseFloat(formatEther(recipientsObj.total.toString()));
         }
         if (buttonsValid.canDisplayDiff) {
-            const useBalance = balancesObject?.userBalances?.[isEtherMode ? 'ethers' : 'tokens'];
+            const useBalance = isEtherMode ? balancesObject?.userBalances?.['ethers'] : balancesObject?.airdropBalances['tokens'];
             const userBalance = parseFloat(formatEther(useBalance.toString()));
             const diff = total - userBalance;
             if (diff > 0) {
