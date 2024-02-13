@@ -33,7 +33,7 @@ function Airdrop({ airdrops, connection }) {
         total: 0n
     });
 
-    const [airdropCost, setAirdropCost] = useState(0);
+    // const [airdropCost, setAirdropCost] = useState(0);
 
     const [transferXObj, setTransferXObj] = useState({
         str: '',
@@ -188,24 +188,24 @@ function Airdrop({ airdrops, connection }) {
                 };
             }
         }
-        evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]).then(setAirdropCost);
+        // evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]).then(setAirdropCost);
         return { addresses, amounts, total: amounts.reduce((a, b) => a + b, 0n), error: '' };
     }
 
-    const evaluateAirdropFunctionCost = async (airdrop, func, args) => {
-        const { provider, signer } = connection;
-        const airdropContract = new Contract(airdrop.address, airdropABI, provider);
-        const tx = {
-            to: airdrop.address,
-            from: signer.address,
-            data: airdropContract.interface.encodeFunctionData(func, args)
-        };
+    // const evaluateAirdropFunctionCost = async (airdrop, func, args) => {
+    //     const { provider, signer } = connection;
+    //     const airdropContract = new Contract(airdrop.address, airdropABI, provider);
+    //     const tx = {
+    //         to: airdrop.address,
+    //         from: signer.address,
+    //         data: airdropContract.interface.encodeFunctionData(func, args)
+    //     };
 
-        const estimate = await provider.estimateGas(tx);
-        const estimatedCost = await provider.getFeeData();
-        const totalCostInWei = estimatedCost.maxFeePerGas * estimate;
-        return weiToDisplay(totalCostInWei);
-    }
+    //     const estimate = await provider.estimateGas(tx);
+    //     const estimatedCost = await provider.getFeeData();
+    //     const totalCostInWei = estimatedCost.maxFeePerGas * estimate;
+    //     return weiToDisplay(totalCostInWei);
+    // }
 
     const _infoIcon = (id, content) => (
         <div>
