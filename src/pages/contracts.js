@@ -234,8 +234,8 @@ const Contracts = ({ setSigner = noop }) => {
         <div className="mainContainer">
             {connection.connected ? (
                 <div className='pageContainer'>
-                    <div className='infoText'>
-                        Connected with address {connection.signer.address}
+                    <div className='infoText' style={{ display: 'flex', flexDirection: 'row' }}>
+                        Connected with address <div className='address'>{connection.signer.address}</div>
                     </div>
                     {_typeToggle()}
                     {_inputsSection()}
