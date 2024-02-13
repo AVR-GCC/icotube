@@ -112,7 +112,7 @@ function Airdrop({ airdrops, connection }) {
     useEffect(() => {
         let canDrop = false;
         let canDisplayDiff = false;
-        const useBalance = balancesObject?.userBalances?.[isEtherMode ? 'ethers' : 'tokens'];
+        const useBalance = isEtherMode ? balancesObject?.userBalances?.['ethers'] : balancesObject?.airdropBalances['tokens'];
         if (typeof useBalance === 'bigint' && typeof recipientsObj.total === 'bigint' && recipientsObj.valid) {
             canDisplayDiff = true;
             const userBalance = parseFloat(formatEther(useBalance.toString()));
