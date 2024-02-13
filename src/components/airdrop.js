@@ -75,10 +75,13 @@ function Airdrop({ airdrops, connection }) {
             setButtonsValid({ ...buttonsValid, leftValid, rightValid });
             return;
         } catch (e) {}
-        if (!isNaN(parseFloat(numberStr))) {
-            const wei = parseEther(numberStr);
-            rightValid.tokens = wei <= userBalances.tokens;
-        }
+
+        try {
+            if (!isNaN(parseFloat(numberStr))) {
+                const wei = parseEther(numberStr);
+                rightValid.tokens = wei <= userBalances.tokens;
+            }
+        } catch (e) {}
         setButtonsValid({ ...buttonsValid, leftValid, rightValid });
     }
 
