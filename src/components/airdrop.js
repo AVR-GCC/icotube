@@ -423,7 +423,7 @@ function Airdrop({ airdrops, connection }) {
             const diff = total - userBalance;
             if (diff > 0) {
                 style = { color: '#d32f2f' };
-                missing = diff;
+                missing = roundToTwoSubstantialDigits(diff);
             }
         }
         return (
@@ -433,7 +433,7 @@ function Airdrop({ airdrops, connection }) {
                         total drop value:
                     </div>
                     <div className='balanceLabel' style={style}>
-                        {roundToTwoSubstantialDigits(missing)}
+                        {missing}
                     </div>
                 </div>
                 <div className='dropNumbersSide' style={{ marginTop: -20 }}>
