@@ -45,12 +45,14 @@ function Airdrop({ airdrops, connection }) {
         airdropBalances: {}
     });
 
-    const [arrowsValid, setArrowsValid] = useState({
+    const [buttonsValid, setButtonsValid] = useState({
         leftValid: {
             tokens: false,
             ethers: false
         },
-        rightValid: { tokens: false }
+        rightValid: { tokens: false },
+        canDrop: false,
+        canDisplayDiff: false
     });
 
     const [isEtherMode, setIsEtherMode] = useState(false);
@@ -63,21 +65,21 @@ function Airdrop({ airdrops, connection }) {
         if (!numberStr) {
             leftValid.tokens = 0 < airdropBalances.tokens;
             leftValid.ethers = 0 <= airdropBalances.ethers;
-            setArrowsValid({ leftValid, rightValid });
+            setButtonsValid({ ...buttonsValid, leftValid, rightValid });
             return;
         }
         try {
             getAddress(numberStr);
             leftValid.tokens = 0 <= airdropBalances.tokens;
             leftValid.ethers = 0 <= airdropBalances.ethers;
-            setArrowsValid({ leftValid, rightValid });
+            setButtonsValid({ ...buttonsValid, leftValid, rightValid });
             return;
         } catch (e) {}
         if (!isNaN(parseFloat(numberStr))) {
             const wei = parseEther(numberStr);
             rightValid.tokens = wei <= userBalances.tokens;
         }
-        setArrowsValid({ leftValid, rightValid });
+        setButtonsValid({ ...buttonsValid, leftValid, rightValid });
     }
 
     const getBalances = async () => {
@@ -99,6 +101,24 @@ function Airdrop({ airdrops, connection }) {
     useEffect(() => {
         getBalances();
     }, [airdrop]);
+
+    useEffect(() => {
+        let canDrop = false;
+        let canDisplayDiff = false;
+        const useBalance = balancesObject?.userBalances?.[isEtherMode ? 'ethers' : 'tokens'];
+        if (typeof useBalance === 'bigint' && typeof recipientsObj.total === 'bigint' && recipientsObj.valid) {
+            canDisplayDiff = true;
+            const userBalance = parseFloat(formatEther(useBalance.toString()));
+            const total = parseFloat(formatEther(recipientsObj.total.toString()));
+            const diff = total - userBalance;
+            if (diff <= 0) {
+                canDrop = true;
+            }
+        }
+        if (canDrop !== buttonsValid.canDrop || canDisplayDiff !== buttonsValid.canDisplayDiff) {
+            setButtonsValid({ ...buttonsValid, canDrop, canDisplayDiff });
+        }
+    }, [balancesObject, recipientsObj, isEtherMode]);
 
     const weiToDisplay = (wei) => {
         const bigIntEther = formatEther(wei);
@@ -279,7 +299,7 @@ function Airdrop({ airdrops, connection }) {
                         await tokenContract.transfer(airdrop.address, value);
                     }
                 }}
-                disabled={!connection.connected || !arrowsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
+                disabled={!connection.connected || !buttonsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
             >
                 {left ?
                     <div style={{ transform: 'scale(1.7, 3.5)', marginTop: 22 }}><Download /></div>
@@ -303,7 +323,7 @@ function Airdrop({ airdrops, connection }) {
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }
                 }}
-                disabled={!connection.connected || !recipientsObj.valid}
+                disabled={!connection.connected || !buttonsValid.canDrop}
             >
                 <span style={{ fontSize: 14 }}>Drop</span>
             </Button>
@@ -390,6 +410,44 @@ function Airdrop({ airdrops, connection }) {
         );
     }
 
+    const _airdropBlockDoDropNumbers = () => {
+        let style = {};
+        let missing = '-';
+        let total = '-';
+        if (recipientsObj.valid) {
+            total = parseFloat(formatEther(recipientsObj.total.toString()));
+        }
+        if (buttonsValid.canDisplayDiff) {
+            const useBalance = balancesObject?.userBalances?.[isEtherMode ? 'ethers' : 'tokens'];
+            const userBalance = parseFloat(formatEther(useBalance.toString()));
+            const diff = total - userBalance;
+            if (diff > 0) {
+                style = { color: '#d32f2f' };
+                missing = diff;
+            }
+        }
+        return (
+            <div className='dropNumbers'>
+                <div className='dropNumbersSide'>
+                    <div className='label dropNumbersLabel'>
+                        total drop value:
+                    </div>
+                    <div className='balanceLabel' style={style}>
+                        {roundToTwoSubstantialDigits(missing)}
+                    </div>
+                </div>
+                <div className='dropNumbersSide' style={{ marginTop: -20 }}>
+                    <div className='balanceLabel'>
+                        {total}
+                    </div>
+                    <div className='label dropNumbersLabel'>
+                        missing
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     const _airdropBlockDoDropSection = () => (
         <div className='sectionContainer recipients'>
             <div className='sectionTitle'>
@@ -408,7 +466,7 @@ function Airdrop({ airdrops, connection }) {
                     0x5678567856785678567856785678567856785678,200<br />
                     0x9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC9ABC,300<br />.....</div>}
                 multiline
-                rows={7}
+                rows={4}
                 variant='outlined'
                 margin='normal'
                 type='text'
@@ -420,7 +478,8 @@ function Airdrop({ airdrops, connection }) {
                 helperText={recipientsObj.error}
             />
             {!recipientsObj.error && <div style={{ height: 23 }} />}
-            {_airdropBlockDoDropButtonSection(airdrop)}
+            {_airdropBlockDoDropNumbers()}
+            {_airdropBlockDoDropButtonSection()}
         </div>
     );
 

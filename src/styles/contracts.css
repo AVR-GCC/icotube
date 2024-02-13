@@ -102,6 +102,13 @@
     cursor: default;
 }
 
+.dropNumbersLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1
+}
+
 .balanceLabel {
     display: flex;
     align-items: center;
@@ -170,3 +177,14 @@
     z-index: 1;
 }
 
+.dropNumbers {
+    display: flex;
+}
+
+.dropNumbersSide {
+    width: 150px;
+}
+
+.dropNumbersLabel {
+    justify-content: center;
+}
