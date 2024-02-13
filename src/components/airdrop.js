@@ -288,15 +288,25 @@ function Airdrop({ airdrops, connection }) {
                 style={{ height: 100, width: 40 }}
                 onClick={async () => {
                     const { provider, signer } = connection;
-                    if (left) {
-                        const disconnectedAirdropContract = new Contract(airdrop.address, airdropABI, provider);
-                        const airdropContract = disconnectedAirdropContract.connect(signer);
-                        await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
-                    } else if (!isEtherMode) {
-                        const value = parseEther(transferXObj.str);
-                        const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
-                        const tokenContract = disconnectedTokenContract.connect(signer);
-                        await tokenContract.transfer(airdrop.address, value);
+                    try {
+                        let transferRespone;
+                        if (left) {
+                            const disconnectedAirdropContract = new Contract(airdrop.address, airdropABI, provider);
+                            const airdropContract = disconnectedAirdropContract.connect(signer);
+                            transferRespone = await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
+                        } else if (!isEtherMode) {
+                            const value = parseEther(transferXObj.str);
+                            const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
+                            const tokenContract = disconnectedTokenContract.connect(signer);
+                            transferRespone = await tokenContract.transfer(airdrop.address, value);
+                        }
+                        setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
+                        const transferReciept = await transferRespone.wait();
+                        setNotification({ text: `Transaction confirmed in block ${transferReciept.blockNumber}`, type: 'positive' });
+                        getBalances();
+                    } catch (e) {
+                        console.log(e);
+                        setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }
                 }}
                 disabled={!connection.connected || !buttonsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
