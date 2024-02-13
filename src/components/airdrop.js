@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import  '../styles/contracts.css';
 import  '../styles/publish.css';
 import { getAddress, parseEther, formatEther, Contract } from 'ethers';
@@ -58,6 +58,8 @@ function Airdrop({ airdrops, connection }) {
     const [isEtherMode, setIsEtherMode] = useState(false);
 
     const { setNotification } = useContext(AppContext);
+
+    const transferInputRef = useRef(null);
 
     const setValidArrows = (numberStr, userBalances, airdropBalances) => {
         const rightValid = { tokens: false };
@@ -133,6 +135,7 @@ function Airdrop({ airdrops, connection }) {
     }
 
     const handleChangeTokenAmount = (event) => {
+        transferInputRef.current = event.target;
         const { value } = event.target;
         const number = parseFloat(value);
         const error = isNaN(number) ? 'Invalid amount' : '';
@@ -303,6 +306,8 @@ function Airdrop({ airdrops, connection }) {
                             const tokenContract = disconnectedTokenContract.connect(signer);
                             transferRespone = await tokenContract.transfer(airdrop.address, value);
                         }
+                        setTransferXObj({ str: '', error: '', number: 0 });
+                        transferInputRef.current.value = '';
                         setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
                         const transferReciept = await transferRespone.wait();
                         setNotification({ text: `Transaction confirmed in block ${transferReciept.blockNumber}`, type: 'positive' });
