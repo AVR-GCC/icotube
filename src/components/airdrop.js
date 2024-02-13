@@ -33,6 +33,8 @@ function Airdrop({ airdrops, connection }) {
         total: 0n
     });
 
+    const [airdropCost, setAirdropCost] = useState(0);
+
     const [transferXObj, setTransferXObj] = useState({
         str: '',
         error: '',
@@ -186,6 +188,7 @@ function Airdrop({ airdrops, connection }) {
                 };
             }
         }
+        evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]).then(setAirdropCost);
         return { addresses, amounts, total: amounts.reduce((a, b) => a + b, 0n), error: '' };
     }
 
