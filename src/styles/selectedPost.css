@@ -102,23 +102,6 @@
   margin-right: 5px;
 }
 
-/* width */
-.bottomPartCenter::-webkit-scrollbar {
-  width: 6px;
-}
-
-/* Track */
-.bottomPartCenter::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Handle */
-.bottomPartCenter::-webkit-scrollbar-thumb {
-  background: #ffffff50;
-  border-radius: 3px;
-  border: none;
-}
-
 .infoBox {
   display: flex;
   flex-direction: column;

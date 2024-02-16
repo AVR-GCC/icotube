@@ -289,7 +289,7 @@ function SelectedPost({
     const _bottomPart = () => (
         <div className='bottomPart' style={{ height: window.innerHeight - 126 }}>
             {!isMobile && _leftArrow()}
-            <div className='bottomPartCenter'>
+            <div className='bottomPartCenter scroll'>
                 {_videoSection()}
                 {_infoSection()}
             </div>

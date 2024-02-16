@@ -246,7 +246,7 @@ function Home({
         }
         return (
             <div
-                className={`mainContainer${isMobile ? ' mobileMainContainer' : ''}`}
+                className={`mainContainer${isMobile ? ' mobileMainContainer' : ''} scroll`}
                 ref={mainRef}
                 onScroll={(arg) => {
                     const node = arg.target;

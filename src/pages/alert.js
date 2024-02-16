@@ -31,7 +31,7 @@ function Alert() {
     }
 
     return (
-        <div className="mainContainer">
+        <div className="mainContainer scroll">
             <TextField
                 // error={!!errors[`${field.name}Other`]}
                 // key={`${inputId}Other`}
