@@ -7,7 +7,7 @@
 
 .infoText {
     color: rgb(255, 255, 255);
-    cursor: pointer;
+    cursor: default;
     display: flex;
     align-items: center;
     flex-direction: column;
