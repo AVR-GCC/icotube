@@ -231,7 +231,7 @@ const Contracts = ({ setSigner = noop }) => {
     }
 
     return (
-        <div className="mainContainer">
+        <div className="mainContainer scroll">
             {connection.connected ? (
                 <div className='pageContainer'>
                     <div className='infoText' style={{ display: 'flex', flexDirection: 'row' }}>
