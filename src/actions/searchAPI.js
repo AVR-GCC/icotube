@@ -150,9 +150,9 @@ export const removeAlertAPI = async (email) => {
     });
 };
 
-export const getTokenContractAPI = async (name, symbol) => {
+export const getTokenContractAPI = async (name, symbol, amount) => {
     return await APIcall({
-        body: { name, symbol },
+        body: { name, symbol, amount },
         method: 'POST',
         url: 'contracts/token'
     });

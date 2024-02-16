@@ -113,11 +113,26 @@ const Contracts = ({ setSigner = noop }) => {
                 onChange={getHandleChangeValue('tokenSymbol')}
                 helperText={errors.tokenSymbol}
             />
+            <TextField
+                autoComplete='off'
+                error={!!errors.tokenSymbol}
+                key="totalAmount_input"
+                id="totalAmount_input"
+                label="Total Amount"
+                required
+                variant='outlined'
+                margin='normal'
+                fullWidth
+                value={values.totalAmount}
+                InputLabelProps={{ shrink: !!values.totalAmount }}
+                onChange={getHandleChangeValue('totalAmount')}
+                helperText={errors.totalAmount}
+            />
             <Button
                 variant='outlined'
                 style={{ marginTop: 20 }}
                 onClick={async () => {
-                    const res = await getTokenContractAPI(values.tokenName, values.tokenSymbol);
+                    const res = await getTokenContractAPI(values.tokenName, values.tokenSymbo, values.totalAmount);
                     if (res.data.success) {
                         if (res.data.warning) {
                             setNotification({ text: res.data.warning, type: 'info' });
