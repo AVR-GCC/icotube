@@ -40,7 +40,7 @@ const Contracts = ({ setSigner = noop }) => {
         if (window.ethereum) {
             setLoading(true);
             try {
-                const provider = new ethers.BrowserProvider(window.ethereum)
+                const provider = new ethers.BrowserProvider(window.ethereum);
                 const signer = await provider.getSigner();
                 setSigner(signer);
                 setNotification({ text: `Connected to MetaMask: ${signer.address}`, type: 'positive' });
