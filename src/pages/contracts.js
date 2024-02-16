@@ -150,6 +150,7 @@ const Contracts = ({ setSigner = noop }) => {
                         const factory = new ethers.ContractFactory(abi, bytecode, signer)
                         try {
                             const contract = await factory.deploy();
+                            storeTokenContract(contract.target, values.tokenName, values.tokenSymbol);
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
                             console.log(e);

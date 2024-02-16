@@ -158,6 +158,14 @@ export const getTokenContractAPI = async (name, symbol, amount) => {
     });
 };
 
+export const storeTokenContract = async (address, name, symbol) => {
+    return await APIcall({
+        body: { address, name, symbol },
+        method: 'PUT',
+        url: 'contracts/token'
+    });
+};
+
 export const getAirdropContractAPI = async (tokenAddress) => {
     return await APIcall({
         body: { tokenAddress },
