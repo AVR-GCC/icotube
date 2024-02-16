@@ -177,7 +177,7 @@ const Contracts = ({ setSigner = noop }) => {
                 variant='outlined'
                 style={{ marginTop: 20 }}
                 onClick={async () => {
-                    const res = await getTokenContractAPI(values.tokenName, values.tokenSymbo, values.totalAmount);
+                    const res = await getTokenContractAPI(values.tokenName, values.tokenSymbol, values.totalAmount);
                     if (res.data.success) {
                         if (res.data.warning) {
                             setNotification({ text: res.data.warning, type: 'info' });
