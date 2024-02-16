@@ -10,6 +10,7 @@ import {
     ToggleButtonGroup,
     CircularProgress
 } from '@mui/material';
+import { ContentCopyRounded, LaunchRounded } from '@mui/icons-material';
 import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract, storeTokenContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
 import Airdrop from '../components/airdrop';
@@ -22,6 +23,7 @@ const Contracts = ({ setSigner = noop }) => {
     const [loading, setLoading] = useState(false);
     const { setNotification, user } = useContext(AppContext);
     const airdrops = user && user.contracts && user.contracts.filter(contract => contract.type === 'standard');
+    const tokens = user && user.contracts && user.contracts.filter(contract => contract.type === 'token');
     // console.log('user', user);
 
     const getHandleChangeValue = valueName => (e) => {
@@ -84,8 +86,48 @@ const Contracts = ({ setSigner = noop }) => {
         </div>
     );
 
+    const _existingTokens = () => {
+        if (!tokens.length) return null;
+        return (
+            <div>
+                <div className='spacer' />
+                <div className='spacer' />
+                <div className='airdropTitle'>Existing Tokens:</div>
+                <div className='tokensContainer scroll'>
+                    {tokens.map(token => (
+                        <div key={token.address} className='tokenContainer'>
+                            <div className='infoText' style={{ padding: 0 }}>{token.name}</div>
+                            <div className='infoText' style={{ padding: 0, cursor: 'text' }}>{token.address}</div>
+                            <div
+                                className='infoIcon'
+                                onClick={() => {
+                                    navigator.clipboard.writeText(token.address);
+                                    setNotification({ text: 'Address copied to clipboard', type: 'positive' });
+                                }}
+                            >
+                                <ContentCopyRounded />
+                            </div>
+                            <div
+                                className='infoIcon'
+                                onClick={() => {
+                                    window.open(`https://sepolia.etherscan.io/token/${token.address}`, '_blank');
+                                }}
+                            >
+                                <LaunchRounded />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
     const _tokenSection = () => (
         <div>
+            {_existingTokens()}
+            <div className='spacer' />
+            <div className='spacer' />
+            <div className='airdropTitle'>New Token:</div>
             <TextField
                 autoComplete='off'
                 error={!!errors.tokenName}
