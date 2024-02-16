@@ -10,7 +10,7 @@ import {
     ToggleButtonGroup,
     CircularProgress
 } from '@mui/material';
-import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract } from '../actions/searchAPI';
+import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract, storeTokenContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
 import Airdrop from '../components/airdrop';
 
