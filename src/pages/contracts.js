@@ -30,6 +30,9 @@ const Contracts = ({ setSigner = noop }) => {
             delete newErrors[valueName];
             setErrors(newErrors);
         }
+        if (valueName === 'totalAmount' && e.target.value !== '' && isNaN(parseFloat(e.target.value))) {
+            setErrors({ ...errors, [valueName]: 'Please enter a valid number' });
+        }
         setValues({ ...values, [valueName]: e.target.value });
     }
 
