@@ -336,9 +336,21 @@ function Airdrop({ airdrops, connection }) {
                 style={{ marginTop: 20 }}
                 onClick={async () => {
                     const { addresses, amounts } = recipientsObj;
-                    console.log('recipients', addresses, amounts);
+                    const { provider, signer } = connection;
+                    // console.log('recipients', addresses, amounts);
                     try {
-                        console.log(await evaluateAirdropFunctionCost(airdrop, 'dropTokens', [addresses, amounts]));
+                        const airdropContractDisconnected = new Contract(airdrop.address, airdropABI, provider);
+                        const airdropContract = airdropContractDisconnected.connect(signer);
+                        const functionName = isEtherMode ? 'dropEther' : 'dropTokens';
+                        const args = [addresses, amounts];
+                        if (isEtherMode) {
+                            args.push({ value: recipientsObj.total });
+                        }
+                        const transferRespone = await airdropContract[functionName](...args);
+                        setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
+                        const transferReciept = await transferRespone.wait();
+                        setNotification({ text: `Transaction confirmed in block ${transferReciept.blockNumber}`, type: 'positive' });
+                        getBalances();
                     } catch (e) {
                         console.log(e);
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
