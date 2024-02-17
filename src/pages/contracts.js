@@ -22,8 +22,8 @@ const Contracts = ({ setSigner = noop }) => {
     const [values, setValues] = useState({});
     const [loading, setLoading] = useState(false);
     const { setNotification, user } = useContext(AppContext);
-    const airdrops = user && user.contracts && user.contracts.filter(contract => contract.type === 'standard');
-    const tokens = user && user.contracts && user.contracts.filter(contract => contract.type === 'token');
+    const [airdrops, setAirdrops] = useState(user && user.contracts && user.contracts.filter(contract => contract.type === 'standard'));
+    const [tokens, setTokens] = useState(user && user.contracts && user.contracts.filter(contract => contract.type === 'token'));
     // console.log('user', user);
 
     const getHandleChangeValue = valueName => (e) => {
@@ -195,6 +195,13 @@ const Contracts = ({ setSigner = noop }) => {
                         try {
                             const contract = await factory.deploy();
                             storeTokenContract(contract.target, values.tokenName, values.tokenSymbol, network.chainId.toString());
+                            setTokens([...tokens, {
+                                address: contract.target,
+                                name: `${values.tokenName} (${values.tokenSymbol})`,
+                                type: 'token',
+                                network: network.chainId.toString()
+                            }]);
+                            setValues({ ...values, tokenName: '', tokenSymbol: '', totalAmount: '' });
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
                             console.log(e);
@@ -264,6 +271,13 @@ const Contracts = ({ setSigner = noop }) => {
                         try {
                             const contract = await factory.deploy();
                             storeAirdropContract(contract.target, values.airdropName, values.tokenAddress, network.chainId.toString());
+                            setAirdrops([...airdrops, {
+                                address: contract.target,
+                                name: values.airdropName,
+                                type: 'standard',
+                                network: network.chainId.toString()
+                            }]);
+                            setValues({ ...values, airdropName: '', tokenAddress: '' });
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
                             console.log(e);
