@@ -22,8 +22,8 @@ const Contracts = ({ setSigner = noop }) => {
     const [values, setValues] = useState({});
     const [loading, setLoading] = useState(false);
     const { setNotification, user } = useContext(AppContext);
-    const [airdrops, setAirdrops] = useState(user && user.contracts && user.contracts.filter(contract => contract.type === 'standard'));
-    const [tokens, setTokens] = useState(user && user.contracts && user.contracts.filter(contract => contract.type === 'token'));
+    const [airdrops, setAirdrops] = useState([]);
+    const [tokens, setTokens] = useState([]);
     // console.log('user', user);
 
     const getHandleChangeValue = valueName => (e) => {
@@ -69,6 +69,13 @@ const Contracts = ({ setSigner = noop }) => {
             });
         }
     }, []);
+
+    useEffect(() => {
+        if (connection.connected) {
+            setAirdrops(user && user.contracts && user.contracts.filter(contract => contract.type === 'standard' && contract.network === connection?.network?.chainId?.toString()));
+            setTokens(user && user.contracts && user.contracts.filter(contract => contract.type === 'token' && contract.network === connection?.network?.chainId?.toString()));
+        }
+    }, [user, connection]);
 
     const handleChangeType = (_, arg2) => {
         if (arg2) setPostType(arg2);
