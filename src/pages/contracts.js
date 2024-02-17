@@ -43,11 +43,13 @@ const Contracts = ({ setSigner = noop }) => {
             setLoading(true);
             try {
                 const provider = new ethers.BrowserProvider(window.ethereum);
+                const network = await provider.getNetwork();
                 const signer = await provider.getSigner();
                 setSigner(signer);
                 setNotification({ text: `Connected to MetaMask: ${signer.address}`, type: 'positive' });
                 setConnection({
                     connected: true,
+                    network,
                     provider,
                     signer
                 });
@@ -184,7 +186,7 @@ const Contracts = ({ setSigner = noop }) => {
                         } else {
                             setNotification({ text: 'Compiled successfully', type: 'positive' });
                         }
-                        const { signer } = connection;
+                        const { signer, network } = connection;
                         const relevantContract = res.data.output.contracts[`${values.tokenName}.sol`][values.tokenName]; 
                         const abi = relevantContract.abi;
                         const bytecode = relevantContract.evm.bytecode.object;
@@ -192,7 +194,7 @@ const Contracts = ({ setSigner = noop }) => {
                         const factory = new ethers.ContractFactory(abi, bytecode, signer)
                         try {
                             const contract = await factory.deploy();
-                            storeTokenContract(contract.target, values.tokenName, values.tokenSymbol);
+                            storeTokenContract(contract.target, values.tokenName, values.tokenSymbol, network.chainId.toString());
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
                             console.log(e);
@@ -253,7 +255,7 @@ const Contracts = ({ setSigner = noop }) => {
                         } else {
                             setNotification({ text: 'Compiled successfully', type: 'positive' });
                         }
-                        const { signer } = connection;
+                        const { signer, network } = connection;
                         const relevantContract = res.data.output.contracts['Airdrop.sol']['Airdrop']; 
                         const abi = relevantContract.abi;
                         const bytecode = relevantContract.evm.bytecode.object;
@@ -261,7 +263,7 @@ const Contracts = ({ setSigner = noop }) => {
                         const factory = new ethers.ContractFactory(abi, bytecode, signer)
                         try {
                             const contract = await factory.deploy();
-                            storeAirdropContract(contract.target, values.airdropName, values.tokenAddress);
+                            storeAirdropContract(contract.target, values.airdropName, values.tokenAddress, network.chainId.toString());
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
                             console.log(e);
