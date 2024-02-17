@@ -98,7 +98,7 @@ const Contracts = ({ setSigner = noop }) => {
                 <div className='tokensContainer scroll'>
                     {tokens.map(token => (
                         <div key={token.address} className='tokenContainer'>
-                            <div className='infoText' style={{ padding: 0, width: 150 }}>{token.name}</div>
+                            <div className='infoText' style={{ padding: 0, width: 200 }}>{token.name}</div>
                             <div className='infoText' style={{ padding: 0, width: 400, cursor: 'text' }}>{token.address}</div>
                             <div
                                 className='infoIcon'
