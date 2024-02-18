@@ -32,3 +32,11 @@ export const roundToTwoSubstantialDigits = (num) => {
     }
     return Math.round(curNum * 10) / 10 * digits;
 }
+
+export const etherNetsExplorers = {
+    1: 'https://etherscan.io',
+    59144: 'https://explorer.goerli.linea.build',
+    59140: 'https://explorer.sepolia.linea.build',
+    5: 'https://goerli.etherscan.io',
+    11155111: 'https://sepolia.etherscan.io'
+}

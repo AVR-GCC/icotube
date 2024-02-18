@@ -14,6 +14,7 @@ import { ContentCopyRounded, LaunchRounded } from '@mui/icons-material';
 import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract, storeTokenContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
 import Airdrop from '../components/airdrop';
+import { etherNetsExplorers } from '../utils';
 
 const Contracts = ({ setSigner = noop }) => {
     const [connection, setConnection] = useState({ connected: false });
@@ -119,7 +120,7 @@ const Contracts = ({ setSigner = noop }) => {
                             <div
                                 className='infoIcon'
                                 onClick={() => {
-                                    window.open(`https://sepolia.etherscan.io/token/${token.address}`, '_blank');
+                                    window.open(`${etherNetsExplorers[connection.network.chainId]}/token/${token.address}`, '_blank');
                                 }}
                             >
                                 <LaunchRounded />
