@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const verbose = false;
-export const baseURL = process.env.NODE_ENV === 'production' ? 'https://www.icotube-server.app' : 'http://localhost:5000';
+export const baseURL = process.env.NODE_ENV === 'production' ? 'https://server.icotube.app' : 'http://localhost:5000';
 
 const functions = {
     GET: axios.get,
