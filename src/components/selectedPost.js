@@ -255,13 +255,13 @@ function SelectedPost({
                     <div className='infoBox'>
                         <div className='titleText' style={{ fontSize: isMobile ? 30 : 25 }}>{post.title}</div>
                         <div className='subtitleSection'>
-                            <div className='infoText'>{post.shortDescription}</div>
+                            <div className='infoText' style={{ padding: 0 }}>{post.shortDescription}</div>
                             {/* {_likeButton()} */}
                         </div>
                         {_link(post.homepage)}
                         <div className='spacer' />
                         <div className='spacer' />
-                        <div className='infoText'>{post.importantNote}</div>
+                        {!!post.importantNote && <div className='infoText'>{post.importantNote}</div>}
                         <Divider style={{ marginBottom: 20, background: '#ffffff50' }} />
                         {fields.ICO.map(field => !fieldsToNotShow.includes(field.name) && !!post[field.name] && (
                             <div className='showFieldContainer' key={`${field.name}_show`}>
