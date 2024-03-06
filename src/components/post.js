@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
 import  '../styles/post.css';
 
@@ -16,6 +16,8 @@ function Post({
     hoveredPost,
     isMobile
 }) {
+    const [buffering, setBuffering] = useState(false);
+
     useEffect(() => {
         if (!post.videoUrl && index === loadingPost) {
             setLoadingPost(index + 1);
@@ -49,7 +51,13 @@ function Post({
                         <ReactPlayer
                             onReady={incrementLoadingPost}
                             onError={incrementLoadingPost}
-                            playing={hoveredPost === post._id}
+                            onBuffer={() => {
+                                setBuffering(true);
+                            }}
+                            onBufferEnd={() => {
+                                setBuffering(false);
+                            }}
+                            playing={hoveredPost === post._id && !buffering}
                             height={height}
                             width={isMobile ? '100%' : width}
                             url={post.videoUrl}
