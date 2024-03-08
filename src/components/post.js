@@ -61,7 +61,7 @@ function Post({
                                 console.log('buffering done', index);
                                 setBuffering(false)
                             }}
-                            playing={hoveredPost === post._id && !buffering}
+                            playing={hoveredPost === post._id || buffering}
                             height={height}
                             width={isMobile ? '100%' : width}
                             url={post.videoUrl}
