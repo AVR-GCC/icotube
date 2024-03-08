@@ -25,6 +25,7 @@ function Post({
     }, [post, index, loadingPost, setLoadingPost]);
 
     const incrementLoadingPost = () => {
+        console.log('incrementing', index);
         if (loadingPost < index + 1) {
             setLoadingPost(index + 1);
         }
@@ -33,6 +34,7 @@ function Post({
     const _postContent = (post, index) => {
         const showPlayer = post.videoUrl && index <= loadingPost;
         const showImage = !showPlayer && !!post.logo;
+        console.log(index, 'postId', post._id, 'hovered', hoveredPost, 'buffering', buffering);
 
         let content = <div style={{ height, width }} />;
 
@@ -52,10 +54,12 @@ function Post({
                             onReady={incrementLoadingPost}
                             onError={incrementLoadingPost}
                             onBuffer={() => {
+                                console.log('buffering', index);
                                 setBuffering(true);
                             }}
                             onBufferEnd={() => {
-                                setBuffering(false);
+                                console.log('buffering done', index);
+                                setBuffering(false)
                             }}
                             playing={hoveredPost === post._id && !buffering}
                             height={height}
