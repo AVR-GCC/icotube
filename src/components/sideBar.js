@@ -76,7 +76,11 @@ function SideBar({
             className={isMobile ? 'bottomSection' : 'section'}
             style={getStyle('contracts')}
             onClick={() => {
-                navigate('/contracts');
+                if (currentUser) {
+                    navigate('/contracts');
+                } else {
+                    openLogin();
+                }
             }}
         >
             <div className="icon"><Gavel /></div>
