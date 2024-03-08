@@ -15,13 +15,14 @@ import {
     ListItemText,
     TextField
 } from '@mui/material';
-import { InfoOutlined, UndoOutlined, Download } from '@mui/icons-material';
+import { InfoOutlined, UndoOutlined, Download, Delete } from '@mui/icons-material';
 import { AppContext } from '../App';
 import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
+import { deleteUserContract } from '../actions/searchAPI';
 
 
-function Airdrop({ airdrops, connection, defaultAirdrop }) {
+function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops }) {
     const [airdrop, setAirdrop] = useState(airdrops[defaultAirdrop || 0]);
 
     const [recipientsObj, setRecipientsObj] = useState({
@@ -290,6 +291,24 @@ function Airdrop({ airdrops, connection, defaultAirdrop }) {
                     <div className='addressLabel'>Token Address:</div>
                     <div className='address'>{airdrop.tokenAddress}</div>
                 </div>
+            </div>
+            <div
+                className='infoIcon'
+                onClick={async() => {
+                    const oldAirdrops = airdrops;
+                    const oldAirdrop = airdrop;
+                    const newAirdrops = airdrops.filter(t => t.address !== airdrop.address);
+                    setAirdrops(newAirdrops);
+                    setAirdrop(newAirdrops[0]);
+                    const res = await deleteUserContract(airdrop.address);
+                    if (!res.data.success) {
+                        setNotification({ text: res.data.error.message, type: 'negative' });
+                        setAirdrops(oldAirdrops);
+                        setAirdrop(oldAirdrop);
+                    }
+                }}
+            >
+                <Delete />
             </div>
         </div>
     );

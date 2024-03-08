@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import  '../styles/contracts.css';
 import  '../styles/publish.css';
-import { noop, filter, findIndex } from 'lodash';
+import { noop, filter, findIndex, set } from 'lodash';
 import { ethers } from 'ethers';
 import {
     Button,
@@ -321,7 +321,13 @@ const Contracts = ({ setSigner = noop }) => {
 
     const _airdropSection = () => (
         <div className='airdropsSectionContainer'>
-            {airdrops.length ? <Airdrop airdrops={airdrops} connection={connection} defaultAirdrop={airdropIndex} /> : null}
+            {airdrops.length ?
+                <Airdrop
+                    airdrops={airdrops}
+                    connection={connection}
+                    defaultAirdrop={airdropIndex}
+                    setAirdrops={setAirdrops}
+                /> : null}
             {_newAirdropSection()}
         </div>
     );
