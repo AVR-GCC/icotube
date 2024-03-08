@@ -348,7 +348,10 @@ const Contracts = ({ setSigner = noop }) => {
             {connection.connected ? (
                 <div className='pageContainer'>
                     <div className='flex-row' style={{ paddingTop: 24 }}>
-                        {loading ? <div className='loadingIndicator' style={{ marginRight: 10 }}><CircularProgress size={20} /></div> : <div style={{ width: 35, height: 30 }} />}
+                        {loading ?
+                            <div className='loadingIndicator' style={{ marginRight: 10 }}><CircularProgress size={20} /></div>
+                            : <div style={{ width: 35, height: 30 }} />
+                        }
                         <div className='infoText' style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
                             Connected with address <div className='address'>{connection.signer.address}</div>
                         </div>
