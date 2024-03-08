@@ -22,7 +22,7 @@ import { roundToTwoSubstantialDigits } from '../utils';
 import { deleteUserContract } from '../actions/searchAPI';
 
 
-function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops }) {
+function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading }) {
     const [airdrop, setAirdrop] = useState(airdrops[defaultAirdrop || 0]);
 
     const [recipientsObj, setRecipientsObj] = useState({
@@ -325,20 +325,24 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops }) {
                         if (left) {
                             const disconnectedAirdropContract = new Contract(airdrop.address, airdropABI, provider);
                             const airdropContract = disconnectedAirdropContract.connect(signer);
+                            setLoading(true);
                             transferRespone = await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
                         } else if (!isEtherMode) {
                             const value = parseEther(transferXObj.str);
                             const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
                             const tokenContract = disconnectedTokenContract.connect(signer);
+                            setLoading(true);
                             transferRespone = await tokenContract.transfer(airdrop.address, value);
                         }
                         setTransferXObj({ str: '', error: '', number: 0 });
                         transferInputRef.current.value = '';
                         setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
                         const transferReciept = await transferRespone.wait();
+                        setLoading(false);
                         setNotification({ text: `Transaction confirmed in block ${transferReciept.blockNumber}`, type: 'positive' });
                         getBalances();
                     } catch (e) {
+                        setLoading(false);
                         console.log(e);
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }
@@ -369,12 +373,15 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops }) {
                         if (isEtherMode) {
                             args.push({ value: recipientsObj.total });
                         }
+                        setLoading(true);
                         const transferRespone = await airdropContract[functionName](...args);
                         setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
                         const transferReciept = await transferRespone.wait();
+                        setLoading(false);
                         setNotification({ text: `Transaction confirmed in block ${transferReciept.blockNumber}`, type: 'positive' });
                         getBalances();
                     } catch (e) {
+                        setLoading(false);
                         console.log(e);
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                     }

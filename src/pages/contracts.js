@@ -333,6 +333,7 @@ const Contracts = ({ setSigner = noop }) => {
                     connection={connection}
                     defaultAirdrop={airdropIndex}
                     setAirdrops={setAirdrops}
+                    setLoading={setLoading}
                 /> : null}
             {_newAirdropSection()}
         </div>
