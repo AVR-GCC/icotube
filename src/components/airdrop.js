@@ -21,8 +21,8 @@ import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
 
 
-function Airdrop({ airdrops, connection }) {
-    const [airdrop, setAirdrop] = useState(airdrops[0]);
+function Airdrop({ airdrops, connection, defaultAirdrop }) {
+    const [airdrop, setAirdrop] = useState(airdrops[defaultAirdrop || 0]);
 
     const [recipientsObj, setRecipientsObj] = useState({
         addresses: [],
@@ -108,6 +108,10 @@ function Airdrop({ airdrops, connection }) {
     useEffect(() => {
         getBalances();
     }, [airdrop]);
+
+    useEffect(() => {
+        if (defaultAirdrop !== -1) setAirdrop(airdrops[defaultAirdrop]);
+    }, [defaultAirdrop]);
 
     useEffect(() => {
         let canDrop = false;

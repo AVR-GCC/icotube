@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import  '../styles/contracts.css';
 import  '../styles/publish.css';
-import { noop } from 'lodash';
+import { noop, filter, findIndex } from 'lodash';
 import { ethers } from 'ethers';
 import {
     Button,
@@ -24,6 +24,7 @@ const Contracts = ({ setSigner = noop }) => {
     const [loading, setLoading] = useState(false);
     const { setNotification, user } = useContext(AppContext);
     const [airdrops, setAirdrops] = useState([]);
+    const [airdropIndex, setAirdropIndex] = useState(0);
     const [tokens, setTokens] = useState([]);
     // console.log('user', user);
 
@@ -293,13 +294,13 @@ const Contracts = ({ setSigner = noop }) => {
                         const factory = new ethers.ContractFactory(abi, bytecode, signer)
                         try {
                             const contract = await factory.deploy();
-                            storeAirdropContract(contract.target, values.airdropName, values.tokenAddress, network.chainId.toString());
-                            setAirdrops([...airdrops, {
-                                address: contract.target,
-                                name: values.airdropName,
-                                type: 'standard',
-                                network: network.chainId.toString()
-                            }]);
+                            storeAirdropContract(contract.target, values.airdropName, values.tokenAddress, network.chainId.toString()).then(async res => {
+                                await contract.waitForDeployment();
+                                const newAirdrops = filter(res?.data?.contracts, contract => contract.type === 'standard' && contract.network === network.chainId.toString());
+                                const newAirdropIndex = findIndex(newAirdrops, { address: contract.target });
+                                setAirdrops(newAirdrops);
+                                setAirdropIndex(newAirdropIndex);
+                            });
                             setValues({ ...values, airdropName: '', tokenAddress: '' });
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
@@ -320,7 +321,7 @@ const Contracts = ({ setSigner = noop }) => {
 
     const _airdropSection = () => (
         <div className='airdropsSectionContainer'>
-            {airdrops.length ? <Airdrop airdrops={airdrops} connection={connection} /> : null}
+            {airdrops.length ? <Airdrop airdrops={airdrops} connection={connection} defaultAirdrop={airdropIndex} /> : null}
             {_newAirdropSection()}
         </div>
     );
