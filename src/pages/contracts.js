@@ -216,11 +216,13 @@ const Contracts = ({ setSigner = noop }) => {
 
                         const factory = new ethers.ContractFactory(abi, bytecode, signer)
                         try {
+                            setLoading(true);
                             const contract = await factory.deploy();
                             storeTokenContract(contract.target, values.tokenName, values.tokenSymbol, network.chainId.toString());
                             setValues({ ...values, tokenName: '', tokenSymbol: '', totalAmount: '' });
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                             await contract.waitForDeployment();
+                            setLoading(false);
                             setTokens([...tokens, {
                                 address: contract.target,
                                 name: `${values.tokenName} (${values.tokenSymbol})`,
@@ -228,6 +230,7 @@ const Contracts = ({ setSigner = noop }) => {
                                 network: network.chainId.toString()
                             }]);
                         } catch (e) {
+                            setLoading(false);
                             console.log(e);
                             setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                         }
@@ -293,9 +296,11 @@ const Contracts = ({ setSigner = noop }) => {
 
                         const factory = new ethers.ContractFactory(abi, bytecode, signer)
                         try {
+                            setLoading(true);
                             const contract = await factory.deploy();
                             storeAirdropContract(contract.target, values.airdropName, values.tokenAddress, network.chainId.toString()).then(async res => {
                                 await contract.waitForDeployment();
+                                setLoading(false);
                                 const newAirdrops = filter(res?.data?.contracts, contract => contract.type === 'standard' && contract.network === network.chainId.toString());
                                 const newAirdropIndex = findIndex(newAirdrops, { address: contract.target });
                                 setAirdrops(newAirdrops);
@@ -304,6 +309,7 @@ const Contracts = ({ setSigner = noop }) => {
                             setValues({ ...values, airdropName: '', tokenAddress: '' });
                             setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
+                            setLoading(false);
                             console.log(e);
                             setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
                         }
@@ -341,8 +347,11 @@ const Contracts = ({ setSigner = noop }) => {
         <div className="mainContainer scroll">
             {connection.connected ? (
                 <div className='pageContainer'>
-                    <div className='infoText' style={{ display: 'flex', flexDirection: 'row' }}>
-                        Connected with address <div className='address'>{connection.signer.address}</div>
+                    <div className='flex-row' style={{ paddingTop: 24 }}>
+                        {loading ? <div className='loadingIndicator' style={{ marginRight: 10 }}><CircularProgress size={20} /></div> : <div style={{ width: 35, height: 34 }} />}
+                        <div className='infoText' style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
+                            Connected with address <div className='address'>{connection.signer.address}</div>
+                        </div>
                     </div>
                     {_typeToggle()}
                     {_inputsSection()}
