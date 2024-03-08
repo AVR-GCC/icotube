@@ -203,14 +203,15 @@ const Contracts = ({ setSigner = noop }) => {
                         try {
                             const contract = await factory.deploy();
                             storeTokenContract(contract.target, values.tokenName, values.tokenSymbol, network.chainId.toString());
+                            setValues({ ...values, tokenName: '', tokenSymbol: '', totalAmount: '' });
+                            setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
+                            await contract.waitForDeployment();
                             setTokens([...tokens, {
                                 address: contract.target,
                                 name: `${values.tokenName} (${values.tokenSymbol})`,
                                 type: 'token',
                                 network: network.chainId.toString()
                             }]);
-                            setValues({ ...values, tokenName: '', tokenSymbol: '', totalAmount: '' });
-                            setNotification({ text: `Deployment successful! Contract Address: ${contract.target}`, type: 'positive' });
                         } catch (e) {
                             console.log(e);
                             setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
