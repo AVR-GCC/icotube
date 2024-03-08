@@ -181,3 +181,10 @@ export const storeAirdropContract = async (airdropAddress, airdropName, tokenAdd
         url: 'contracts/airdrop'
     });
 }
+
+export const deleteUserContract = async (address) => {
+    return await APIcall({
+        method: 'DELETE',
+        url: `contracts/${address}`
+    });
+};

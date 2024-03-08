@@ -10,8 +10,8 @@ import {
     ToggleButtonGroup,
     CircularProgress
 } from '@mui/material';
-import { ContentCopyRounded, LaunchRounded } from '@mui/icons-material';
-import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract, storeTokenContract } from '../actions/searchAPI';
+import { ContentCopyRounded, LaunchRounded, Delete } from '@mui/icons-material';
+import { getTokenContractAPI, getAirdropContractAPI, storeAirdropContract, storeTokenContract, deleteUserContract } from '../actions/searchAPI';
 import { AppContext } from '../App';
 import Airdrop from '../components/airdrop';
 import { etherNetsExplorers } from '../utils';
@@ -124,6 +124,20 @@ const Contracts = ({ setSigner = noop }) => {
                                 }}
                             >
                                 <LaunchRounded />
+                            </div>
+                            <div
+                                className='infoIcon'
+                                onClick={async() => {
+                                    const oldTokens = tokens;
+                                    setTokens(tokens.filter(t => t.address !== token.address));
+                                    const res = await deleteUserContract(token.address);
+                                    if (!res.data.success) {
+                                        setNotification({ text: res.data.error.message, type: 'negative' });
+                                        setTokens(oldTokens);
+                                    }
+                                }}
+                            >
+                                <Delete />
                             </div>
                         </div>
                     ))}
