@@ -21,6 +21,15 @@ import { airdropABI, tokenABI } from '../constants/abis';
 import { roundToTwoSubstantialDigits } from '../utils';
 import { deleteUserContract } from '../actions/searchAPI';
 
+const baseValidObject = {
+    leftValid: {
+        tokens: false,
+        ethers: false
+    },
+    rightValid: { tokens: false },
+    canDrop: false,
+    canDisplayDiff: false
+};
 
 function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading }) {
     const [airdrop, setAirdrop] = useState(airdrops[defaultAirdrop || 0]);
@@ -48,15 +57,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
         airdropBalances: {}
     });
 
-    const [buttonsValid, setButtonsValid] = useState({
-        leftValid: {
-            tokens: false,
-            ethers: false
-        },
-        rightValid: { tokens: false },
-        canDrop: false,
-        canDisplayDiff: false
-    });
+    const [buttonsValid, setButtonsValid] = useState({ ...baseValidObject });
 
     const [isEtherMode, setIsEtherMode] = useState(false);
 
@@ -325,12 +326,14 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                         if (left) {
                             const disconnectedAirdropContract = new Contract(airdrop.address, airdropABI, provider);
                             const airdropContract = disconnectedAirdropContract.connect(signer);
+                            setButtonsValid({ ...baseValidObject });
                             setLoading(true);
                             transferRespone = await airdropContract[isEtherMode ? 'withdrawEther' : 'withdrawTokens'](signer.address);
                         } else if (!isEtherMode) {
                             const value = parseEther(transferXObj.str);
                             const disconnectedTokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
                             const tokenContract = disconnectedTokenContract.connect(signer);
+                            setButtonsValid({ ...baseValidObject });
                             setLoading(true);
                             transferRespone = await tokenContract.transfer(airdrop.address, value);
                         }
@@ -345,6 +348,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                         setLoading(false);
                         console.log(e);
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                        getBalances();
                     }
                 }}
                 disabled={!connection.connected || !buttonsValid?.[left ? 'leftValid' : 'rightValid']?.[isEtherMode ? 'ethers' : 'tokens']}
@@ -373,6 +377,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                         if (isEtherMode) {
                             args.push({ value: recipientsObj.total });
                         }
+                        setButtonsValid({ ...baseValidObject });
                         setLoading(true);
                         const transferRespone = await airdropContract[functionName](...args);
                         setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
@@ -384,6 +389,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                         setLoading(false);
                         console.log(e);
                         setNotification({ text: `Error deploying contract: ${e.reason}`, type: 'negative' });
+                        getBalances();
                     }
                 }}
                 disabled={!connection.connected || !buttonsValid.canDrop}
