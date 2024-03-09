@@ -31,17 +31,19 @@ const baseValidObject = {
     canDisplayDiff: false
 };
 
-function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading }) {
-    const [airdrop, setAirdrop] = useState(airdrops[defaultAirdrop || 0]);
-
-    const [recipientsObj, setRecipientsObj] = useState({
+const baseRecipientsObject = {
         addresses: [],
         amounts: [],
         str: '',
         error: '',
         valid: false,
         total: 0n
-    });
+}
+
+function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading }) {
+    const [airdrop, setAirdrop] = useState(airdrops[defaultAirdrop || 0]);
+
+    const [recipientsObj, setRecipientsObj] = useState({ ...baseRecipientsObject });
 
     // const [airdropCost, setAirdropCost] = useState(0);
 
@@ -64,6 +66,8 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
     const { setNotification } = useContext(AppContext);
 
     const transferInputRef = useRef(null);
+
+    const recipientsInputRef = useRef(null);
 
     const setValidArrows = (numberStr, userBalances, airdropBalances) => {
         const rightValid = { tokens: false };
@@ -152,6 +156,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
     }
 
     const handleChangeRecipientString = (event) => {
+        recipientsInputRef.current = event.target;
         const { value } = event.target;
         const { addresses, amounts, error, total } = parseRecipientsString(value);
         setRecipientsObj({ addresses, amounts, str: value, valid: !error, error, total });
@@ -384,6 +389,10 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                         const transferReciept = await transferRespone.wait();
                         setLoading(false);
                         setNotification({ text: `Transaction confirmed in block ${transferReciept.blockNumber}`, type: 'positive' });
+                        if (recipientsInputRef.current) {
+                            recipientsInputRef.current.value = '';
+                        }
+                        setRecipientsObj({ ...baseRecipientsObject });
                         getBalances();
                     } catch (e) {
                         setLoading(false);
