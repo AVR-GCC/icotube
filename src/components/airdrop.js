@@ -103,7 +103,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
             ethers: await provider.getBalance(airdrop.address)
         };
         setBalancesObject({ userBalances, airdropBalances, loading: false });
-        setValidArrows(transferXObj.str, userBalances, airdropBalances);
+        setValidArrows(transferInputRef.current.value, userBalances, airdropBalances);
     }
 
     useEffect(() => {
