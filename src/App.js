@@ -95,6 +95,7 @@ function App() {
               setUser={setUser}
               signOut={signOut}
               toggleModal={toggleModal}
+              title={title}
             />
             <div className='topContainer'>
               <SideBar

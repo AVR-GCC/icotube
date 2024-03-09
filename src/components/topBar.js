@@ -14,7 +14,7 @@ const pageNames = {
 }
 
 function TopBar(props) {
-    const { setUser, signOut, toggleModal, isMobile } = props;
+    const { setUser, signOut, toggleModal, isMobile, title } = props;
     const navigate = useNavigate();
     const navigateToMain = () => {
         navigate('/');
@@ -34,7 +34,7 @@ function TopBar(props) {
                 <img style={{ height: 30, width: 70 }} src={logoPNG} alt="logo" />
                 <div className='logoText'>ICOTube</div>
             </div>
-            <div className='topBarTitle' style={titleStyle}>{pageNames[page]}</div>
+            {title || <div className='topBarTitle' style={titleStyle}>{pageNames[page]}</div>}
             <Login
                 onSignIn={setUser}
                 onSignOut={signOut}
