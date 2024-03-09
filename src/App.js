@@ -24,6 +24,7 @@ function App() {
     name: "Bar Yehudai"
   */
   const [user, setUser] = useState(null);
+  const [title, setTitle] = useState(null);
   const [config, setConfig] = useState(null);
   const [toggleModal, setTogglenModal] = useState(false);
   const isMobile = useRef(window.matchMedia("only screen and (max-width: 760px)").matches);
@@ -66,7 +67,7 @@ function App() {
   const contractsComponent = user ? <Contracts /> : <Navigate to={'/'} />;
 
   return (
-    <AppContext.Provider value={{ user, config, setNotification: setNotification.current, openMenu }}>
+    <AppContext.Provider value={{ user, config, setNotification: setNotification.current, openMenu, setTitle }}>
       <div className="App">
         <link
           rel="stylesheet"
