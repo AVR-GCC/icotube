@@ -16,7 +16,7 @@ import { AppContext } from '../App';
 import Airdrop from '../components/airdrop';
 import { etherNetsExplorers } from '../utils';
 
-const Contracts = ({ setSigner = noop }) => {
+const Contracts = () => {
     const [connection, setConnection] = useState({ connected: false });
     const [postType, setPostType] = useState('Token');
     const [errors, setErrors] = useState({});
@@ -47,7 +47,6 @@ const Contracts = ({ setSigner = noop }) => {
                 const provider = new ethers.BrowserProvider(window.ethereum);
                 const network = await provider.getNetwork();
                 const signer = await provider.getSigner();
-                setSigner(signer);
                 setNotification({ text: `Connected to MetaMask: ${signer.address}`, type: 'positive' });
                 setConnection({
                     connected: true,
