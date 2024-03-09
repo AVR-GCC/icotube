@@ -69,20 +69,20 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
 
     const recipientsInputRef = useRef(null);
 
-    const setValidArrows = (numberStr, userBalances, airdropBalances) => {
+    const setValidArrows = (numberStr, userBalances, airdropBalances, existingButtonsValid = {}) => {
         const rightValid = { tokens: false };
         const leftValid = { tokens: false, ethers: false };
         if (!numberStr) {
             leftValid.tokens = 0 < airdropBalances.tokens;
             leftValid.ethers = 0 < airdropBalances.ethers;
-            setButtonsValid({ ...buttonsValid, leftValid, rightValid });
+            setButtonsValid({ ...buttonsValid, ...existingButtonsValid, leftValid, rightValid });
             return;
         }
         try {
             getAddress(numberStr);
             leftValid.tokens = 0 <= airdropBalances.tokens;
             leftValid.ethers = 0 <= airdropBalances.ethers;
-            setButtonsValid({ ...buttonsValid, leftValid, rightValid });
+            setButtonsValid({ ...buttonsValid, ...existingButtonsValid, leftValid, rightValid });
             return;
         } catch (e) {}
 
@@ -92,10 +92,10 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                 rightValid.tokens = wei <= userBalances.tokens;
             }
         } catch (e) {}
-        setButtonsValid({ ...buttonsValid, leftValid, rightValid });
+        setButtonsValid({ ...buttonsValid, ...existingButtonsValid, leftValid, rightValid });
     }
 
-    const getBalances = async () => {
+    const getBalances = async (existingButtonsValid = {}) => {
         setBalancesObject({ ...balancesObject, loading: true });
         const { provider, signer } = connection;
         const tokenContract = new Contract(airdrop.tokenAddress, tokenABI, provider);
@@ -108,7 +108,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
             ethers: await provider.getBalance(airdrop.address)
         };
         setBalancesObject({ userBalances, airdropBalances, loading: false });
-        setValidArrows(transferInputRef?.current?.value || '', userBalances, airdropBalances);
+        setValidArrows(transferInputRef?.current?.value || '', userBalances, airdropBalances, existingButtonsValid);
     }
 
     useEffect(() => {
@@ -393,7 +393,7 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                             recipientsInputRef.current.value = '';
                         }
                         setRecipientsObj({ ...baseRecipientsObject });
-                        getBalances();
+                        getBalances(baseValidObject);
                     } catch (e) {
                         setLoading(false);
                         console.log(e);
