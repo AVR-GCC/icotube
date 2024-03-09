@@ -22,7 +22,7 @@ const Contracts = () => {
     const [errors, setErrors] = useState({});
     const [values, setValues] = useState({});
     const [loading, setLoading] = useState(false);
-    const { setNotification, user } = useContext(AppContext);
+    const { setNotification, user, setTitle } = useContext(AppContext);
     const [airdrops, setAirdrops] = useState([]);
     const [airdropIndex, setAirdropIndex] = useState(0);
     const [tokens, setTokens] = useState([]);
@@ -60,6 +60,23 @@ const Contracts = () => {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        if (connection.signer) {
+            setTitle(
+                <div className='flex-row'>
+                    {loading ?
+                        <div className='loadingIndicator' style={{ marginRight: 10 }}><CircularProgress size={20} /></div>
+                        : <div style={{ width: 35, height: 30 }} />
+                    }
+                    <div className='infoText' style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
+                        Connected with address <div className='address'>{connection.signer.address}</div>
+                    </div>
+                </div>
+            );
+        }
+        return () => setTitle(null);
+    }, [setTitle, connection, loading]);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -347,15 +364,6 @@ const Contracts = () => {
         <div className="mainContainer scroll">
             {connection.connected ? (
                 <div className='pageContainer'>
-                    <div className='flex-row' style={{ paddingTop: 24 }}>
-                        {loading ?
-                            <div className='loadingIndicator' style={{ marginRight: 10 }}><CircularProgress size={20} /></div>
-                            : <div style={{ width: 35, height: 30 }} />
-                        }
-                        <div className='infoText' style={{ display: 'flex', flexDirection: 'row', padding: 0 }}>
-                            Connected with address <div className='address'>{connection.signer.address}</div>
-                        </div>
-                    </div>
                     {_typeToggle()}
                     {_inputsSection()}
                 </div>
