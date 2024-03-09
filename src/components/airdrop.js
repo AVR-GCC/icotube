@@ -343,7 +343,9 @@ function Airdrop({ airdrops, connection, defaultAirdrop, setAirdrops, setLoading
                             transferRespone = await tokenContract.transfer(airdrop.address, value);
                         }
                         setTransferXObj({ str: '', error: '', number: 0 });
-                        transferInputRef.current.value = '';
+                        if (transferInputRef.current) {
+                            transferInputRef.current.value = '';
+                        }
                         setNotification({ text: <div>Transaction sent:<br />{transferRespone.hash}<br />waiting for confirmation...</div>, type: 'positive' });
                         const transferReciept = await transferRespone.wait();
                         setLoading(false);
