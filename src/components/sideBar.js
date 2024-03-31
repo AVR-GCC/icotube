@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
-import { Upcoming, History, NewReleases, AlarmAdd, Gavel } from '@mui/icons-material';
+import { PlayCircleOutline, AlarmAdd, Gavel } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import '../styles/sideBar.css';
 
@@ -24,8 +24,7 @@ function SideBar({
 
     const getStyle = section => section === category ? { backgroundColor: 'rgb(255, 255, 255, 0.2)' } : {};
 
-    const _icoCategories = () => (
-        <React.Fragment>
+    const _videos = () => (
             <div
                 className={isMobile ? 'bottomSection' : 'section'}
                 style={getStyle('')}
@@ -37,38 +36,9 @@ function SideBar({
                     }
                 }}
             >
-                <div className="icon"><Upcoming /></div>
-                Upcoming{isMobile ? '' : ' ICOs'}
+                <div className="icon"><PlayCircleOutline /></div>
+                Videos
             </div>
-            <div
-                className={isMobile ? 'bottomSection' : 'section'}
-                style={getStyle('running')}
-                onClick={() => {
-                    if (clickRunning) {
-                        clickRunning();
-                    } else {
-                        navigate('/running');
-                    }
-                }}
-            >
-                <div className="icon"><NewReleases /></div>
-                Running{isMobile ? '' : ' ICOs'}
-            </div>
-            <div
-                className={isMobile ? 'bottomSection' : 'section'}
-                style={getStyle('ended')}
-                onClick={() => {
-                    if (clickEnded) {
-                        clickEnded();
-                    } else {
-                        navigate('/ended');
-                    }
-                }}
-            >
-                <div className="icon"><History /></div>
-                Ended{isMobile ? '' : ' ICOs'}
-            </div>
-        </React.Fragment>
     );
 
     const _contractsPage = () => (
@@ -123,7 +93,7 @@ function SideBar({
 
     return (
         <div className={isMobile ? 'bottomBar' : 'sideBar'}>
-            {_icoCategories()}
+            {_videos()}
             {!isMobile && _divider()}
             {_alertPage()}
             {_contractsPage()}

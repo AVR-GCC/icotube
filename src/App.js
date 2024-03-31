@@ -107,8 +107,7 @@ function App() {
               />
               <Routes>
                 <Route path="/" element={videosComponent} />
-                <Route path="/:category" element={videosComponent} />
-                <Route path="/:category/:postId" element={videosComponent} />
+                <Route path="/:postId" element={videosComponent} />
                 <Route path="/publish" element={publishComponent} />
                 <Route path="/publish/:postId" element={publishComponent} />
                 <Route path="/alert" element={<Alert />} />

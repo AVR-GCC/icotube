@@ -44,23 +44,14 @@ export const getPostsAPI = async ({
     limit,
     sort = { startDate: -1 },
     filter = {},
-    category,
     noVideo = false
 }) => {
-    const today = new Date();
-    let categoryFilter = { startDate: { $gt: today } };
-    if (category === 'running') {
-        categoryFilter = { startDate: { $lte: today }, $or: [{ endDate: null }, { endDate: { $gte: today } }] };
-    }
-    if (category === 'ended') {
-        categoryFilter = { endDate: { $lt: today } };
-    }
     let videoFilter = { $and: [{ videoUrl: { $ne: '' } }, { videoUrl: { $exists: true } }] };
     if (noVideo) {
         videoFilter = { $or: [{ videoUrl: '' }, { videoUrl: { $exists: false } }] };
     }
     const allFilters = { $and: [] };
-    allFilters.$and.push(categoryFilter);
+    // allFilters.$and.push(categoryFilter);
     allFilters.$and.push(videoFilter);
     let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...allFilters })}`;
     // let url = `posts?skip=${skip}&sort=${JSON.stringify(sort)}&filter=${JSON.stringify({ ...filter, ...categoryFilter })}`;

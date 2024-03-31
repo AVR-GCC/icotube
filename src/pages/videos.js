@@ -12,7 +12,6 @@ import { retryUntilSuccess } from '../utils';
 const BATCH_SIZE = 8;
 
 const startCategoryState = {
-    curCategory: 'upcoming',
     posts: [],
     nvPosts: [],
     selectedPost: -1,
@@ -27,7 +26,6 @@ function Videos({
 }) {
     const [categoryState, setCategoryState] = useState({ ...startCategoryState });
     const {
-        curCategory,
         posts,
         nvPosts,
         loadingPost,
@@ -45,49 +43,37 @@ function Videos({
 
     const mainRef = useRef(null);
     const lastLoaded = useRef(0);
-    const pauseNavigate = useRef(false);
 
-    const { postId, category = 'upcoming' } = useParams();
-
-    useEffect(() => {
-        lastLoaded.current = 0;
-        setCategoryState({ ...startCategoryState, curCategory: category });
-    }, [category]);
-
+    const { postId } = useParams();
     const navigate = useNavigate();
 
     const fetchPosts = async () => {
-        if (category === curCategory) {
-            setLoading(true);
-            const res = await retryUntilSuccess(() => {
-                return getPostsAPI({
-                    category: curCategory,
-                    skip: fetchedPost - (nvMode ? posts.length : 0),
-                    limit: BATCH_SIZE,
-                    noVideo: nvMode
-                });
+        setLoading(true);
+        const res = await retryUntilSuccess(() => {
+            return getPostsAPI({
+                skip: fetchedPost - (nvMode ? posts.length : 0),
+                limit: BATCH_SIZE,
+                noVideo: nvMode
             });
-            const gotPosts = res?.data?.data;
-            if (gotPosts) {
-                const newPosts = nvMode ? posts : [...posts, ...gotPosts];
-                const newNvPosts = nvMode ? [...nvPosts, ...gotPosts] : nvPosts;
-                const newNvMode = gotPosts.length < BATCH_SIZE;
-                setCategoryState({
-                    curCategory,
-                    posts: newPosts,
-                    nvPosts: newNvPosts,
-                    fetchedPost: fetchedPost + gotPosts.length,
-                    nvMode: newNvMode,
-                    gotLastPost: nvMode && gotPosts.length < BATCH_SIZE,
-                    loadingPost: categoryState.loadingPost + 1
-                });
-                setLoading(false);
-            }
+        });
+        const gotPosts = res?.data?.data;
+        if (gotPosts) {
+            const newPosts = nvMode ? posts : [...posts, ...gotPosts];
+            const newNvPosts = nvMode ? [...nvPosts, ...gotPosts] : nvPosts;
+            const newNvMode = gotPosts.length < BATCH_SIZE;
+            setCategoryState({
+                posts: newPosts,
+                nvPosts: newNvPosts,
+                fetchedPost: fetchedPost + gotPosts.length,
+                nvMode: newNvMode,
+                gotLastPost: nvMode && gotPosts.length < BATCH_SIZE,
+                loadingPost: categoryState.loadingPost + 1
+            });
+            setLoading(false);
         }
     };
 
     const fetchPostsToId = async (id) => {
-        pauseNavigate.current = true;
         const singleRes = await retryUntilSuccess(() => getPostAPI(id));
         const gotSelectedPost = (singleRes?.data?.data || []);
         setCategoryState({
@@ -131,7 +117,7 @@ function Videos({
 
     useEffect(() => {
         fetchPosts();
-    }, [curCategory]);
+    }, []);
 
     useEffect(() => {
         if (nvMode && posts.length < BATCH_SIZE && nvPosts.length === 0) {
@@ -152,18 +138,10 @@ function Videos({
 
     useEffect(() => {
         const post = getSelectedPost();
-        if (post) {
-            navigate(`/${curCategory}/${post._id}`);
+        if (post && post._id !== postId) {
+            navigate(`/${post._id}`);
         }
     }, [selectedPost, posts, nvPosts]);
-
-    useEffect(() => {
-        const post = getSelectedPost();
-        if (post && post._id !== postId && !pauseNavigate.current) {
-            pauseNavigate.current = true;
-            navigate(`/${curCategory}/${post._id}`);
-        }
-    }, [selectedPost, posts, nvPosts, curCategory]);
 
     const removePost = (id) => {
         let removePostIndex = findIndex(posts, post => post._id === id);
@@ -199,7 +177,7 @@ function Videos({
 
     const leavePost = () => {
         setSelectedPost(-1);
-        navigate(`/${curCategory}`);
+        navigate('/');
     }
 
     const onMouseEnterPost = (post) => {
