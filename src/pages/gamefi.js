@@ -1,14 +1,14 @@
 import React from 'react';
 import  '../styles/home.css';
 
-function Home({
+function GameFi({
     isMobile
 }) {
     return (
         <div className="header">
-            <h1>Home</h1>
+            <h1>GameFi</h1>
         </div>
     );
 }
 
-export default Home;
+export default GameFi;

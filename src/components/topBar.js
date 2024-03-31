@@ -5,9 +5,13 @@ import logoPNG from '../assets/icogalleryicon-topbarbg.jpg'
 import Login from './login';
 
 const pageNames = {
-    upcoming: 'Upcoming ICOs',
-    running: 'Running ICOs',
-    ended: 'Ended ICOs',
+    home: '0xplorer',
+    airdrop: 'Airdrops',
+    bounty: 'Bounties',
+    exchange: 'Exchanges',
+    gamefi: 'GameFi',
+    icos: 'ICOs',
+    staking: 'Staking',
     alert: 'Register for Alerts',
     publish: 'Publish Crypto Project',
     contracts: 'Deploy a Contract'
@@ -20,7 +24,7 @@ function TopBar(props) {
         navigate('/');
     }
 
-    const page = window?.location?.pathname?.slice(1) || 'upcoming';
+    const page = window?.location?.pathname?.slice(1) || 'home';
     const logoStyle = isMobile ? { transform: 'scale(0.5)', transformOrigin: 0, width: 70 } : {};
     const titleStyle = isMobile ? { fontSize: 14 } : {};
 

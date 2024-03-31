@@ -5,6 +5,12 @@ import TopBar from './components/topBar';
 import { getConfigAPI, loginSuccessAPI } from './actions/searchAPI';
 import './styles/app.css';
 import Home from './pages/home';
+import Airdrops from './pages/airdrop';
+import Bounties from './pages/bounty';
+import Exchanges from './pages/exchange';
+import GameFi from './pages/gamefi';
+import ICOs from './pages/icos';
+import Staking from './pages/staking';
 import Videos from './pages/videos';
 import Publish from './pages/publish';
 import Alert from './pages/alert';
@@ -107,6 +113,12 @@ function App() {
               />
               <Routes>
                 <Route path="/" element={homeComponent} />
+                <Route path="/airdrop" element={<Airdrops />} />
+                <Route path="/bounty" element={<Bounties />} />
+                <Route path="/exchange" element={<Exchanges />} />
+                <Route path="/gamefi" element={<GameFi />} />
+                <Route path="/icos" element={<ICOs />} />
+                <Route path="/staking" element={<Staking />} />
                 <Route path="/videos" element={videosComponent} />
                 <Route path="/videos/:postId" element={videosComponent} />
                 <Route path="/publish" element={publishComponent} />
