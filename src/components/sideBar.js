@@ -1,15 +1,12 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../App';
-import { PlayCircleOutline, AlarmAdd, Gavel } from '@mui/icons-material';
+import { PlayCircleOutline, AlarmAdd, Gavel, Home } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 import '../styles/sideBar.css';
 
 function SideBar({
     openLogin,
-    clickRunning,
-    clickEnded,
-    clickUpcoming,
     isMobile
 }) {
     const appContext = useContext(AppContext);
@@ -24,16 +21,25 @@ function SideBar({
 
     const getStyle = section => section === category ? { backgroundColor: 'rgb(255, 255, 255, 0.2)' } : {};
 
-    const _videos = () => (
+    const _home = () => (
             <div
                 className={isMobile ? 'bottomSection' : 'section'}
                 style={getStyle('')}
                 onClick={() => {
-                    if (clickUpcoming) {
-                        clickUpcoming();
-                    } else {
-                        navigate('/');
-                    }
+                    navigate('/');
+                }}
+            >
+                <div className="icon"><Home /></div>
+                Home
+            </div>
+    );
+
+    const _videos = () => (
+            <div
+                className={isMobile ? 'bottomSection' : 'section'}
+                style={getStyle('videos')}
+                onClick={() => {
+                    navigate('/videos');
                 }}
             >
                 <div className="icon"><PlayCircleOutline /></div>
@@ -93,6 +99,7 @@ function SideBar({
 
     return (
         <div className={isMobile ? 'bottomBar' : 'sideBar'}>
+            {_home()}
             {_videos()}
             {!isMobile && _divider()}
             {_alertPage()}

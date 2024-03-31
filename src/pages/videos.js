@@ -139,7 +139,7 @@ function Videos({
     useEffect(() => {
         const post = getSelectedPost();
         if (post && post._id !== postId) {
-            navigate(`/${post._id}`);
+            navigate(`/videos/${post._id}`);
         }
     }, [selectedPost, posts, nvPosts]);
 
@@ -177,7 +177,7 @@ function Videos({
 
     const leavePost = () => {
         setSelectedPost(-1);
-        navigate('/');
+        navigate('/videos');
     }
 
     const onMouseEnterPost = (post) => {

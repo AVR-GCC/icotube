@@ -4,7 +4,7 @@ import SideBar from './components/sideBar';
 import TopBar from './components/topBar';
 import { getConfigAPI, loginSuccessAPI } from './actions/searchAPI';
 import './styles/app.css';
-// import Home from './pages/home';
+import Home from './pages/home';
 import Videos from './pages/videos';
 import Publish from './pages/publish';
 import Alert from './pages/alert';
@@ -63,7 +63,7 @@ function App() {
     }
   }
 
-  // const homeComponent = <Home openLogin={openLogin} isMobile={isMobile.current} />;
+  const homeComponent = <Home openLogin={openLogin} isMobile={isMobile.current} />;
   const videosComponent = <Videos openLogin={openLogin} isMobile={isMobile.current} />;
   const publishComponent = user ? <Publish /> : <Navigate to={'/'} />;
   const contractsComponent = user ? <Contracts /> : <Navigate to={'/'} />;
@@ -106,8 +106,9 @@ function App() {
                   openLogin={openLogin}
               />
               <Routes>
-                <Route path="/" element={videosComponent} />
-                <Route path="/:postId" element={videosComponent} />
+                <Route path="/" element={homeComponent} />
+                <Route path="/videos" element={videosComponent} />
+                <Route path="/videos/:postId" element={videosComponent} />
                 <Route path="/publish" element={publishComponent} />
                 <Route path="/publish/:postId" element={publishComponent} />
                 <Route path="/alert" element={<Alert />} />
